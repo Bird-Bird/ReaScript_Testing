@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<index version="1" commit="03ffad4b2af90283655a09ec8e06b8043685976c" name="BirdBird ReaScript Testing">
+  <category name="Global Sampler">
+    <reapack name="BirdBird_Global Sampler.lua" type="script" desc="Global Sampler">
+      <version name="0.99" author="BirdBird" time="2021-12-05T16:33:21Z">
+        <source main="main">https://github.com/Bird-Bird/ReaScript_Testing/raw/03ffad4b2af90283655a09ec8e06b8043685976c/Global%20Sampler/BirdBird_Global%20Sampler.lua</source>
+        <source file="global_sampler_libraries/global_resampler_lib.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/03ffad4b2af90283655a09ec8e06b8043685976c/Global%20Sampler/global_sampler_libraries/global_resampler_lib.lua</source>
+        <source file="global_sampler_libraries/json.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/03ffad4b2af90283655a09ec8e06b8043685976c/Global%20Sampler/global_sampler_libraries/json.lua</source>
+        <source file="global_sampler_libraries/sampler_settings.json">https://github.com/Bird-Bird/ReaScript_Testing/raw/03ffad4b2af90283655a09ec8e06b8043685976c/Global%20Sampler/global_sampler_libraries/sampler_settings.json</source>
+        <source file="global_sampler_libraries/themes.json">https://github.com/Bird-Bird/ReaScript_Testing/raw/03ffad4b2af90283655a09ec8e06b8043685976c/Global%20Sampler/global_sampler_libraries/themes.json</source>
+        <source file="global_sampler_libraries/wav.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/03ffad4b2af90283655a09ec8e06b8043685976c/Global%20Sampler/global_sampler_libraries/wav.lua</source>
+        <source main="main" file="BirdBird_Sample Last Playthrough.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/03ffad4b2af90283655a09ec8e06b8043685976c/Global%20Sampler/BirdBird_Sample%20Last%20Playthrough.lua</source>
+        <source main="main" file="BirdBird_Sample Last X Seconds.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/03ffad4b2af90283655a09ec8e06b8043685976c/Global%20Sampler/BirdBird_Sample%20Last%20X%20Seconds.lua</source>
+        <source main="main" file="BirdBird_Set Global Sampler Recording Path.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/03ffad4b2af90283655a09ec8e06b8043685976c/Global%20Sampler/BirdBird_Set%20Global%20Sampler%20Recording%20Path.lua</source>
+        <source type="effect" file="BirdBird_Global Sampler Recorder.jsfx">https://github.com/Bird-Bird/ReaScript_Testing/raw/03ffad4b2af90283655a09ec8e06b8043685976c/Global%20Sampler/BirdBird_Global%20Sampler%20Recorder.jsfx</source>
+      </version>
+    </reapack>
+  </category>
+</index>
