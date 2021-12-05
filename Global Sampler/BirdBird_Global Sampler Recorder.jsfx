@@ -119,7 +119,7 @@ gmem[2] == 0 ? (
   disp_timestamp = disp_timestamp_buf[disp_counter];
 
   l_disp_val = gmem[disp_buf + disp_counter];
-  abs(disp_val) > abs(l_disp_val) || timer - disp_timestamp > len_in_secs - 0.1 ? ( 
+  abs(disp_val) > abs(l_disp_val) || timer - disp_timestamp > len_in_secs/2 ? ( 
     gmem[disp_buf + disp_counter] = disp_val;
     disp_timestamp_buf[disp_counter] = timer;
   );

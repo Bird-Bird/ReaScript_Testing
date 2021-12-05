@@ -1,5 +1,5 @@
 -- @description Global Sampler
--- @version 0.99.1
+-- @version 0.99.2
 -- @author BirdBird
 -- @provides
 --    [nomain]global_sampler_libraries/global_resampler_lib.lua
@@ -155,7 +155,7 @@ function draw(m, mouse_state, drag_info)
     local width_str, height_str
     local t_start, t_end
     if buf.len_in_secs == 0 then
-        local t_str = "~ Insert the JSFX plugin to start recording ~"
+        local t_str = "~ Insert the Global Sampler JSFX plugin to start recording ~"
         local font_size = 22
         if bh < font_size then
             font_size = bh/2
