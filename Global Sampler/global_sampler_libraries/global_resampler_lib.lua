@@ -8,10 +8,12 @@ reaper_do_file('json.lua')
 function load_settings()
     local settings_file = io.open(path .. "sampler_settings.json", 'r')
     if not settings_file then
-        local text = 'Cannot find sampler_settings.json in the installation directory, are you sure Global Sampler is installed correctly?'
-        local ret = reaper.ShowMessageBox(text, 'Global Sampler - Dependency Error', 0)
-        return nil
+        local default_settings = '{"theme":"theme_carbon"}'
+        settings_file = io.open(path .. "sampler_settings.json", 'w')
+        settings_file:write(default_settings)
+        settings_file:close()
     end
+    settings_file = io.open(path .. "sampler_settings.json", 'r')
     local settings_str = settings_file:read("*all")
     local settings = json.decode(settings_str)
     settings_file:close(settings_file)
