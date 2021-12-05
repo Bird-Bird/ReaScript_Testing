@@ -1,5 +1,5 @@
 -- @description Global Sampler
--- @version 0.99
+-- @version 0.99.1
 -- @author BirdBird
 -- @provides
 --    [nomain]global_sampler_libraries/global_resampler_lib.lua
@@ -31,6 +31,7 @@ if not reaper.APIExists('CF_GetSWSVersion') then
     if ret == 6 then
         open_url('https://www.sws-extension.org/')
     end
+    return
 end
 
 if not reaper.APIExists('JS_ReaScriptAPI_Version') then
@@ -39,6 +40,7 @@ if not reaper.APIExists('JS_ReaScriptAPI_Version') then
     if ret == 6 then
         open_url('https://forum.cockos.com/showthread.php?t=212174')
     end
+    return
 end
 
 --LOAD LIBRARIES-------------------------------------------------
