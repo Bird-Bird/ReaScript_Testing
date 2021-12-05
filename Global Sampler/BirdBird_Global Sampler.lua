@@ -4,7 +4,6 @@
 -- @provides
 --    [nomain]global_sampler_libraries/global_resampler_lib.lua
 --    [nomain]global_sampler_libraries/json.lua
---    [nomain]global_sampler_libraries/sampler_settings.json
 --    [nomain]global_sampler_libraries/themes.json
 --    [nomain]global_sampler_libraries/wav.lua
 --    [main] BirdBird_Sample Last Playthrough.lua
