@@ -1,0 +1,218 @@
+{
+    "theme_violet": {
+      "waveform_fill_alpha": 0.3,
+      "wave_fade_alpha_intensity": 0.8,
+      "writer_col": {
+        "g": 197,
+        "b": 5,
+        "r": 231
+      },
+      "trail_pow": 4,
+      "crop_region_alpha": 0.2,
+      "border": {
+        "g": 42,
+        "b": 61,
+        "r": 58
+      },
+      "trail_len": 50,
+      "trail_alpha": 0.3,
+      "wave_fade_len": 20,
+      "crop_region": {
+        "g": 217,
+        "b": 27,
+        "r": 250
+      },
+      "rainbow_waveform_col": false,
+      "waveform_line": {
+        "g": 4,
+        "b": 98,
+        "r": 202
+      },
+      "border_margin": 5,
+      "bg": {
+        "g": 32,
+        "b": 32,
+        "r": 32
+      }
+    },
+    "theme_reaper_default": {
+      "waveform_fill_alpha": 0.5,
+      "wave_fade_alpha_intensity": 0.6,
+      "writer_col": {
+        "g": 200,
+        "b": 82,
+        "r": 239
+      },
+      "trail_pow": 4,
+      "crop_region_alpha": 0.13,
+      "border": {
+        "g": 51,
+        "b": 51,
+        "r": 51
+      },
+      "trail_len": 0,
+      "trail_alpha": 0.3,
+      "wave_fade_len": 20,
+      "crop_region": {
+        "g": 233,
+        "b": 192,
+        "r": 31
+      },
+      "rainbow_waveform_col": false,
+      "waveform_line": {
+        "g": 26,
+        "b": 26,
+        "r": 26
+      },
+      "border_margin": 5,
+      "bg": {
+        "g": 137,
+        "b": 137,
+        "r": 129
+      }
+    },
+    "theme_rainbow": {
+      "waveform_fill_alpha": 0.3,
+      "wave_fade_alpha_intensity": 0.6,
+      "writer_col": {
+        "g": 197,
+        "b": 5,
+        "r": 231
+      },
+      "trail_pow": 4,
+      "crop_region_alpha": 0.2,
+      "border": {
+        "g": 42,
+        "b": 61,
+        "r": 58
+      },
+      "trail_len": 50,
+      "trail_alpha": 0.3,
+      "wave_fade_len": 20,
+      "crop_region": {
+        "g": 217,
+        "b": 27,
+        "r": 250
+      },
+      "rainbow_waveform_col": true,
+      "waveform_line": {
+        "g": 4,
+        "b": 98,
+        "r": 202
+      },
+      "border_margin": 5,
+      "bg": {
+        "g": 32,
+        "b": 32,
+        "r": 32
+      }
+    },
+    "theme_sundial": {
+      "waveform_fill_alpha": 0.3,
+      "wave_fade_alpha_intensity": 1,
+      "writer_col": {
+        "g": 234,
+        "b": 223,
+        "r": 247
+      },
+      "trail_pow": 4,
+      "crop_region_alpha": 0.2,
+      "border": {
+        "g": 94,
+        "b": 94,
+        "r": 89
+      },
+      "trail_len": 50,
+      "trail_alpha": 0.3,
+      "wave_fade_len": 20,
+      "crop_region": {
+        "g": 102,
+        "b": 103,
+        "r": 182
+      },
+      "rainbow_waveform_col": false,
+      "waveform_line": {
+        "g": 150,
+        "b": 116,
+        "r": 223
+      },
+      "border_margin": 1,
+      "bg": {
+        "g": 85,
+        "b": 100,
+        "r": 70
+      }
+    },
+    "theme_carbon": {
+      "waveform_fill_alpha": 0.3,
+      "wave_fade_alpha_intensity": 0.5,
+      "writer_col": {
+        "g": 150,
+        "b": 240,
+        "r": 80
+      },
+      "trail_pow": 4,
+      "crop_region_alpha": 0.2,
+      "border": {
+        "g": 80,
+        "b": 80,
+        "r": 80
+      },
+      "trail_len": 50,
+      "trail_alpha": 0.22,
+      "wave_fade_len": 20,
+      "crop_region": {
+        "g": 150,
+        "b": 240,
+        "r": 80
+      },
+      "rainbow_waveform_col": false,
+      "waveform_line": {
+        "g": 200,
+        "b": 200,
+        "r": 200
+      },
+      "border_margin": 5,
+      "bg": {
+        "g": 40,
+        "b": 40,
+        "r": 40
+      }
+    },
+    "theme_classic": {
+      "waveform_fill_alpha": 0.3,
+      "wave_fade_alpha_intensity": 0.5,
+      "writer_col": {
+        "g": 68,
+        "b": 126,
+        "r": 240
+      },
+      "trail_pow": 4,
+      "crop_region_alpha": 0.2,
+      "border": {
+        "g": 90,
+        "b": 50,
+        "r": 50
+      },
+      "trail_len": 0,
+      "trail_alpha": 0.22,
+      "wave_fade_len": 20,
+      "crop_region": {
+        "g": 68,
+        "b": 126,
+        "r": 240
+      },
+      "rainbow_waveform_col": false,
+      "waveform_line": {
+        "g": 10,
+        "b": 10,
+        "r": 10
+      },
+      "border_margin": 5,
+      "bg": {
+        "g": 249,
+        "b": 232,
+        "r": 255
+      }
+    }
+  }
