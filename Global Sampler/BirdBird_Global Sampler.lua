@@ -1,5 +1,5 @@
 -- @description Global Sampler
--- @version 0.99.4
+-- @version 0.99.5
 -- @author BirdBird
 -- @provides
 --    [nomain]global_sampler_libraries/global_resampler_lib.lua
@@ -118,7 +118,12 @@ function table.shallow_copy(t)
     return t2
 end
 
+function wmod(num, mod)
+    return num < 0 and mod - (num*-1 % mod) or num % mod
+end
+
 local draw_state = {cs = 0, cw = 0, bw = 0, bh = 0, offset = 0, start_offset = 0, start_cs = 0}
+draw_state.waveform_zoom = st.waveform_zoom
 function draw(m, mouse_state, drag_info)
     local w = gfx.w
     local h = gfx.h
@@ -184,7 +189,7 @@ function draw(m, mouse_state, drag_info)
         local t2 = t
 
         local t2 = math.floor(t2*draw_len)
-        local f_val = math.abs(reaper.gmem_read(t2 + disp_buf_index))*-1
+        local f_val = math.abs(reaper.gmem_read(t2 + disp_buf_index))*-1*draw_state.waveform_zoom
         --CLIP
         if math.abs(f_val) > 1 then
             f_val = f_val / math.abs(f_val)
@@ -268,16 +273,34 @@ function draw(m, mouse_state, drag_info)
     if jsfx_existed > 0 then
         if mouse_state == 'DOWN' then
             if drag_info.type == 'L' then
-                draw_state.hit_time = reaper.time_precise()
-                local aax = m.x >= draw_state.cs and m.x <= draw_state.cs + draw_state.cw
-                local aay = m.y >= margin and m.y <= margin + bh
-                local mouse_in_crop_region = aax and aay
-                if mouse_in_crop_region then
-                    draw_state.drag_sample = true
+                if m.ctrl then
+                    draw_state.tweak_waveform_zoom = true
+                    local cursor = reaper.JS_Mouse_LoadCursor(32645)
+                    reaper.JS_Mouse_SetCursor(cursor)
+                elseif m.alt then
+                    draw_state.preview = true
+                    
+                    --NORMALIZED MOUSE
+                    local nmx = ((m.x - margin)/bw) - norm_offset
+                    nmx = wmod(nmx, 1)
+                    reaper.gmem_write(10,1)
+                    reaper.gmem_write(11,nmx)
+
+                    --CURSOR
+                    local cursor = reaper.JS_Mouse_LoadCursor(32515) --CROSSHAIR
+                    reaper.JS_Mouse_SetCursor(cursor)
                 else
-                    draw_state.draw_crop_region = true
-                    draw_state.cs = -1
-                    draw_state.cw = -1
+                    draw_state.hit_time = reaper.time_precise()
+                    local aax = m.x >= draw_state.cs and m.x <= draw_state.cs + draw_state.cw
+                    local aay = m.y >= margin and m.y <= margin + bh
+                    local mouse_in_crop_region = aax and aay
+                    if mouse_in_crop_region then
+                        draw_state.drag_sample = true
+                    else
+                        draw_state.draw_crop_region = true
+                        draw_state.cs = -1
+                        draw_state.cw = -1
+                    end
                 end
             elseif drag_info.type == 'MMB' then
                 draw_state.start_offset = draw_state.offset
@@ -382,10 +405,19 @@ function draw(m, mouse_state, drag_info)
                 draw_state.offset_buffer = false
                 draw_state.start_offset = 0
                 draw_state.start_cs = -1
+            elseif draw_state.tweak_waveform_zoom then
+                draw_state.tweak_waveform_zoom = false
+                local settings = load_settings()
+                settings.waveform_zoom = draw_state.waveform_zoom
+                save_settings(settings)
+            elseif draw_state.preview then
+                draw_state.preview = false
+                reaper.gmem_write(10, 0)
             end
         end
     end
     
+    --MOUSE DRAG
     if draw_state.draw_crop_region then
         local ds = drag_info.start_x
         if math.abs(ds - m.x) >= 1 then
@@ -422,14 +454,38 @@ function draw(m, mouse_state, drag_info)
         end
         if ce >= bw + margin then ce = margin + bw end
         draw_state.cw = ce - draw_state.cs
+    elseif draw_state.tweak_waveform_zoom then
+        draw_state.waveform_zoom = draw_state.waveform_zoom - m.dy * 0.05
+        if draw_state.waveform_zoom < 0 then
+            draw_state.waveform_zoom = 0
+        end
+    elseif draw_state.preview then
+        local preview_pos = reaper.gmem_read(12)
+        if preview_pos > 0 then
+            preview_pos = wmod(preview_pos + norm_offset, 1)
+            local col = {theme.waveform_line.r/256, theme.waveform_line.g/256, theme.waveform_line.b/256}
+            if theme.rainbow_waveform_col then
+                col = palette(preview_pos*3)
+            end
+
+            local xp = preview_pos*bw + margin
+            gfx.set(col.r, col.g, col.b, 0.8)
+            gfx.line(xp, margin, xp, margin + bh)
+        end
     else --IDLE 
         local aax = m.x >= draw_state.cs and m.x <= draw_state.cs + draw_state.cw
         local aay = m.y >= margin and m.y <= margin + bh
         local mouse_in_crop_region = aax and aay
-        if mouse_in_crop_region then
-            gfx.setcursor(32649) --HAND
+        if m.ctrl then
+            gfx.setcursor(32645) --ARROW UP/DOWN
+        elseif m.alt then
+            gfx.setcursor(32515) --CROSSHAIR
         else
-            gfx.setcursor(32513) --IBEAM
+            if mouse_in_crop_region then
+                gfx.setcursor(32649) --HAND
+            else
+                gfx.setcursor(32513) --IBEAM
+            end
         end
     end
 
@@ -478,10 +534,12 @@ function main()
     m.y = gfx.mouse_y
     m.l = gfx.mouse_cap&1 == 1 
     m.r = gfx.mouse_cap&2 == 2
+    m.ctrl =  reaper.JS_Mouse_GetState(0|00000100)&4  == 4
+    m.alt =  reaper.JS_Mouse_GetState(0|00010000)&16 == 16
     m.mmb = gfx.mouse_cap&64 == 64 
     m.dx = m.x - lm.x
     m.dy = m.y - lm.y
-
+    
     --Down/Drag
     local draw_count = 0
     if m_lock == '' or m_lock == 'L' then

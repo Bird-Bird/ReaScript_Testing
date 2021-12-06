@@ -20,12 +20,50 @@ buf_len = len_in_secs*srate*2;
 counter = 0;
 gmem[5] = 1;
 gmem_reserved = 20;
+preview_delick_len = 0.01;
 
 @slider
 
 @block
 
 @sample
+
+//Audio Preview
+p_l = 0;
+p_r = 0;
+
+preview_state = gmem[10];
+preview_state != last_preview_state ? (
+  preview_state == 1 ? (
+    //Start preview
+    preview_counter = floor(gmem[11]*buf_len + 0.5);
+    preview_counter -= preview_counter % 2;
+    preview_declick = 0;
+    preview = 1;
+  );
+  preview_state == 0 ? (
+    //Stop preview
+    preview = 0;
+    gmem[12] = -1;
+  );
+);
+last_preview_state = preview_state;
+
+preview == 1 ? (
+  p_l = buf_pos[preview_counter]*preview_declick;
+  p_r = buf_pos[preview_counter + 1]*preview_declick;
+  
+  preview_declick += (1/srate)/preview_delick_len;
+  preview_declick > 1 ? (preview_declick = 1);
+  
+  preview_counter = preview_counter + 2;
+  preview_counter >= buf_len ? (
+    preview_counter = preview_counter % buf_len;
+  );
+  
+  gmem[12] = preview_counter/buf_len;
+);
+
 //Recording Boundary
 lock_writehead == 0 ? (
   play_state != last_play_state ? (
@@ -114,9 +152,31 @@ lock_writehead == 0 ? (
   last_disp_buf_size = disp_buf_size;
 );
 
-@gfx
-//export_buffer_to_project(0,9000*2,2,srate,track,0,tempo);
+preview == 1 ? (
+  spl0 = spl0 + p_l;
+  spl1 = spl1 + p_r;
+  last_p_l = p_l;
+  last_p_r = p_r;
+);
+preview == 0 && preview_declick > 0 ? (
+  preview_declick -= (1/srate)/0.01;
+  preview_declick < 0 ? (preview_declick = 0);
+  
+  p_l = buf_pos[preview_counter]*preview_declick;
+  p_r = buf_pos[preview_counter + 1]*preview_declick;
+  spl0 = spl0 + p_l;
+  spl1 = spl1 + p_r;
+  
+  preview_counter = preview_counter + 2;
+  preview_counter >= buf_len ? (
+    preview_counter = preview_counter % buf_len;
+  );
+);
 
+preview_delick > 1 ? (preview_declick = 1;);
+preview_delick < 0 ? (preview_declick = 0;);
+
+@gfx
 function wmod(num, mod) local(v) (
   num < 0 ? mod - ((num*-1) % mod) : num % mod;
 );
@@ -162,7 +222,6 @@ export_buf == 1 ? (
     sample_buf(start_pos, last_secs_buf_len);
   );
   export_type == 3 ? (
-    a += 1;
     is = gmem[6];
     iw = gmem[7];
     sample_buf_norm(is, iw);
@@ -171,5 +230,3 @@ export_buf == 1 ? (
   gmem[0] = 0;
   lock_writehead = 0;
 );
-
-e += 1;
