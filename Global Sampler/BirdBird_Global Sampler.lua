@@ -1,5 +1,5 @@
 -- @description Global Sampler
--- @version 0.99.5
+-- @version 0.99.6
 -- @author BirdBird
 -- @provides
 --    [nomain]global_sampler_libraries/global_resampler_lib.lua
@@ -49,6 +49,10 @@ reaper_do_file('json.lua')
 local st = load_settings()
 if not st then 
     return
+end
+if not st.waveform_zoom then
+    st.waveform_zoom = 1
+    save_settings(st)
 end
 
 --THEMES
