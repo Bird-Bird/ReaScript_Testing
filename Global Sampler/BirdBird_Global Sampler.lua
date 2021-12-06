@@ -1,5 +1,5 @@
 -- @description Global Sampler
--- @version 0.99.7
+-- @version 0.99.7.1
 -- @author BirdBird
 -- @provides
 --    [nomain]global_sampler_libraries/global_resampler_lib.lua
@@ -277,10 +277,13 @@ function draw(m, mouse_state, drag_info)
     if jsfx_existed > 0 then
         if mouse_state == 'DOWN' then
             if drag_info.type == 'L' then
-                if m.ctrl then
+                if m.ctrl and m.shift then
                     draw_state.tweak_waveform_zoom = true
                     local cursor = reaper.JS_Mouse_LoadCursor(32645)
                     reaper.JS_Mouse_SetCursor(cursor)
+                elseif m.ctrl then
+                    local pause_state = reaper.gmem_read(13)
+                    reaper.gmem_write(13, 1 - pause_state)
                 elseif m.alt then
                     draw_state.preview = true
                     
@@ -480,10 +483,12 @@ function draw(m, mouse_state, drag_info)
         local aax = m.x >= draw_state.cs and m.x <= draw_state.cs + draw_state.cw
         local aay = m.y >= margin and m.y <= margin + bh
         local mouse_in_crop_region = aax and aay
-        if m.ctrl then
+        if m.ctrl and m.shift then
             gfx.setcursor(32645) --ARROW UP/DOWN
         elseif m.alt then
             gfx.setcursor(32515) --CROSSHAIR
+        elseif m.ctrl then
+            gfx.setcursor(32648) --STOP SIGN
         else
             if mouse_in_crop_region then
                 gfx.setcursor(32649) --HAND
@@ -539,6 +544,7 @@ function main()
     m.l = gfx.mouse_cap&1 == 1 
     m.r = gfx.mouse_cap&2 == 2
     m.ctrl =  reaper.JS_Mouse_GetState(0|00000100)&4  == 4
+    m.shift = reaper.JS_Mouse_GetState(0|00001000)&8 == 8
     m.alt =  reaper.JS_Mouse_GetState(0|00010000)&16 == 16
     m.mmb = gfx.mouse_cap&64 == 64 
     m.dx = m.x - lm.x

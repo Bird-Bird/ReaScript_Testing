@@ -65,7 +65,8 @@ preview == 1 ? (
 );
 
 //Recording Boundary
-lock_writehead == 0 ? (
+pause_state = gmem[13];
+lock_writehead == 0 && pause_state != 1 ? (
   play_state != last_play_state ? (
     play_state != 0 ? (
       play_start = play_position;
