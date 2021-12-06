@@ -1,5 +1,5 @@
 -- @description Global Sampler
--- @version 0.99.6
+-- @version 0.99.7
 -- @author BirdBird
 -- @provides
 --    [nomain]global_sampler_libraries/global_resampler_lib.lua
@@ -467,7 +467,7 @@ function draw(m, mouse_state, drag_info)
         local preview_pos = reaper.gmem_read(12)
         if preview_pos > 0 then
             preview_pos = wmod(preview_pos + norm_offset, 1)
-            local col = {theme.waveform_line.r/256, theme.waveform_line.g/256, theme.waveform_line.b/256}
+            local col = {r = theme.waveform_line.r/256, g = theme.waveform_line.g/256, b = theme.waveform_line.b/256}
             if theme.rainbow_waveform_col then
                 col = palette(preview_pos*3)
             end
