@@ -1,15 +1,13 @@
 -- @description Global Sampler
--- @version 0.99.3
+-- @version 0.99.4
 -- @author BirdBird
 -- @provides
 --    [nomain]global_sampler_libraries/global_resampler_lib.lua
 --    [nomain]global_sampler_libraries/json.lua
 --    [nomain]global_sampler_libraries/themes.json
---    [nomain]global_sampler_libraries/wav.lua
 --    [main] BirdBird_Sample Last Playthrough.lua
 --    [main] BirdBird_Sample Last X Seconds.lua
---    [main] BirdBird_Set Global Sampler Recording Path.lua
---    [effect] BirdBird_Global Sampler Recorder.jsfx
+--    [effect] BirdBird_Global Sampler.jsfx
 
 --@changelog
 --  + Development version
@@ -137,23 +135,22 @@ function draw(m, mouse_state, drag_info)
 
 
     --OFFSET
-    --local offset = draw_state.offset
     local norm_offset = draw_state.offset
     norm_offset = norm_offset < 0 and 1 - (norm_offset*-1 - math.floor(norm_offset*-1)) or norm_offset - math.floor(norm_offset)
     local buf = get_buffer_data()
     
     --WRITEHEAD
-    local writer_pos = reaper.gmem_read(6)
-    local writer_pos_n = (writer_pos - buf.buf_start_index)/buf.real_size
+    local writer_pos_n = reaper.gmem_read(4)
     writer_pos_n = writer_pos_n + norm_offset
     if writer_pos_n < 0 then writer_pos_n = writer_pos_n + 1 elseif writer_pos_n > 1 then writer_pos_n = writer_pos_n - 1 end
     local wxp = math.floor((writer_pos_n * bw) + 0.5) + margin   
     
 
     --FIRST TIME TEXT
+    local jsfx_existed = reaper.gmem_read(5)
     local width_str, height_str
     local t_start, t_end
-    if buf.len_in_secs == 0 then
+    if jsfx_existed == 0 then
         local t_str = "~ Insert the Global Sampler JSFX plugin to start recording ~"
         local font_size = 22
         if bh < font_size then
@@ -176,7 +173,8 @@ function draw(m, mouse_state, drag_info)
     local wave_fade_len = theme.wave_fade_len
     local wave_fade_alpha_intensity = theme.wave_fade_alpha_intensity
     local draw_len = bw - 2
-    reaper.gmem_write(7, draw_len)
+    reaper.gmem_write(8, draw_len)
+    local disp_buf_index = reaper.gmem_read(9)
 
     local lx,ly
     for i = 0, draw_len do
@@ -186,7 +184,7 @@ function draw(m, mouse_state, drag_info)
         local t2 = t
 
         local t2 = math.floor(t2*draw_len)
-        local f_val = math.abs(reaper.gmem_read(t2 + buf.disp_buf_index))*-1
+        local f_val = math.abs(reaper.gmem_read(t2 + disp_buf_index))*-1
         --CLIP
         if math.abs(f_val) > 1 then
             f_val = f_val / math.abs(f_val)
@@ -226,19 +224,21 @@ function draw(m, mouse_state, drag_info)
             waveform_line_col = palette(i/draw_len + reaper.time_precise()/10)
         end
         
-        gfx.set(waveform_line_col.r, waveform_line_col.g, waveform_line_col.b,
-        theme.waveform_fill_alpha*alpha_mul_writehead*alpha_mul_starter)
-        if math.abs(height) >= 1 then
-            gfx.line(x, h/2, x1, y1)
-            gfx.line(x, h/2 + 1, x1, y2)
-        end
-        
-        if i > 0 then 
+        if jsfx_existed > 0 then
             gfx.set(waveform_line_col.r, waveform_line_col.g, waveform_line_col.b,
-            1*alpha_mul_writehead*alpha_mul_starter)            
+            theme.waveform_fill_alpha*alpha_mul_writehead*alpha_mul_starter)
+            if math.abs(height) >= 1 then
+                gfx.line(x, h/2, x1, y1)
+                gfx.line(x, h/2 + 1, x1, y2)
+            end
             
-            gfx.line(lx, ly, x1, y1) 
-            gfx.line(lx2, ly2, x1, y2) 
+            if i > 0 then 
+                gfx.set(waveform_line_col.r, waveform_line_col.g, waveform_line_col.b,
+                1*alpha_mul_writehead*alpha_mul_starter)            
+                
+                gfx.line(lx, ly, x1, y1) 
+                gfx.line(lx2, ly2, x1, y2) 
+            end
         end
         lx = x1
         ly = y1
@@ -247,23 +247,25 @@ function draw(m, mouse_state, drag_info)
     end
 
     --WRITEHEAD DRAWING
-    gfx.set(theme.writer_col.r/256, theme.writer_col.g/256, theme.writer_col.b/256)
-    gfx.line(wxp, margin, wxp, bh + margin)
+    if jsfx_existed > 0 then
+        gfx.set(theme.writer_col.r/256, theme.writer_col.g/256, theme.writer_col.b/256)
+        gfx.line(wxp, margin, wxp, bh + margin)
 
-    --TRAIL
-    local trail_len   = theme.trail_len   
-    local trail_pow   = theme.trail_pow   
-    local trail_alpha = theme.trail_alpha 
-    for i = math.max(wxp - trail_len, margin), wxp - 1 do 
-        local alpha = 1 - ((wxp - 1) - i)/trail_len
-        alpha = alpha ^ trail_pow
-        alpha = alpha * trail_alpha
-        gfx.set(theme.writer_col.r/256, theme.writer_col.g/256, theme.writer_col.b/256, alpha)
-        gfx.line(i, margin, i, bh + margin)
+        --TRAIL
+        local trail_len   = theme.trail_len   
+        local trail_pow   = theme.trail_pow   
+        local trail_alpha = theme.trail_alpha 
+        for i = math.max(wxp - trail_len, margin), wxp - 1 do 
+            local alpha = 1 - ((wxp - 1) - i)/trail_len
+            alpha = alpha ^ trail_pow
+            alpha = alpha * trail_alpha
+            gfx.set(theme.writer_col.r/256, theme.writer_col.g/256, theme.writer_col.b/256, alpha)
+            gfx.line(i, margin, i, bh + margin)
+        end
     end
 
     --CROP REGION
-    if buf.len_in_secs > 0 then
+    if jsfx_existed > 0 then
         if mouse_state == 'DOWN' then
             if drag_info.type == 'L' then
                 draw_state.hit_time = reaper.time_precise()
@@ -293,9 +295,8 @@ function draw(m, mouse_state, drag_info)
                     gfx.y = m.y
                     local menu = "Insert at edit cursor"
                     local option = gfx.showmenu(menu)
-                    if option > 0 then
+                    if option == 1 then
                         --UNSELECT ALL ITEMS - FOCUS ARRANGE
-                        reaper.gmem_write(2, 1) --pause writer
                         local sel_item_count = reaper.CountSelectedMediaItems(0)
                         for i = 0, sel_item_count - 1 do
                             local item = reaper.GetSelectedMediaItem(0, sel_item_count - (i+1))
@@ -305,19 +306,16 @@ function draw(m, mouse_state, drag_info)
                         
                         --INSERT MEDIA
                         local start_time, end_time = reaper.GetSet_ArrangeView2(0, false, 0, 0)
+                        pos =  reaper.GetCursorPosition()
 
                         local nx = (draw_state.cs - margin)/draw_state.bw
                         nx = nx - norm_offset
                         if nx < 0 then nx = nx + 1 elseif nx > 1 then nx = nx - 1 end
 
                         local nw = (draw_state.cw)/draw_state.bw
-                        nx = math.floor(nx * buf.real_size + buf.buf_start_index)
-                        nw = nw * buf.len_in_secs
 
-                        sample(nx, nw)
+                        sample_normalized(nx, nw)
                         reaper.GetSet_ArrangeView2(0, true, 0,0, start_time, end_time)
-
-                        reaper.gmem_write(2, 0) --release writer                    
                     end
                 else
                     gfx.x = m.x 
@@ -356,7 +354,6 @@ function draw(m, mouse_state, drag_info)
                     local window, segment, details = reaper.BR_GetMouseCursorContext()
                     if window == 'arrange' then
                         --UNSELECT ALL ITEMS - FOCUS ARRANGE
-                        reaper.gmem_write(2, 1) --pause writer
                         local sel_item_count = reaper.CountSelectedMediaItems(0)
                         for i = 0, sel_item_count - 1 do
                             local item = reaper.GetSelectedMediaItem(0, sel_item_count - (i+1))
@@ -375,13 +372,9 @@ function draw(m, mouse_state, drag_info)
                         if nx < 0 then nx = nx + 1 elseif nx > 1 then nx = nx - 1 end
 
                         local nw = (draw_state.cw)/draw_state.bw
-                        nx = math.floor(nx * buf.real_size + buf.buf_start_index)
-                        nw = nw * buf.len_in_secs
 
-                        sample(nx, nw)
+                        sample_normalized(nx, nw)
                         reaper.GetSet_ArrangeView2(0, true, 0,0, start_time, end_time)
-
-                        reaper.gmem_write(2, 0) --release writer
                     end
                 end
             elseif draw_state.offset_buffer then
@@ -442,7 +435,9 @@ function draw(m, mouse_state, drag_info)
 
     gfx.set(theme.crop_region.r/256,
     theme.crop_region.g/256,theme.crop_region.b/256, theme.crop_region_alpha)
-    gfx.rect(draw_state.cs, margin, draw_state.cw, bh)
+    if jsfx_existed > 0 then
+        gfx.rect(draw_state.cs, margin, draw_state.cw, bh)
+    end
 
     --STORE STATE--
     draw_state.bw = bw

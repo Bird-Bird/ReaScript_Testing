@@ -2,8 +2,8 @@
 
 function p(msg) reaper.ShowConsoleMsg(tostring(msg) .. ' \n') end
 function reaper_do_file(file) local info = debug.getinfo(1,'S'); path = info.source:match[[^@?(.*[\/])[^\/]-$]]; dofile(path .. file); end
-reaper_do_file('wav.lua')
 reaper_do_file('json.lua')
+reaper.gmem_attach('BB_Sampler')
 
 function load_settings()
     local settings_file = io.open(path .. "sampler_settings.json", 'r')
@@ -31,77 +31,91 @@ local settings = load_settings()
 if not settings then
     return
 end
-if not settings.path then
-    local text = 'It seems that this is your first time running Global Sampler, would you like to set a recording path?' .. '\n\n' .. "You can always change this path later by running the action 'BirdBird_Set Global Sampler Recording Path'."
-    local ret = reaper.ShowMessageBox(text, 'Global Sampler - First Time Setup', 4)
-    if ret == 6 then
-        local retval, folder = reaper.JS_Dialog_BrowseForFolder('Select Recording Path', '')
-        if retval then 
-            settings.path = folder .. '/'
-            save_settings(settings)
+
+local fx_name = 'Global Sampler'
+function locate_JSFX(name)
+    --check master
+    local master = reaper.GetMasterTrack(0)
+    local index = reaper.TrackFX_GetByName( master, name, false)
+    if index ~= -1 then
+        return {track = master, index = index, type = 'MASTER'}
+    end
+
+    --check monitor fx
+    index = reaper.TrackFX_AddByName( master, name, true, 0)
+    if index ~= -1 then
+        return {track = master, index = index|0x1000000, type = 'MONITOR'}
+    end    
+    
+    --check tracks
+    local track_count = reaper.CountTracks(0)
+    for i = 0, track_count - 1 do
+        local track = reaper.GetTrack(0, i)
+        local index = reaper.TrackFX_GetByName( track, name, false)
+        if index ~= -1 then
+            return {track = track, index = index, type = 'TRACK'}
         end
     end
+    return nil
 end
-local recording_path = settings.path -- <- set via script
 
-reaper.gmem_attach('BB_Resampler')
+function ping_JSFX()
+    local js = locate_JSFX(fx_name)
+    if js then
+        reaper.TrackFX_Show(js.track, js.index, 3)
+        local hwnd = reaper.TrackFX_GetFloatingWindow( js.track, js.index )
+        reaper.JS_Window_Show( hwnd, "HIDE" )
+    else
+        reaper.gmem_write(5, 0) --announce plugin not found
+    end
+end
+
 function get_buffer_data()
     local b = {}
-
-    b.srate = 1 / reaper.parse_timestr_len( 1, 0, 4 )
-    b.len_in_secs = reaper.gmem_read(0)
-    b.buf_start_index = reaper.gmem_read(1)
-    b.num_channels = 2
-    b.real_size = b.srate * b.len_in_secs
     b.disp_buf_index = reaper.gmem_read(8)
     return b
 end
 
-function sample(start_index, sample_len_in_secs)
-    local srate = 1 / reaper.parse_timestr_len( 1, 0, 4 )
-    local len_in_secs = reaper.gmem_read(0)
-    local buf_start_index = reaper.gmem_read(1)
-    local num_channels = 2
-    
-    local playback_start_index = reaper.gmem_read(4)
-    local playback_length_secs = sample_len_in_secs
-    
-    local samples = {n = 0}
-    local start_index = start_index
-    local end_index = math.floor(start_index - 1 + playback_length_secs*srate)
-    local arr_size = len_in_secs*srate
-    local r = reaper
-    for i = start_index, end_index do
-        local j = i;
-        if j >= arr_size + buf_start_index then
-            j = (j % arr_size) + buf_start_index
-        end
-        for c = 1, 2 do
-            samples.n = samples.n + 1
-            if c == 1 then
-                samples[samples.n] = r.gmem_read(j)
-            else 
-                samples[samples.n] = r.gmem_read(j + arr_size)
-            end
-        end
+function get_track()
+    local track_id
+    local track = reaper.GetSelectedTrack(0, 0)
+    if track then
+        track_id = reaper.GetMediaTrackInfo_Value(track, 'IP_TRACKNUMBER')
     end
-    
-    --WRITE TO FILE
-    local proj_name = reaper.GetProjectName(0, '')
-    if proj_name == '' then proj_name = 'Untitled' else
-    proj_name = string.sub(proj_name, 1, #proj_name - 4) end 
-    local file_name = recording_path .. proj_name .. ' - ' ..  reaper.time_precise() .. ".wav"
-    local writer = wav.create_context(file_name, "w")
-    writer.init(num_channels, srate, 32)
-    writer.write_samples_interlaced(samples)
-    writer.finish()
-    
-    reaper.gmem_write(2, 0) --release writer
-    
-    --INSERT MEDIA
-    reaper.PreventUIRefresh(1)
-    local edit_cursor_pos = reaper.GetCursorPosition()
-    reaper.InsertMedia(file_name, 0)
-    reaper.SetEditCurPos( edit_cursor_pos, false, false)
-    reaper.PreventUIRefresh(-1)
+    return {track = track, track_id = track_id}
+end
+
+function sample_normalized(nx, nw)
+    local t = get_track()
+    if t.track then
+        reaper.gmem_write(6, nx) --start
+        reaper.gmem_write(7, nw) --width
+        reaper.gmem_write(2, t.track_id) --track
+        
+        reaper.gmem_write(1, 3)  --type
+        reaper.gmem_write(0, 1)  --dump switch
+
+        ping_JSFX()
+    end
+end
+
+function sample_playback()
+    local t = get_track()
+    if t.track then
+        reaper.gmem_write(1, 1)  --type
+        reaper.gmem_write(0, 1)  --dump switch
+        reaper.gmem_write(2, t.track_id) --track
+        ping_JSFX()
+    end
+end
+
+function sample_seconds(seconds)
+    local t = get_track()
+    if t.track then
+        reaper.gmem_write(1, 2) --last X secs
+        reaper.gmem_write(3, seconds) --4 seconds
+        reaper.gmem_write(0, 1) --dump values
+        reaper.gmem_write(2, t.track_id) --track
+        ping_JSFX()
+    end
 end

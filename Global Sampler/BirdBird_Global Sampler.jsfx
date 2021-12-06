@@ -1,0 +1,173 @@
+options:gmem=BB_Sampler
+desc: Global Sampler
+version:0.99
+author:BirdBird
+
+slider1:0<-1,1,0.1>-Force Change
+
+in_pin:left input
+in_pin:right input
+out_pin:left output
+out_pin:right output
+
+@init
+ext_noinit = 1;
+buf_pos = 0;
+len_in_secs = 60;
+buf_len = len_in_secs*srate*2;
+counter = 0;
+gmem[5] = 1;
+gmem_reserved = 20;
+
+@slider
+
+@block
+
+@sample
+//Recording Boundary
+lock_writehead == 0 ? (
+  play_state != last_play_state ? (
+    play_state != 0 ? (
+      play_start = play_position;
+      play_len = 0;
+      play_counter = 0;
+      play_start_counter = counter;
+      playback = 1;
+    );
+    play_state == 0 ? (
+      playback = 0;
+    );
+  );
+  last_play_state = play_state;
+  playback == 1 ? (
+    play_len += 1/srate;
+    play_len > len_in_secs ? (
+      play_len = len_in_secs;
+    );
+  
+  
+    play_counter += 1;
+    play_counter >= len_in_secs*srate ? (
+      play_counter = len_in_secs*srate;
+    );
+  );
+  
+  buf_pos[counter]   = spl0;
+  buf_pos[counter+1] = spl1;
+  
+  counter = counter + 2;
+  counter >= buf_len ? (
+    counter = counter % buf_len;
+  );
+  counter_norm = counter/buf_len;
+  gmem[4] = counter_norm;
+  
+  //DISPLAY BUFFER
+  timer = time_precise();
+  disp_val = (spl0 + spl1)/2;
+  disp_timestamp_buf = buf_len + 1;
+  
+  disp_buf_size = gmem[8];
+  disp_buf = gmem_reserved + 1;
+  gmem[9] = disp_buf;
+  
+  disp_timestamp_buf = buf_pos + buf_len + 1;
+  //RESAMPLE DISPLAY BUFFER
+  disp_temp_buf = buf_len + 1 + disp_buf_size*3;
+  disp_buf_size != last_disp_buf_size ? (
+    //COPY TO TEMP BUFFER and flush disp
+    i = 0;
+    while(i < last_disp_buf_size) (
+      disp_temp_buf[i] = gmem[disp_buf + i];
+      gmem[disp_buf + i] = 0;
+      i = i+1;
+    );
+    
+    //RESAMPLE FROM TEMP BUFFER
+    i = 0;
+    while(i < disp_buf_size) (
+      t_index = floor((i/disp_buf_size)*last_disp_buf_size + 0.5);
+      gmem[disp_buf + i] = disp_temp_buf[t_index];
+      i = i+1;
+    );
+    
+    //FLUSH DISPLAY BUFFER
+    i = 0;
+    while(i < last_disp_buf_size) (   
+      disp_timestamp_buf[i] = 0;
+      i = i+1;
+    );
+
+    last_disp_buf_size = disp_buf_size;
+  );
+  
+  
+  disp_counter = floor(counter_norm*disp_buf_size);
+  disp_timestamp = disp_timestamp_buf[disp_counter];
+  l_disp_val = gmem[disp_buf + disp_counter];
+  abs(disp_val) > abs(l_disp_val) || timer - disp_timestamp > len_in_secs/2 ? ( 
+    gmem[disp_buf + disp_counter] = disp_val;
+    disp_timestamp_buf[disp_counter] = timer;
+  );
+  last_disp_buf_size = disp_buf_size;
+);
+
+@gfx
+//export_buffer_to_project(0,9000*2,2,srate,track,0,tempo);
+
+function wmod(num, mod) local(v) (
+  num < 0 ? mod - ((num*-1) % mod) : num % mod;
+);
+
+function sample_buf(start_index, len) local(temp_buf, track, i) (
+    temp_buf = buf_len + 1 + disp_buf_size*2;
+    temp_buf_len = len;
+    
+    i = 0;
+    while(i < len*2) (
+      x1 = start_index;
+      x2 = start_index + 1;
+      x1 = wmod(x1 + i, buf_len);
+      x2 = wmod(x2 + i, buf_len);
+      
+      temp_buf[i] =   buf_pos[x1];
+      temp_buf[i+1] = buf_pos[x2];
+      i += 2;
+    );
+    
+    track = gmem[2] - 1;
+    export_buffer_to_project(temp_buf,temp_buf_len,2,srate,track,0,tempo);
+);
+
+function sample_buf_norm(sn, wn) (
+  sample_buf(floor(sn*buf_len), floor(wn*buf_len/2));
+);
+
+export_buf = gmem[0];
+export_buf == 1 ? (
+  lock_writehead = 1;
+  
+  export_type = gmem[1];
+  export_type == 1 ? (
+    sample_buf(play_start_counter, play_counter);
+  );
+  export_type == 2 ? (
+    last_secs_len = gmem[3];
+    last_secs_buf_len = floor(last_secs_len*srate + 0.5);
+
+    start_pos = counter - (last_secs_buf_len*2);
+    start_pos = wmod(start_pos, buf_len);
+    sample_buf(start_pos, last_secs_buf_len);
+  );
+  export_type == 3 ? (
+    a += 1;
+    is = gmem[6];
+    iw = gmem[7];
+    sample_buf_norm(is, iw);
+  );
+  
+  gmem[0] = 0;
+  lock_writehead = 0;
+);
+
+e += 1;
