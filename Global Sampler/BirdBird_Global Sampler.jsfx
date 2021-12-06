@@ -1,7 +1,9 @@
+noindex: true
+version: 0.99
+author BirdBird
+
 options:gmem=BB_Sampler
 desc: Global Sampler
-version:0.99
-author:BirdBird
 
 slider1:0<-1,1,0.1>-Force Change
 
