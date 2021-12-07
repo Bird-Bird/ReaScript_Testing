@@ -1,5 +1,5 @@
 -- @description Global Sampler
--- @version 0.99.7.1
+-- @version 0.99.7.2
 -- @author BirdBird
 -- @provides
 --    [nomain]global_sampler_libraries/global_resampler_lib.lua
@@ -128,6 +128,7 @@ end
 
 local draw_state = {cs = 0, cw = 0, bw = 0, bh = 0, offset = 0, start_offset = 0, start_cs = 0}
 draw_state.waveform_zoom = st.waveform_zoom
+local simulations = {}
 function draw(m, mouse_state, drag_info)
     local w = gfx.w
     local h = gfx.h
@@ -284,6 +285,17 @@ function draw(m, mouse_state, drag_info)
                 elseif m.ctrl then
                     local pause_state = reaper.gmem_read(13)
                     reaper.gmem_write(13, 1 - pause_state)
+                    
+                    local col
+                    if pause_state == 0 then
+                        --PAUSING
+                        col = {r = 219/256, g = 13/256, b = 68/256}
+                    else 
+                        col = {r = 154/256, g = 227/256, b = 82/256}
+                    end
+                    local pause_sim = {center = m.x, width = 0, age = 0,
+                    type = 'PAUSE', lifetime = 10, col = col}
+                    table.insert(simulations, pause_sim)
                 elseif m.alt then
                     draw_state.preview = true
                     
@@ -462,7 +474,7 @@ function draw(m, mouse_state, drag_info)
         if ce >= bw + margin then ce = margin + bw end
         draw_state.cw = ce - draw_state.cs
     elseif draw_state.tweak_waveform_zoom then
-        draw_state.waveform_zoom = draw_state.waveform_zoom - m.dy * 0.05
+        draw_state.waveform_zoom = draw_state.waveform_zoom - m.dy * 0.025
         if draw_state.waveform_zoom < 0 then
             draw_state.waveform_zoom = 0
         end
@@ -470,6 +482,7 @@ function draw(m, mouse_state, drag_info)
         local preview_pos = reaper.gmem_read(12)
         if preview_pos > 0 then
             preview_pos = wmod(preview_pos + norm_offset, 1)
+            
             local col = {r = theme.waveform_line.r/256, g = theme.waveform_line.g/256, b = theme.waveform_line.b/256}
             if theme.rainbow_waveform_col then
                 col = palette(preview_pos*3)
@@ -496,6 +509,35 @@ function draw(m, mouse_state, drag_info)
                 gfx.setcursor(32513) --IBEAM
             end
         end
+    end
+
+    local sim_count = #simulations
+    for i = sim_count, 1, -1 do
+        sim = simulations[i]
+        if sim.type == 'PAUSE' then
+            if sim.age == sim.lifetime then
+                table.remove(simulations, i)
+                goto continue
+            end
+            
+            sim.width = sim.width + 3
+            local a = (1 - (sim.age/sim.lifetime)) ^ 2
+            local x1 = math.max(sim.center - sim.width, margin)
+            local x2 = math.min(sim.center + sim.width, margin + bw)
+            local y1, y2 = margin, margin + bh
+
+            local col = sim.col
+            gfx.set(col.r, col.g, col.b, a) 
+
+            gfx.line(x1, y1, x1, y2)
+            gfx.line(x2, y1, x2, y2)
+            
+            gfx.set(col.r, col.g, col.b, a/3) 
+            gfx.rect(x1 + 1, margin, sim.width*2, bh)
+
+            sim.age = sim.age + 1
+        end
+        ::continue::
     end
 
     gfx.set(theme.crop_region.r/256,
