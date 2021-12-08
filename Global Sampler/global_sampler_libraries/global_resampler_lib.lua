@@ -141,6 +141,9 @@ end
 
 function validate_instances()
     local instances, dat = locate_all_JSFX(fx_name)
+    if #instances == 0 then
+        return
+    end
     local num_enabled = dat.num_enabled
     table.sort(instances, function(a,b) return a.prio < b.prio end)
     
