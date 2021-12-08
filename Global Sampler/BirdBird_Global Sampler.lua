@@ -1,5 +1,5 @@
 -- @description Global Sampler
--- @version 0.99.7.5
+-- @version 0.99.7.6
 -- @author BirdBird
 -- @provides
 --    [nomain]global_sampler_libraries/global_resampler_lib.lua

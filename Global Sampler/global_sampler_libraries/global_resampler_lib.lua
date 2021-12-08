@@ -10,7 +10,7 @@ reaper.gmem_attach('BB_Sampler')
 function load_settings()
     local settings_file = io.open(path .. "sampler_settings.json", 'r')
     if not settings_file then
-        local default_settings = '{"theme":"theme_carbon", "waveform_zoom":1}'
+        local default_settings = '{"theme":"theme_reaper_default", "waveform_zoom":1}'
         settings_file = io.open(path .. "sampler_settings.json", 'w')
         settings_file:write(default_settings)
         settings_file:close()

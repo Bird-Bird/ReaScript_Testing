@@ -2,7 +2,7 @@ noindex: true
 version: 0.99
 author BirdBird
 
-options:gmem=BB_Sampler
+options:gmem=BB_Sampler, maxmem=33554432
 desc: Global Sampler
 
 slider1:0<-1,1,0.1>-Force Change
