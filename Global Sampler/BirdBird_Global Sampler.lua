@@ -1,5 +1,5 @@
 -- @description Global Sampler
--- @version 0.99.7.2
+-- @version 0.99.7.3
 -- @author BirdBird
 -- @provides
 --    [nomain]global_sampler_libraries/global_resampler_lib.lua
@@ -569,7 +569,15 @@ end
 local lm = {x = gfx.mouse_x, y = gfx.mouse_y}
 local drag_info = {}
 local m_lock = ''
+local last_project = reaper.EnumProjects(-1)
 function main()
+    --PROJECT HANDLING
+    local current_project = reaper.EnumProjects(-1)
+    if last_project ~= current_project then
+        validate_instances()
+    end
+    last_project = current_project
+    
     --WINDOW RESIZE--
     local ww = gfx.w
     local hh = gfx.h
@@ -695,4 +703,5 @@ if st.window_state then
 end
 
 reaper.atexit(exit)
+validate_instances()
 main()

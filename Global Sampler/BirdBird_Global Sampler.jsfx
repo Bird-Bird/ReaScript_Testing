@@ -132,7 +132,7 @@ lock_writehead == 0 && pause_state != 1 ? (
       i = i+1;
     );
     
-    //FLUSH DISPLAY BUFFER
+    //FLUSH DISPLAY TIMESTAMP BUFFER
     i = 0;
     while(i < last_disp_buf_size) (   
       disp_timestamp_buf[i] = 0;
@@ -143,6 +143,38 @@ lock_writehead == 0 && pause_state != 1 ? (
   );
   
   
+  
+  
+  //RECALCULATE DISPLAY BUFFER
+  flush_display = gmem[14];
+  flush_display == 1 ? (
+    //FLUSH BUFFERS
+    i = 0;
+    while(i < disp_buf_size) (
+      disp_timestamp_buf[i] = 0;  
+      gmem[disp_buf + i] = 0;
+      i = i+1;
+    );
+    
+    //RECALCULATE BUFFER
+    i = 0;
+    while(i < buf_len) (
+      n_i = i/buf_len;
+      disp_buf_i = floor(n_i*disp_buf_size + 0.5);
+      
+      l = buf_pos[i];
+      r = buf_pos[i+1];
+      disp_val = (l+r)/2;
+
+      cur_val = gmem[disp_buf + disp_buf_i];
+      gmem[disp_buf + disp_buf_i] = max(cur_val, disp_val);
+      
+      i = i+2;
+    );
+    gmem[14] = 0;
+  );
+  
+  //UPDATE DISPLAY BUFFER
   disp_counter = floor(counter_norm*disp_buf_size);
   disp_timestamp = disp_timestamp_buf[disp_counter];
   l_disp_val = gmem[disp_buf + disp_counter];
