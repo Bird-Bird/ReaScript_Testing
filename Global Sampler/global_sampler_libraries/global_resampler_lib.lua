@@ -131,9 +131,7 @@ end
 function ping_JSFX()
     local js = locate_JSFX(fx_name)
     if js then
-        reaper.TrackFX_Show(js.track, js.index, 3)
-        local hwnd = reaper.TrackFX_GetFloatingWindow( js.track, js.index )
-        reaper.JS_Window_Show( hwnd, "HIDE" )
+        hide_instance(js)
     else
         reaper.gmem_write(5, 0) --announce plugin not found
     end
@@ -179,6 +177,7 @@ function validate_instances()
         p2('FLUSH DISPLAY')
         reaper.gmem_write(14, 1)
     end
+    hide_instance(js)
 end
 
 function get_buffer_data()
