@@ -1,4 +1,5 @@
 -- @noindex
+-- @version 0.99.2
 
 function p(msg) reaper.ShowConsoleMsg(tostring(msg)..'\n')end
 function str_split(s, delimiter)
