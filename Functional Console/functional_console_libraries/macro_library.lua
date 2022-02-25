@@ -1,3 +1,5 @@
+-- @noindex
+
 macros = {
     ["f"]   = "sf bs",
     ["gr"] = "*f len 0.25b rep 15 sel 0-1 nud 0.05b sa fxo",
