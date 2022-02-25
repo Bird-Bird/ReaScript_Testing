@@ -614,7 +614,6 @@ function reverse()
         reaper.SetMediaItemSelected(item, true)
 
         local take = reaper.GetMediaItemTake(item, 0)
-        local retval, section, start, length, fade, reverse = reaper.BR_GetMediaSourceProperties( take )
         
         --DATA
         local item_pos = reaper.GetMediaItemInfo_Value(item, 'D_POSITION')
