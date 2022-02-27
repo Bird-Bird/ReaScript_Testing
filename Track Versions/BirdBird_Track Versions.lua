@@ -1,5 +1,5 @@
 -- @description Track Versions
--- @version 0.99.1
+-- @version 0.99.2
 -- @author BirdBird
 -- @provides
 --    [nomain]track_versions_libraries/json.lua
@@ -9,6 +9,25 @@
 
 function reaper_do_file(file) local info = debug.getinfo(1,'S'); path = info.source:match[[^@?(.*[\/])[^\/]-$]]; dofile(path .. file); end
 reaper_do_file('track_versions_libraries/json.lua')
+
+--CHECK DEPENDENCIES
+function open_url(url)
+    local OS = reaper.GetOS()
+    if (OS == "OSX32" or OS == "OSX64") or OS == 'macOS-arm64' then
+        os.execute('open "" "' .. url .. '"')
+    else
+        os.execute('start "" "' .. url .. '"')
+    end
+end
+
+if not reaper.APIExists('JS_ReaScriptAPI_Version') then
+    local text = 'Track Versions requires the js_ReaScriptAPI to to run, however it is unable to find it. \nWould you like to be redirected to the extensions forum thread for installation?'
+    local ret = reaper.ShowMessageBox(text, 'Track Versions - Dependency Error', 4)
+    if ret == 6 then
+        open_url('https://forum.cockos.com/showthread.php?t=212174')
+    end
+    return
+end
 
 --FUNCTIONS
 function p(msg) reaper.ShowConsoleMsg(tostring(msg) .. '\n') end
