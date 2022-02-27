@@ -2,7 +2,7 @@
 -- @version 0.99
 -- @author BirdBird
 -- @provides
---    [nomain]'track_versions_libraries/json.lua'
+--    [nomain]track_versions_libraries/json.lua
 
 --@changelog
 --  + Initial version
