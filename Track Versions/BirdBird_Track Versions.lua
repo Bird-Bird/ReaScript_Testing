@@ -1,5 +1,5 @@
 -- @description Track Versions
--- @version 0.99
+-- @version 0.99.1
 -- @author BirdBird
 -- @provides
 --    [nomain]track_versions_libraries/json.lua
