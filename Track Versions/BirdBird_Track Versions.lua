@@ -1,5 +1,5 @@
 -- @description Track Versions
--- @version 0.99.3
+-- @version 0.99.4
 -- @author BirdBird
 -- @provides
 --    [nomain]track_versions_libraries/json.lua
@@ -49,11 +49,12 @@ end
 
 --INIT
 local tracks, min_versions, all_selected = get_selected_tracks()
+if #tracks == 0 then return end
 
 --SHOW MENU
 gfx.x, gfx.y = gfx.mouse_x + offs, gfx.mouse_y + offs
-local menu = "Create new version|Create new empty version|>Actions|<Clear other versions||#Versions|"
-local menu_length = 4
+local menu = "Create new version|Create new empty version|>Actions|Delete current version|<Clear other versions||#Versions|"
+local menu_length = 5
 for i = 1, min_versions do
     local c = ''
     if #tracks == 1 or all_selected ~= -1 then
@@ -65,6 +66,17 @@ end
 --EXECUTE COMMAND
 local option = gfx.showmenu(menu)
 if option == 0 then return end
+local partial_load = reaper.JS_Mouse_GetState(0|00000100)&4 == 4
+
+--DELETE PROMPT
+if option == 3 or option == 4 then
+    local text = option == 4 and "Are you sure that you want to clear all other versions?" or 
+    "Are you sure that you want to delete the selected version?"
+    local ret = reaper.ShowMessageBox(text, 'Track Versions - Delete Version', 4)
+    if ret ~= 6 then
+        return
+    end
+end
 
 reaper.PreventUIRefresh(1)
 reaper.Undo_BeginBlock()
@@ -77,29 +89,31 @@ if option == 1 or option == 2 then
         add_new_version(track, state, clear)   
     end
     undo = 'Track Versions - Create New Version'
-elseif option == 3 then
+elseif option == 4 then
     for i = 1, #tracks do
         local track = tracks[i].track
         local state = tracks[i].state
         collapse_versions(track, state)
     end
     undo = 'Track Versions - Collapse Versions'
-elseif option == 4 then
+elseif option == 3 then
     for i = 1, #tracks do
         local track = tracks[i].track
         local state = tracks[i].state
-        explode_to_child_tracks(track, state)
+        delete_current_version(track, state)
     end  
-    undo = 'Track Versions - Explode Versions'    
+    undo = 'Track Versions - Delete Current Version'    
 elseif option > menu_length then
     local selected_id = option - menu_length
     for i = 1, #tracks do 
         local track = tracks[i].track
         local state = tracks[i].state
-        switch_versions(track, state, selected_id)
+        switch_versions(track, state, selected_id, false, partial_load)
     end
-    undo = 'Track Versions - Switch Version'
+    undo = partial_load and 'Track Versions - Additive Load' or 
+    'Track Versions - Switch Version'
 end
+clear_pool()
 reaper.Undo_EndBlock(undo, -1)
 reaper.PreventUIRefresh(-1)
 
