@@ -1,5 +1,5 @@
 -- @noindex
--- @version 0.99.4
+-- @version 0.99.5
 
 function reaper_do_file(file) local info = debug.getinfo(1,'S'); local path = info.source:match[[^@?(.*[\/])[^\/]-$]]; dofile(path .. file); end
 reaper_do_file('json.lua')
@@ -131,39 +131,6 @@ function load_chunk(track, item_chunks, partial_load)
                 end
             end
         end
-    
-        --INSERT INTO POOL TABLE
-        if not del then
-            local item_take = reaper.GetMediaItemTake(item, 0)
-            if reaper.TakeIsMIDI(item_take) then
-                table.insert(new_items, item)
-            end
-        end
-    end
-end
-
-function clear_pool()
-    --SAVE SELECTION
-    local selected_items = {}
-    local selected_item_count = reaper.CountSelectedMediaItems(0)
-    for i = selected_item_count - 1, 0, -1 do
-        local item = reaper.GetSelectedMediaItem(0, i)
-        reaper.SetMediaItemSelected(item, false)
-        table.insert(selected_items, item)
-    end
-
-    --SELECT NEW ITEMS
-    for i = 1, #new_items do
-        reaper.SetMediaItemSelected(new_items[i], true)
-    end
-
-    --REMOVE FROM TAKE POOL
-    reaper.Main_OnCommand(41613, 0)
-    reaper.Main_OnCommand(40289, 0)
-
-    --RESTORE SELECTION
-    for i = 1, #selected_items do
-        reaper.SetMediaItemSelected(selected_items[i], true)
     end
 end
 
@@ -192,7 +159,11 @@ function get_item_chunks(chunk_lines)
         if current_scope == 1 and last_item_chunk ~= -1 and scope_end then
             local s = ''
             for j = last_item_chunk, i do
-                s = s .. chunk_lines[j] .. '\n'
+                if not string.starts(chunk_lines[j], 'POOLEDEVTS') and not
+                string.starts(chunk_lines[j], 'GUID') and not
+                string.starts(chunk_lines[j], 'IGUID') then
+                    s = s .. chunk_lines[j] .. '\n'
+                end
             end
             last_item_chunk = -1
             table.insert(item_chunks, s)

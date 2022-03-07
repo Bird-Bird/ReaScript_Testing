@@ -1,5 +1,5 @@
 -- @description Track Versions
--- @version 0.99.4
+-- @version 0.99.5
 -- @author BirdBird
 -- @provides
 --    [nomain]track_versions_libraries/json.lua
@@ -113,7 +113,6 @@ elseif option > menu_length then
     undo = partial_load and 'Track Versions - Additive Load' or 
     'Track Versions - Switch Version'
 end
-clear_pool()
 reaper.Undo_EndBlock(undo, -1)
 reaper.PreventUIRefresh(-1)
 
