@@ -1,12 +1,5 @@
--- @description Functional Console
+-- @noindex
 -- @version 0.99.5
--- @author BirdBird
--- @provides
---    [nomain]functional_console_libraries/functions.lua
---    [nomain]functional_console_libraries/macro_library.lua
-
---@changelog
---  + Early version
 
 function p(msg) reaper.ShowConsoleMsg(tostring(msg)..'\n')end
 function reaper_do_file(file) local info = debug.getinfo(1,'S'); local path = info.source:match[[^@?(.*[\/])[^\/]-$]]; dofile(path .. file); end
