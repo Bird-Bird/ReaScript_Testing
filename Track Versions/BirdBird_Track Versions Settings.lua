@@ -1,9 +1,16 @@
 -- @noindex
--- @version 0.99.6
+-- @version 0.99.6.1
 
 function p(msg) reaper.ShowConsoleMsg(tostring(msg)..'\n')end
 function reaper_do_file(file) local info = debug.getinfo(1,'S'); path = info.source:match[[^@?(.*[\/])[^\/]-$]]; dofile(path .. file); end
 reaper_do_file('track_versions_libraries/functions.lua')
+
+--CHECK DEPENDENCY
+if not reaper.APIExists('ImGui_GetVersion') then
+    local text = 'Track Versions Settings requires the ReaImGui extension to run. You can install it through ReaPack.'
+    local ret = reaper.ShowMessageBox(text, 'Track Versions - Missing Dependency', 0)
+    return
+end
 
 local ctx = reaper.ImGui_CreateContext('Track Versions Settings')
 local size = reaper.GetAppVersion():match('OSX') and 12 or 14
@@ -24,7 +31,7 @@ end
 
 function loop()
     reaper.ImGui_PushFont(ctx, font)
-    reaper.ImGui_SetNextWindowSize(ctx, 400, 80, reaper.ImGui_Cond_FirstUseEver())
+    reaper.ImGui_SetNextWindowSize(ctx, 200, 300, reaper.ImGui_Cond_FirstUseEver())
     local visible, open = reaper.ImGui_Begin(ctx, 'Track Versions Settings', true)
     if visible then
         frame()
