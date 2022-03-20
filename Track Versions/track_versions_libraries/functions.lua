@@ -1,8 +1,59 @@
 -- @noindex
--- @version 0.99.5
+-- @version 0.99.6
 
 function reaper_do_file(file) local info = debug.getinfo(1,'S'); local path = info.source:match[[^@?(.*[\/])[^\/]-$]]; dofile(path .. file); end
 reaper_do_file('json.lua')
+
+--USER SETTINGS
+local info = debug.getinfo(1,'S')
+local path = info.source:match[[^@?(.*[\/])[^\/]-$]]
+local default_settings = {prefix_tracks = false}
+function get_settings()
+    local file_name = 'settings.json'
+    local settings = io.open(path .. file_name, 'r')
+    if not settings then
+        return default_settings
+    else
+        local st = settings:read("*all")
+        st_json = json.decode(st)
+        return st_json
+    end
+end
+
+function save_settings(data)
+    local settings = io.open(path .. 'settings.json', 'w')
+    local d = json.encode(data)
+    settings:write(d)
+    settings:close()
+end
+
+--TRACK PREFIX
+local pattern = "v%d+%s%-%s"
+local pattern_2 = "v%d+%s%-"
+function prefix_track(track, id)
+    local r, name = reaper.GetSetMediaTrackInfo_String(track, 'P_NAME', '', false)
+    local name = name:gsub(pattern, "")
+    name = name:gsub(pattern_2, "")
+    name = "v" .. tostring(id) .. " - " .. name
+    reaper.GetSetMediaTrackInfo_String(track, 'P_NAME', name, true)
+end
+
+function prefix_tracks(tracks, init, init_version_data)
+    local init_data = {}
+    for i = 1, #tracks do 
+        local track = tracks[i].track
+        local state = tracks[i].state
+        if #state.versions > 1 then
+            prefix_track(track, math.floor(state.data.selected))
+        elseif not init and init_version_data[track] - #state.versions > 0 then
+            prefix_track(track, math.floor(state.data.selected))
+        end
+        if init then
+            init_data[track] = #state.versions
+        end
+    end
+    return init_data
+end
 
 --UTILITY
 function str_split(s, delimiter)
@@ -17,7 +68,7 @@ function string.starts(String,Start)
 end
 
 function get_empty_state()
-    return {versions = {}, data = {}}
+    return {versions = {}, data = {selected = 1}}
 end
 
 local ext_name = 'P_EXT:BB_Track_Versions'
@@ -229,6 +280,7 @@ end
 function collapse_versions(track, state)
     local new_state = get_empty_state()
     add_new_version(track, new_state)
+    return new_state
 end
 
 function get_selected_tracks()

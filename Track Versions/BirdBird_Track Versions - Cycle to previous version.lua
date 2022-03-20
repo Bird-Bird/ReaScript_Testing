@@ -1,5 +1,5 @@
 -- @noindex
--- @version 0.99.5
+-- @version 0.99.6
 
 function p(msg) reaper.ShowConsoleMsg(tostring(msg) .. '\n') end
 function reaper_do_file(file) local info = debug.getinfo(1,'S'); path = info.source:match[[^@?(.*[\/])[^\/]-$]]; dofile(path .. file); end
@@ -16,6 +16,10 @@ for i = 1, #tracks do
     local j = state.data.selected - 1
     if j == 0 then j = j + version_count end
     switch_versions(track, state, j)
+end
+local settings = get_settings()
+if settings.prefix_tracks then 
+    prefix_tracks(tracks, true)
 end
 
 reaper.Undo_EndBlock('Track Versions - Cycle to previous version', -1)

@@ -1,11 +1,12 @@
 -- @description Track Versions
--- @version 0.99.5
+-- @version 0.99.6
 -- @author BirdBird
 -- @provides
 --    [nomain]track_versions_libraries/json.lua
 --    [nomain]track_versions_libraries/functions.lua
 --    [main]BirdBird_Track Versions - Cycle to next version.lua
 --    [main]BirdBird_Track Versions - Cycle to previous version.lua
+--    [main]BirdBird_Track Versions Settings.lua
 
 --@changelog
 --  + Initial version
@@ -48,8 +49,14 @@ else
 end
 
 --INIT
+local settings = get_settings()
 local tracks, min_versions, all_selected = get_selected_tracks()
 if #tracks == 0 then return end
+local init_version_counts = {}
+if settings.prefix_tracks then
+    --BACKWARDS COMPATIBILITY
+    init_version_counts = prefix_tracks(tracks, true)
+end
 
 --SHOW MENU
 gfx.x, gfx.y = gfx.mouse_x + offs, gfx.mouse_y + offs
@@ -93,7 +100,7 @@ elseif option == 4 then
     for i = 1, #tracks do
         local track = tracks[i].track
         local state = tracks[i].state
-        collapse_versions(track, state)
+        tracks[i].state = collapse_versions(track, state)
     end
     undo = 'Track Versions - Collapse Versions'
 elseif option == 3 then
@@ -112,6 +119,10 @@ elseif option > menu_length then
     end
     undo = partial_load and 'Track Versions - Additive Load' or 
     'Track Versions - Switch Version'
+end
+--PREFIX TRACKS
+if settings.prefix_tracks then
+    prefix_tracks(tracks, false, init_version_counts)
 end
 reaper.Undo_EndBlock(undo, -1)
 reaper.PreventUIRefresh(-1)
