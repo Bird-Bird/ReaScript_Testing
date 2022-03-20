@@ -1,5 +1,5 @@
 -- @noindex
--- @version 0.99.5.2
+-- @version 0.99.5.3
 
 function p(msg) reaper.ShowConsoleMsg(tostring(msg)..'\n')end
 function reaper_do_file(file) local info = debug.getinfo(1,'S'); path = info.source:match[[^@?(.*[\/])[^\/]-$]]; dofile(path .. file); end
@@ -213,7 +213,7 @@ function main_frame()
     reaper.ImGui_PushStyleColor(ctx,  reaper.ImGui_Col_TitleBg(), button_color)
     reaper.ImGui_PushStyleColor(ctx,  reaper.ImGui_Col_MenuBarBg(), bg_color)
     reaper.ImGui_PushStyleVar(ctx, reaper.ImGui_StyleVar_WindowPadding(),  4, 4)
-    reaper.ImGui_SetNextWindowSize(ctx, 272, 680, reaper.ImGui_Cond_FirstUseEver())
+    reaper.ImGui_SetNextWindowSize(ctx, 272, 500, reaper.ImGui_Cond_FirstUseEver())
     if reaper.ImGui_BeginPopupModal(ctx, 'Macros', nil) then
         if reaper.ImGui_Button(ctx, 'Seed') then
             reset_seed()
@@ -222,7 +222,9 @@ function main_frame()
 
         --MACRO SELECTABLES
         reaper.ImGui_PushStyleColor(ctx, reaper.ImGui_Col_FrameBg(), bg_color)
-        if reaper.ImGui_BeginListBox(ctx, '##listbox_1', -1, 600) then
+        local w, h = reaper.ImGui_GetWindowSize(ctx);
+        local y = reaper.ImGui_GetCursorPosY( ctx )
+        if reaper.ImGui_BeginListBox(ctx, '##listbox_1', -1, h - 29 - y) then
             reaper.ImGui_PushStyleColor(ctx, reaper.ImGui_Col_Text(), button_color)
             for i = 1, #macro_display do
                 local k,v = macro_display[i].macro, macro_display[i].cmd
