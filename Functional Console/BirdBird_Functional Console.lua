@@ -5,7 +5,7 @@
 --    [nomain]functional_console_libraries/functions.lua
 --    [nomain]functional_console_libraries/base.lua
 --    [nomain]functional_console_libraries/macro_library.lua
---    [main]BirdBird_Functional Console (Reactive).lua
+--    [main]BirdBird_Functional Console Reactive.lua
 
 --@changelog
 --  + Early version

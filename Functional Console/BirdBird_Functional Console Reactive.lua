@@ -1,4 +1,4 @@
--- @description Functional Console (Reactive)
+-- @description Functional Console Reactive
 -- @version 0.99.5
 -- @author BirdBird
 
