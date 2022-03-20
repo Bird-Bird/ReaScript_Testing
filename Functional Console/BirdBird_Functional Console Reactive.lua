@@ -1,16 +1,17 @@
 -- @noindex
--- @version 0.99.5.1
+-- @version 0.99.5.2
 
 function p(msg) reaper.ShowConsoleMsg(tostring(msg)..'\n')end
 function reaper_do_file(file) local info = debug.getinfo(1,'S'); path = info.source:match[[^@?(.*[\/])[^\/]-$]]; dofile(path .. file); end
 reaper_do_file('functional_console_libraries/base.lua')
 
 --CHECK DEPENDENCY
-if not reaper.ImGui_GetVersion() then
+if not reaper.APIExists('ImGui_GetVersion') then
     local text = 'Reactive version of functional console requires the ReaImGui extension to run. You can install it through ReaPack.'
     local ret = reaper.ShowMessageBox(text, 'Functional Console - Missing Dependency', 0)
     return
 end
+
 
 local ctx = reaper.ImGui_CreateContext('My script')
 local size = reaper.GetAppVersion():match('OSX') and 12 or 14
