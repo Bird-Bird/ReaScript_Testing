@@ -1,5 +1,5 @@
 desc:BirdBird Very Important Compressor
-version: 0.99.2
+version: 0.99.3
 author: BirdBird
 provides:  
   vic_dependencies/*
@@ -17,7 +17,7 @@ options:no_meter, maxmem=33554432
 @init
 ext_noinit = 1.0;
 buff = 0;
-file_handle = file_open("/vic_dependencies/very_important_file.ogg");
+file_handle = file_open("./vic_dependencies/very_important_file.ogg");
 file_riff(file_handle,num_channels,wav_sr);
 num_channels > 0 ? (
   len = file_avail(file_handle);
