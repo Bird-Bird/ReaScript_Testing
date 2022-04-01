@@ -1,0 +1,234 @@
+desc:BirdBird Very Important Compressor
+version: 0.99
+author: BirdBird
+provides:  
+  vic_dependencies/*
+
+slider1:0<0,1,0.0001>-gain (dB)
+
+in_pin:left input
+in_pin:right input
+out_pin:left output
+out_pin:right output
+
+options:gfx_hz=120
+options:no_meter, maxmem=33554432
+
+@init
+ext_noinit = 1.0;
+buff = 0;
+file_handle = file_open("/vic_dependencies/very_important_file.mp3");
+file_riff(file_handle,num_channels,wav_sr);
+num_channels > 0 ? (
+  len = file_avail(file_handle);
+  file_mem(file_handle, buff, len);
+);
+
+reader=0;
+tau=2*$pi;
+
+@slider
+gain = slider1;
+
+@block
+
+@sample
+num_channels > 0 && gain > 0 ? (
+  l_peak -= (1/srate)*4;
+  r_peak -= (1/srate)*4;
+  
+  //PLAY FILE
+  reader >= buff + len ? (
+    reader -= len;
+  );
+  spl0 = buff[reader]*gain;
+  spl1 = buff[reader+1]*gain;
+  
+  //UPDATE PEAK METERS
+  l_peak = max(l_peak, abs(spl0));
+  r_peak = max(r_peak, abs(spl1));
+  
+  reader += 2;
+) : (
+  l_peak = 0;
+  r_peak = 0;
+);
+
+@gfx 252 164
+function dist(x1,y1,x2,y2) (
+  sqrt(pow(x2-x1,2) + pow(y2-y1,2));
+);
+
+function lerp(a,b,t)
+(
+  a + (b-a)*t;
+);
+
+//COLORS
+w = gfx_w;
+h = gfx_h;
+bc = 0.12/1.4;
+
+whr = 230/256;
+whg = 230/256;
+whb = 230/256;
+
+whr_dim = whr/6;
+whg_dim = whg/6;
+whb_dim = whb/6;
+
+gfx_set(bc,bc,bc, 1);
+gfx_rect(0, 0, gfx_w, gfx_h);
+gfx_set(wh,wh,wh, 1);
+
+//KNOB
+anim_w = 3;
+knob_x = w/2;
+knob_y = h/2;
+knob_r = 60;
+knob_w = 20 + anim_w;
+
+knob_rad = 0.6;
+knob_inner_rad = knob_r - knob_w - knob_margin;
+knob_as = -tau*(1 + knob_rad/2);
+arc_fill = 6;
+knob_margin = 10;
+
+//COLOR ANIMATION
+function palette(t) local(b)
+(
+    b = 0.2;
+    tr = min(0.5 + brightness + cos((t       )*tau)*0.5,1) + b;
+    tg = min(0.5 + brightness + cos((t + 0.33)*tau)*0.5,1) + b;
+    tb = min(0.5 + brightness + cos((t + 0.67)*tau)*0.5,1) + b;
+);
+col_timer_len = 4;
+palette(time_precise()*1.75);
+t_col = min(run_time*col_timer_len, 1);
+t_col = pow(t_col, 1/4);
+whr = lerp(whr, tr, t_col);
+whg = lerp(whg, tg, t_col);
+whb = lerp(whb, tb, t_col);
+
+//PARTICLES
+
+
+//MOUSE
+mx = mouse_x;
+my = mouse_y;
+dx = lx - mx;
+dy = ly - my;
+mouse_over = -1;
+timer = time_precise();
+dt = timer - l_timer;
+anim_speed = 11;
+dist(mx, my, knob_x, knob_y) <= knob_r ? (
+  mouse_over = 1;
+  mouse_over_len += dt*anim_speed;
+  mouse_over_len = min(mouse_over_len, 1);
+) : (
+  mouse_drag != 1 ? (
+    mouse_over_len -= dt*anim_speed;
+    mouse_over_len = max(mouse_over_len, 0);
+  );
+);
+l_timer = timer;
+
+t_anim = pow(mouse_over_len, 2);
+knob_w = lerp(knob_w, knob_w - anim_w, t_anim);
+knob_inner_rad = lerp(knob_inner_rad, knob_inner_rad + anim_w, t_anim);
+
+LMB = mouse_cap&1;
+LMB == 1 && last_LMB == 0 ? (//mouse down
+  mouse_drag = mouse_over;
+);
+LMB == 1 && last_LMB == 1 ? (//mouse drag
+  mouse_drag == 1 ? (
+    new_val = slider1 + dy/100;
+    new_val = min(new_val, 1);
+    new_val = max(new_val, 0);
+    
+    slider1 = new_val;
+    gain = new_val;
+  );
+);
+LMB == 0 && last_LMB == 1 ? (//mouse up
+  mouse_drag = -1;
+);
+lx = mx;
+ly = my;
+last_LMB = LMB;
+
+//RING
+i = knob_r - knob_w;
+t = 0;
+loop(knob_w*arc_fill,
+  gfx_set(whr_dim,whg_dim,whb_dim, 1);
+  gfx_arc(knob_x, knob_y, i, knob_as, tau*knob_rad + knob_as);
+  
+  gfx_set(whr,whg,whb, 1);
+  gfx_arc(knob_x, knob_y, i, knob_as, gain*tau*knob_rad + knob_as);
+  i += 1/arc_fill;
+  t += (1/arc_fill)/knob_w;
+);
+
+//DIAL CIRCLE
+gfx_set(whr,whg,whb, 1);
+gfx_circle(knob_x, knob_y, knob_inner_rad , 0);
+gfx_circle(knob_x, knob_y, knob_inner_rad - 0.25, 0);
+gfx_circle(knob_x, knob_y, knob_inner_rad - 0.5, 0);
+
+//DIAL LINE
+polar_angle = (gain*1.01)*tau*knob_rad + knob_as;
+xo = sin(polar_angle + tau/2)*-1;
+yo = cos(polar_angle + tau/2);
+
+//CENTER LINE
+gfx_line(knob_x, knob_y, knob_x + xo*(knob_inner_rad-1), knob_y + yo*(knob_inner_rad-1));
+
+//LABEL
+gfx_setfont(1, "courier-new", 12);
+gfx_setfont(1);
+gfx_measurestr("COMPRESS",strw,strh);
+gfx_x = knob_x - strw/2;
+gfx_y = knob_y + knob_inner_rad + knob_margin + 1;
+gfx_drawstr("COMPRESS");
+
+//PEAK METERS
+peak_margin = 4;
+peak_width = 25;
+function outline_rect(xstart, ystart, w, h, t) local(g_c, xend, yend)
+(
+  g_c = 0;
+  xend = xstart + w;
+  yend = ystart + h;
+  loop(t, 
+    gfx_line(xstart+g_c, ystart+g_c, xstart+g_c, yend-g_c);
+    gfx_line(xstart+g_c, yend-g_c, xend-g_c, yend-g_c);
+    gfx_line(xend-g_c, yend-g_c, xend-g_c, ystart+g_c);
+    gfx_line(xstart+g_c, ystart+g_c, xend-g_c, ystart+g_c);
+    g_c += 1;
+  );
+);
+
+function peak_meter(val, x, y, w, h, t)
+(
+  gfx_set(whr,whg,whb, 1);
+  outline_rect(x,y,w,h,t);
+
+  gfx_set(whr,whg,whb, 0.2);
+  gfx_rect(x,y, peak_width, val*h);
+);
+peak_meter(l_peak, peak_margin, peak_margin, peak_width, h - 2*peak_margin, 1);
+peak_meter(r_peak, w - peak_width - peak_margin, peak_margin, peak_width, h - 2*peak_margin, 1);
+
+gain == 0 ? (
+  run_time = 0;
+) : (
+  run_time += dt;
+  l_gain == 0 ? (
+    reader = buff;
+  );
+);
+l_gain = gain;
+
