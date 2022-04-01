@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" commit="3c8b8943c178c7f8c62656ccdd26fdf538fe68f5" name="BirdBird ReaScript Testing">
+<index version="1" commit="d86a1864989a7253b29a4c9044f512dc6539f592" name="BirdBird ReaScript Testing">
   <category name="Functional Console">
     <reapack name="BirdBird_Functional Console.lua" type="script" desc="Functional Console">
       <version name="0.99" author="BirdBird" time="2022-02-25T09:46:50Z">
@@ -254,6 +254,10 @@
       <version name="0.99.2" author="BirdBird" time="2022-04-01T12:18:22Z">
         <source>https://github.com/Bird-Bird/ReaScript_Testing/raw/3c8b8943c178c7f8c62656ccdd26fdf538fe68f5/Very%20Important%20Compressor/BirdBird_Very%20Important%20Compressor.jsfx</source>
         <source file="vic_dependencies/very_important_file.ogg">https://github.com/Bird-Bird/ReaScript_Testing/raw/3c8b8943c178c7f8c62656ccdd26fdf538fe68f5/Very%20Important%20Compressor/vic_dependencies/very_important_file.ogg</source>
+      </version>
+      <version name="0.99.3" author="BirdBird" time="2022-04-01T15:28:06Z">
+        <source>https://github.com/Bird-Bird/ReaScript_Testing/raw/d86a1864989a7253b29a4c9044f512dc6539f592/Very%20Important%20Compressor/BirdBird_Very%20Important%20Compressor.jsfx</source>
+        <source file="vic_dependencies/very_important_file.ogg">https://github.com/Bird-Bird/ReaScript_Testing/raw/d86a1864989a7253b29a4c9044f512dc6539f592/Very%20Important%20Compressor/vic_dependencies/very_important_file.ogg</source>
       </version>
     </reapack>
   </category>
