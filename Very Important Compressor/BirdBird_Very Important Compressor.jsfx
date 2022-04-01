@@ -1,8 +1,8 @@
 desc:BirdBird Very Important Compressor
-version: 0.99.1
+version: 0.99.2
 author: BirdBird
 provides:  
-  [nomain]vic_dependencies/very_important_file.mp3
+  vic_dependencies/*
 
 slider1:0<0,1,0.0001>-gain (dB)
 
@@ -17,7 +17,7 @@ options:no_meter, maxmem=33554432
 @init
 ext_noinit = 1.0;
 buff = 0;
-file_handle = file_open("/vic_dependencies/very_important_file.mp3");
+file_handle = file_open("/vic_dependencies/very_important_file.ogg");
 file_riff(file_handle,num_channels,wav_sr);
 num_channels > 0 ? (
   len = file_avail(file_handle);
