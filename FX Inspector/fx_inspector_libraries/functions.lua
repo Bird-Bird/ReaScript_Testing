@@ -450,6 +450,12 @@ function write_buffer_to_envelope(track, env, pb, pos)
     create_edge_points(env, pos - f, pos + offs + f)
     reaper.DeleteEnvelopePointRange(env, pos, pos + offs)
     reaper.Envelope_SortPoints(env)
+
+    --GET MIN/MAX VALUES FOR ENVELOPE
+    local br_env = reaper.BR_EnvAlloc(env, true)
+    local _, _, _, _, _, _,
+    min, max, _, _, _, _ = reaper.BR_EnvGetProperties(br_env)
+    reaper.BR_EnvFree(br_env, false)
     
     --INSERT POINTS
     local l_val = -1
@@ -462,7 +468,8 @@ function write_buffer_to_envelope(track, env, pb, pos)
         --FILTER IDENTICAL POINTS
         local n_val = buf[t+1] and buf[t+1] or nil
         if not (l_val == p_val and p_val == n_val) or i == w + (#buf-1) then
-            reaper.InsertEnvelopePoint(env, pos + t_offs, p_val, 0, 0, false, true)
+            local r_val = min + ((max - min)*p_val)
+            reaper.InsertEnvelopePoint(env, pos + t_offs, r_val, 0, 0, false, true)
         end
         l_val = p_val
     end
