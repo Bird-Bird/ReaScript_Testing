@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" commit="d86a1864989a7253b29a4c9044f512dc6539f592" name="BirdBird ReaScript Testing">
+<index version="1" commit="93473d80a5d966b73da812fdc6f8f73080fefcd8" name="BirdBird ReaScript Testing">
   <category name="Functional Console">
     <reapack name="BirdBird_Functional Console.lua" type="script" desc="Functional Console">
       <version name="0.99" author="BirdBird" time="2022-02-25T09:46:50Z">
@@ -44,6 +44,15 @@
         <source file="functional_console_libraries/base.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/3f52faaafe842cbf82ad983a70d781ecb097ed56/Functional%20Console/functional_console_libraries/base.lua</source>
         <source file="functional_console_libraries/macro_library.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/3f52faaafe842cbf82ad983a70d781ecb097ed56/Functional%20Console/functional_console_libraries/macro_library.lua</source>
         <source main="main" file="BirdBird_Functional Console Reactive.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/3f52faaafe842cbf82ad983a70d781ecb097ed56/Functional%20Console/BirdBird_Functional%20Console%20Reactive.lua</source>
+      </version>
+    </reapack>
+  </category>
+  <category name="FX Inspector">
+    <reapack name="BirdBird_FX Inspector.lua" type="script" desc="FX Inspector">
+      <version name="0.5" author="BirdBird" time="2022-04-06T22:17:18Z">
+        <source main="main">https://github.com/Bird-Bird/ReaScript_Testing/raw/93473d80a5d966b73da812fdc6f8f73080fefcd8/FX%20Inspector/BirdBird_FX%20Inspector.lua</source>
+        <source file="fx_inspector_libraries/functions.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/93473d80a5d966b73da812fdc6f8f73080fefcd8/FX%20Inspector/fx_inspector_libraries/functions.lua</source>
+        <source file="fx_inspector_libraries/json.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/93473d80a5d966b73da812fdc6f8f73080fefcd8/FX%20Inspector/fx_inspector_libraries/json.lua</source>
       </version>
     </reapack>
   </category>
