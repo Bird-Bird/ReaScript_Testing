@@ -1,5 +1,5 @@
 -- @description FX Inspector
--- @version 0.5.1
+-- @version 0.5.2
 -- @author BirdBird
 -- @provides
 --    [nomain]fx_inspector_libraries/functions.lua
