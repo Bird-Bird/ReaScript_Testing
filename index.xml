@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" commit="eda85ebab56cda27b18d7d43571b05086c71ee0a" name="BirdBird ReaScript Testing">
+<index version="1" commit="09a7c459b4ca49e1e690a53013a2a3f4e0796138" name="BirdBird ReaScript Testing">
   <category name="Functional Console">
     <reapack name="BirdBird_Functional Console.lua" type="script" desc="Functional Console">
       <version name="0.99" author="BirdBird" time="2022-02-25T09:46:50Z">
@@ -63,6 +63,11 @@
         <source main="main">https://github.com/Bird-Bird/ReaScript_Testing/raw/eda85ebab56cda27b18d7d43571b05086c71ee0a/FX%20Inspector/BirdBird_FX%20Inspector.lua</source>
         <source file="fx_inspector_libraries/functions.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/eda85ebab56cda27b18d7d43571b05086c71ee0a/FX%20Inspector/fx_inspector_libraries/functions.lua</source>
         <source file="fx_inspector_libraries/json.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/eda85ebab56cda27b18d7d43571b05086c71ee0a/FX%20Inspector/fx_inspector_libraries/json.lua</source>
+      </version>
+      <version name="0.5.3" author="BirdBird" time="2022-04-07T12:25:05Z">
+        <source main="main">https://github.com/Bird-Bird/ReaScript_Testing/raw/09a7c459b4ca49e1e690a53013a2a3f4e0796138/FX%20Inspector/BirdBird_FX%20Inspector.lua</source>
+        <source file="fx_inspector_libraries/functions.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/09a7c459b4ca49e1e690a53013a2a3f4e0796138/FX%20Inspector/fx_inspector_libraries/functions.lua</source>
+        <source file="fx_inspector_libraries/json.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/09a7c459b4ca49e1e690a53013a2a3f4e0796138/FX%20Inspector/fx_inspector_libraries/json.lua</source>
       </version>
     </reapack>
   </category>
