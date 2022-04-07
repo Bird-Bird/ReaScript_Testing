@@ -1,5 +1,5 @@
 -- @description FX Inspector
--- @version 0.5.2
+-- @version 0.5.3
 -- @author BirdBird
 -- @provides
 --    [nomain]fx_inspector_libraries/functions.lua
@@ -102,7 +102,7 @@ function sidechain_popup(fx)
             for i = 1, #sidechain_dat.tracklist do 
                 local t = sidechain_dat.tracklist[i]
                 reaper.ImGui_PushID(ctx, i)
-                if reaper.ImGui_TextFilter_PassFilter(filter, t.name) then
+                if reaper.ImGui_TextFilter_PassFilter(filter, t.name) and t.track ~= fx.track then
                     local ret, sel = reaper.ImGui_Selectable(ctx, t.id .. ' - ' .. t.name, t.selected)
                     if ret then 
                         t.selected = sel 
@@ -362,39 +362,44 @@ function preset_display(fx, pd, param)
             if s then preset_filter = s end
             local filter = reaper.ImGui_CreateTextFilter(preset_filter)
             
-            for i = 1, #pd.presets do
-                local preset = pd.presets[i]
-                reaper.ImGui_PushID(ctx, i)
-                
-                --SELECTABLES
-                if reaper.ImGui_TextFilter_PassFilter(filter, preset.name) then
-                    local r, p_selected = reaper.ImGui_Selectable(ctx, preset.name, false)
-                    if p_selected and fx.valid then
-                        reaper.TrackFX_SetPreset(fx.track, fx.id, preset.name)
-                    end
+            local w, h = reaper.ImGui_GetWindowSize(ctx);
+            local y, r = reaper.ImGui_GetCursorPosY(ctx), false
+            if reaper.ImGui_BeginListBox(ctx, '##listbox_2', -1, h - y - 10) then
+                for i = 1, #pd.presets do
+                    local preset = pd.presets[i]
+                    reaper.ImGui_PushID(ctx, i)
                     
-                    if settings.enable_preset_edits then
-                        --RIGHT CLICK CONTEXT MENU
-                        if reaper.ImGui_BeginPopupContextItem(ctx) then
-                            if reaper.ImGui_MenuItem(ctx, 'Rename') then
-                                edit_menu = true
-                                edit_id = i
+                    --SELECTABLES
+                    if reaper.ImGui_TextFilter_PassFilter(filter, preset.name) then
+                        local r, p_selected = reaper.ImGui_Selectable(ctx, preset.name, false)
+                        if p_selected and fx.valid then
+                            reaper.TrackFX_SetPreset(fx.track, fx.id, preset.name)
+                        end
+                        
+                        if settings.enable_preset_edits then
+                            --RIGHT CLICK CONTEXT MENU
+                            if reaper.ImGui_BeginPopupContextItem(ctx) then
+                                if reaper.ImGui_MenuItem(ctx, 'Rename') then
+                                    edit_menu = true
+                                    edit_id = i
+                                end
+                                --if reaper.ImGui_MenuItem(ctx, 'Duplicate') then
+                                --    table.insert(pending_duplicate, i)
+                                --end
+                                if reaper.ImGui_MenuItem(ctx, 'Delete') then
+                                    table.insert(pending_removal, i)
+                                end
+                                reaper.ImGui_EndPopup(ctx)
                             end
-                            --if reaper.ImGui_MenuItem(ctx, 'Duplicate') then
-                            --    table.insert(pending_duplicate, i)
-                            --end
-                            if reaper.ImGui_MenuItem(ctx, 'Delete') then
-                                table.insert(pending_removal, i)
-                            end
-                            reaper.ImGui_EndPopup(ctx)
                         end
                     end
+                    
+                    reaper.ImGui_PopID(ctx)
                 end
-                
-                reaper.ImGui_PopID(ctx)
+                reaper.ImGui_EndListBox(ctx)
             end
+
             reaper.ImGui_PushStyleColor(ctx, reaper.ImGui_Col_Separator(), 0x77777762)
-            reaper.ImGui_Separator(ctx)
             reaper.ImGui_PopStyleColor(ctx)
 
             --REMOVE
@@ -479,11 +484,16 @@ function push_theme()
     reaper.ImGui_PushStyleColor(ctx, reaper.ImGui_Col_TextSelectedBg(),    0x70C4C659)
     reaper.ImGui_PushStyleColor(ctx, reaper.ImGui_Col_Header(),            0x12BD9914)
     reaper.ImGui_PushStyleColor(ctx, reaper.ImGui_Col_CheckMark(),         0x12BD99FF)
+    reaper.ImGui_PushStyleColor(ctx, reaper.ImGui_Col_ScrollbarBg(),          0x0D0D0D87)
+    reaper.ImGui_PushStyleColor(ctx, reaper.ImGui_Col_ScrollbarGrab(),        0xFFFFFF1C)
+    reaper.ImGui_PushStyleColor(ctx, reaper.ImGui_Col_ScrollbarGrabHovered(), 0xFFFFFF2E)
+    reaper.ImGui_PushStyleColor(ctx, reaper.ImGui_Col_ScrollbarGrabActive(),  0xFFFFFF32)    
 end
 
 function pop_theme()
     reaper.ImGui_PopStyleVar(ctx, 4)
     reaper.ImGui_PopStyleColor(ctx, 18)
+    reaper.ImGui_PopStyleColor(ctx, 4)
     reaper.ImGui_PopFont(ctx)
 end
 
