@@ -1,5 +1,5 @@
 -- @description FX Inspector
--- @version 0.5.3
+-- @version 0.5.4
 -- @author BirdBird
 -- @provides
 --    [nomain]fx_inspector_libraries/functions.lua
@@ -31,7 +31,7 @@ end
 --GUI
 local ctx = reaper.ImGui_CreateContext('Preset Menu', reaper.ImGui_ConfigFlags_DockingEnable())
 local size = reaper.GetAppVersion():match('OSX') and 12 or 14
-local font = reaper.ImGui_CreateFont('courier-new', size)
+local font = reaper.ImGui_CreateFont('sans-serif', size)
 local dock = nil
 local window_resize_flag = reaper.ImGui_Cond_Appearing()
 
