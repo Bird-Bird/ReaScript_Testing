@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" commit="40cae84ac0aea209e8e646b5d08e67848a48dbbe" name="BirdBird ReaScript Testing">
+<index version="1" commit="e028a1d503e9b1c8e64291a2932b062e858482d1" name="BirdBird ReaScript Testing">
   <category name="Functional Console">
     <reapack name="BirdBird_Functional Console.lua" type="script" desc="Functional Console">
       <version name="0.99" author="BirdBird" time="2022-02-25T09:46:50Z">
@@ -228,6 +228,11 @@
         <source main="main">https://github.com/Bird-Bird/ReaScript_Testing/raw/40cae84ac0aea209e8e646b5d08e67848a48dbbe/Track%20Tags/BirdBird_Track%20Tags.lua</source>
         <source file="libraries/functions.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/40cae84ac0aea209e8e646b5d08e67848a48dbbe/Track%20Tags/libraries/functions.lua</source>
         <source file="libraries/json.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/40cae84ac0aea209e8e646b5d08e67848a48dbbe/Track%20Tags/libraries/json.lua</source>
+      </version>
+      <version name="0.5.2" author="BirdBird" time="2022-04-08T23:07:45Z">
+        <source main="main">https://github.com/Bird-Bird/ReaScript_Testing/raw/e028a1d503e9b1c8e64291a2932b062e858482d1/Track%20Tags/BirdBird_Track%20Tags.lua</source>
+        <source file="libraries/functions.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/e028a1d503e9b1c8e64291a2932b062e858482d1/Track%20Tags/libraries/functions.lua</source>
+        <source file="libraries/json.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/e028a1d503e9b1c8e64291a2932b062e858482d1/Track%20Tags/libraries/json.lua</source>
       </version>
     </reapack>
   </category>
