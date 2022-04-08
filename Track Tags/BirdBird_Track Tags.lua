@@ -1,5 +1,5 @@
 -- @description Track Tags
--- @version 0.5
+-- @version 0.5.1
 -- @author BirdBird
 -- @provides
 --    [nomain]libraries/functions.lua
@@ -313,15 +313,15 @@ function frame()
     --AUTO INSERT NEW TAGS
     local auto_insert = settings.auto_tag_tracks
     if selected_tag and #new_tracks > 0 and auto_insert then
-        reaper.Undo_BeginBlock()
         for i = 1, #new_tracks do
             local track = new_tracks[i]
             local ext = get_ext_state(track)
-            if not ext.lock_visibility then
+            if not ext.lock_visibility and not track_is_blacklisted(track) then
+                reaper.Undo_BeginBlock()
                 add_tag_to_track(track, selected_tag)
+                reaper.Undo_EndBlock('Add new tag to tracks (Automatic tagging)', -1)
             end
         end
-        reaper.Undo_EndBlock('Add new tag to tracks (Automatic tagging)', -1)
     end
     
     --DISPLAY TAGS
