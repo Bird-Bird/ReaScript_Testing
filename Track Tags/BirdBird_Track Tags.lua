@@ -1,5 +1,5 @@
 -- @description Track Tags
--- @version 0.5.1
+-- @version 0.5.2
 -- @author BirdBird
 -- @provides
 --    [nomain]libraries/functions.lua
@@ -196,7 +196,8 @@ function frame()
         reaper.Undo_EndBlock('Create new track tag', -1)
 
         table.insert(tags, new_tag)
-        text = ''       
+        text_input = ''
+        text = ''
     end
     --TAG RIGHT CLICK MENU
     reaper.ImGui_PushStyleVar(ctx, reaper.ImGui_StyleVar_WindowPadding(), 4, 5)
