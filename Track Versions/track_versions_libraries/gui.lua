@@ -6,9 +6,49 @@ local size = reaper.GetAppVersion():match('OSX') and 12 or 14
 local font = reaper.ImGui_CreateFont('sans-serif', size)
 local small_size = math.floor(size*0.8)
 local small_font = reaper.ImGui_CreateFont('sans-serif', small_size)
+local listbox_offs = 29
 
 reaper.ImGui_AttachFont(ctx, font)
 reaper.ImGui_AttachFont(ctx, small_font)
+
+function get_font_data()
+    return {size = size, small_size = small_size}
+end
+
+function get_listbox_size(num_elements)
+    if settings.use_full_height_versions then
+        return listbox_offs*-1
+    else
+        local sel_size = size + 4
+        local w, h = reaper.ImGui_GetWindowSize(ctx)
+        local y = reaper.ImGui_GetCursorPosY(ctx)
+        local max_size = h - y - 35
+        local r_size = (num_elements * sel_size) + 2 
+        local lim = (10 * sel_size) + 2
+        if max_size > lim then
+            r_size = lim
+        else
+            r_size = max_size
+        end
+        return r_size
+    end
+end
+
+function top_frame()
+    local ww = reaper.ImGui_GetWindowSize(ctx)
+    local wx, wy = reaper.ImGui_GetWindowPos(ctx)
+    local draw_list = reaper.ImGui_GetWindowDrawList(ctx)
+    reaper.ImGui_DrawList_AddRectFilled(draw_list, wx, wy, ww + wx, wy + 20, 0x181818FF)
+    
+    local text = 'Track Versions'
+    local text_w = reaper.ImGui_CalcTextSize(ctx, text)
+    local x = reaper.ImGui_GetCursorPosX(ctx)
+    local y = reaper.ImGui_GetCursorPosY(ctx)
+    reaper.ImGui_SetCursorPosX(ctx, (ww - text_w) * 0.5)
+    reaper.ImGui_SetCursorPosY(ctx, y - 3)
+    reaper.ImGui_Text(ctx, text)
+    reaper.ImGui_Separator(ctx)
+end
 
 function get_ctrl()
     local key_mods = reaper.ImGui_GetKeyMods(ctx)
@@ -52,7 +92,7 @@ function push_theme()
     reaper.ImGui_PushStyleColor(ctx, reaper.ImGui_Col_HeaderHovered(),     0x12BD994B)
     reaper.ImGui_PushStyleColor(ctx, reaper.ImGui_Col_HeaderActive(),      0x12BD999E)
 
-    reaper.ImGui_PushStyleColor(ctx, reaper.ImGui_Col_Separator(),         0xFFFFFF81)
+    reaper.ImGui_PushStyleColor(ctx, reaper.ImGui_Col_Separator(), 0xFFFFFF20)  
     reaper.ImGui_PushStyleColor(ctx, reaper.ImGui_Col_ResizeGrip(),        0x12BD9933)
     reaper.ImGui_PushStyleColor(ctx, reaper.ImGui_Col_ResizeGripHovered(), 0x12BD99AB)
     reaper.ImGui_PushStyleColor(ctx, reaper.ImGui_Col_ResizeGripActive(),  0x12BD99F2)

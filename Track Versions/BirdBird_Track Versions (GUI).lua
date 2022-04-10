@@ -8,7 +8,6 @@ reaper_do_file('gui.lua')
 
 local FLT_MIN, FLT_MAX = reaper.ImGui_NumericLimits_Float()
 local window_resize_flag = reaper.ImGui_Cond_Appearing()
-local listbox_offs = 29
 local calc_button_offs = 56
 
 function settings_menu()
@@ -23,6 +22,12 @@ function settings_menu()
         end
         reaper.ImGui_Separator(ctx)
         
+        rv, settings.use_full_height_versions = reaper.ImGui_Checkbox(ctx, 'Use full height.', settings.use_full_height_versions)
+        if rv then
+            save = true
+        end
+        reaper.ImGui_Separator(ctx)
+
         rv, settings.debug_mode = reaper.ImGui_Checkbox(ctx, 'Debug mode', settings.debug_mode)
         if rv then
             save = true
@@ -170,12 +175,13 @@ function frame()
     local switch = nil
     local prefix = false
     local sel_data, min_versions, common_sel, no_versions = get_selected_tracks_fast()
-
+    
     --SELECTED TRACKS
     selection_indicator(sel_data)
     
     --DISPLAY VERSIONS
-    if reaper.ImGui_BeginListBox(ctx, '##listbox_1', -FLT_MIN, -listbox_offs) then
+    local r_size = get_listbox_size(min_versions)
+    if reaper.ImGui_BeginListBox(ctx, '##listbox_1', -FLT_MIN, r_size) then
         for i = 1, min_versions do
             reaper.ImGui_PushID(ctx, i)
             
@@ -233,9 +239,10 @@ function loop()
     if dock then reaper.ImGui_SetNextWindowDockID(ctx, dock); dock = nil end
     reaper.ImGui_SetNextWindowSize(ctx, 173, 245, reaper.ImGui_Cond_FirstUseEver())
     visible, open = reaper.ImGui_Begin(ctx, 'Track Versions', false)
-    local window_is_docked = reaper.ImGui_IsWindowDocked(ctx)
+    window_is_docked = reaper.ImGui_IsWindowDocked(ctx)
 
     reset_scroll()
+    if window_is_docked then top_frame() end
     custom_close_button()
     close_context(window_is_docked)
     settings_menu()

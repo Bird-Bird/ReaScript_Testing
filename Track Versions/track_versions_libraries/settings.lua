@@ -6,7 +6,8 @@ local path = info.source:match[[^@?(.*[\/])[^\/]-$]]
 local default_settings = {
     prefix_tracks = false, 
     clear_selection_versions = true,
-    debug_mode = false
+    debug_mode = false,
+    use_full_height_versions = false
 }
 
 function get_settings()
