@@ -22,7 +22,7 @@ function settings_menu()
         end
         reaper.ImGui_Separator(ctx)
         
-        rv, settings.use_full_height_versions = reaper.ImGui_Checkbox(ctx, 'Use full height.', settings.use_full_height_versions)
+        rv, settings.use_full_height_versions = reaper.ImGui_Checkbox(ctx, 'Use full height', settings.use_full_height_versions)
         if rv then
             save = true
         end
