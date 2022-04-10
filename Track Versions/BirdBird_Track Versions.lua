@@ -1,15 +1,21 @@
 -- @description Track Versions
--- @version 0.99.6.1
+-- @version 0.99.8
 -- @author BirdBird
 -- @provides
 --    [nomain]track_versions_libraries/json.lua
 --    [nomain]track_versions_libraries/functions.lua
+--    [nomain]track_versions_libraries/settings.lua
+--    [nomain]track_versions_libraries/versions.lua
+--    [nomain]track_versions_libraries/gui.lua
+--    [nomain]track_versions_libraries/ext_state.lua
+--    [nomain]track_versions_libraries/chunk_parsing.lua
 --    [main]BirdBird_Track Versions - Cycle to next version.lua
 --    [main]BirdBird_Track Versions - Cycle to previous version.lua
 --    [main]BirdBird_Track Versions Settings.lua
+--    [main]BirdBird_Track Versions (GUI).lua
 
 --@changelog
---  + Initial version
+--  + GUI
 
 function reaper_do_file(file) local info = debug.getinfo(1,'S'); path = info.source:match[[^@?(.*[\/])[^\/]-$]]; dofile(path .. file); end
 reaper_do_file('track_versions_libraries/functions.lua')

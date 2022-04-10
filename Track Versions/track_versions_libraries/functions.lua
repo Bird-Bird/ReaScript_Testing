@@ -1,33 +1,95 @@
 -- @noindex
--- @version 0.99.6.1
 
 function reaper_do_file(file) local info = debug.getinfo(1,'S'); local path = info.source:match[[^@?(.*[\/])[^\/]-$]]; dofile(path .. file); end
 reaper_do_file('json.lua')
+reaper_do_file('chunk_parsing.lua')
+reaper_do_file('settings.lua')
+reaper_do_file('ext_state.lua')
+reaper_do_file('versions.lua')
 
---USER SETTINGS
-local info = debug.getinfo(1,'S')
-local path = info.source:match[[^@?(.*[\/])[^\/]-$]]
-local default_settings = {prefix_tracks = false}
-function get_settings()
-    local file_name = 'settings.json'
-    local settings = io.open(path .. file_name, 'r')
-    if not settings then
-        return default_settings
-    else
-        local st = settings:read("*all")
-        st_json = json.decode(st)
-        return st_json
+--UTILITY
+function str_split(s, delimiter)
+    result = {};
+    for match in (s..delimiter):gmatch("(.-)"..delimiter) do
+        table.insert(result, match);
     end
+    return result;
+end
+function string.starts(String,Start)
+    return string.sub(String,1,string.len(Start))==Start
 end
 
-function save_settings(data)
-    local settings = io.open(path .. 'settings.json', 'w')
-    local d = json.encode(data)
-    settings:write(d)
-    settings:close()
+--https://stackoverflow.com/a/42062321
+function print_table(node)
+    local cache, stack, output = {},{},{}
+    local depth = 1
+    local output_str = "{\n"
+    while true do
+        local size = 0
+        for k,v in pairs(node) do
+            size = size + 1
+        end
+        local cur_index = 1
+        for k,v in pairs(node) do
+            if (cache[node] == nil) or (cur_index >= cache[node]) then
+                if (string.find(output_str,"}",output_str:len())) then
+                    output_str = output_str .. ",\n"
+                elseif not (string.find(output_str,"\n",output_str:len())) then
+                    output_str = output_str .. "\n"
+                end
+                table.insert(output,output_str)
+                output_str = ""
+
+                local key
+                if (type(k) == "number" or type(k) == "boolean") then
+                    key = "["..tostring(k).."]"
+                else
+                    key = "['"..tostring(k).."']"
+                end
+
+                if (type(v) == "number" or type(v) == "boolean") then
+                    output_str = output_str .. string.rep('\t',depth) .. key .. " = "..tostring(v)
+                elseif (type(v) == "table") then
+                    output_str = output_str .. string.rep('\t',depth) .. key .. " = {\n"
+                    table.insert(stack,node)
+                    table.insert(stack,v)
+                    cache[node] = cur_index+1
+                    break
+                else
+                    output_str = output_str .. string.rep('\t',depth) .. key .. " = '"..tostring(v).."'"
+                end
+
+                if (cur_index == size) then
+                    output_str = output_str .. "\n" .. string.rep('\t',depth-1) .. "}"
+                else
+                    output_str = output_str .. ","
+                end
+            else
+                -- close the table
+                if (cur_index == size) then
+                    output_str = output_str .. "\n" .. string.rep('\t',depth-1) .. "}"
+                end
+            end
+            cur_index = cur_index + 1
+        end
+        if (size == 0) then
+            output_str = output_str .. "\n" .. string.rep('\t',depth-1) .. "}"
+        end
+        if (#stack > 0) then
+            node = stack[#stack]
+            stack[#stack] = nil
+            depth = cache[node] == nil and depth + 1 or depth - 1
+        else
+            break
+        end
+    end
+
+    table.insert(output,output_str)
+    output_str = table.concat(output)
+    p(output_str)
 end
 
---TRACK PREFIX
+--TRACKS
 local pattern = "v%d+%s%-%s"
 local pattern_2 = "v%d+%s%-"
 function prefix_track(track, id)
@@ -38,6 +100,7 @@ function prefix_track(track, id)
     reaper.GetSetMediaTrackInfo_String(track, 'P_NAME', name, true)
 end
 
+--DEPRECATE
 function prefix_tracks(tracks, init, init_version_data)
     local init_data = {}
     for i = 1, #tracks do 
@@ -55,39 +118,104 @@ function prefix_tracks(tracks, init, init_version_data)
     return init_data
 end
 
---UTILITY
-function str_split(s, delimiter)
-    result = {};
-    for match in (s..delimiter):gmatch("(.-)"..delimiter) do
-        table.insert(result, match);
+function prefix_track_fast(track)
+    local q = get_ext_state_query(track)
+    prefix_track(track, q.selected)
+end
+
+--DEPRECATE
+function get_selected_tracks()
+    local all_selected = true
+    local last_selected = -1
+
+    local tracks = {}
+    local min_versions = math.huge
+    local selected_track_count = reaper.CountSelectedTracks(0)
+    for i = 0, selected_track_count - 1 do
+        local track = reaper.GetSelectedTrack(0, i)
+        local state = get_ext_state(track)
+
+        --INIT EMPTY TRACKS
+        if #state.versions == 0 then
+            add_new_version(track, state, false)
+        end
+        
+        min_versions = math.min(#state.versions, min_versions)
+        if i > 0 then
+            all_selected = all_selected and (state.data.selected == last_selected)
+        end
+        
+        tracks[i+1] = {}
+        tracks[i+1].track = track
+        tracks[i+1].state = state
+
+        last_selected = state.data.selected
     end
-    return result;
-end
-function string.starts(String,Start)
-    return string.sub(String,1,string.len(Start))==Start
+
+    return tracks, min_versions, all_selected and last_selected or -1
 end
 
-function get_empty_state()
-    return {versions = {}, data = {selected = 1}}
-end
+function get_selected_tracks_fast()
+    local track_count = reaper.CountSelectedTracks(0)
+    if track_count == 0 then return {}, 0, -1 end
 
-local ext_name = 'P_EXT:BB_Track_Versions'
-function get_ext_state(track)
-    local retval, ext_state = reaper.GetSetMediaTrackInfo_String(track, ext_name, "", false)
-    if ext_state == '' then
-        return get_empty_state()
-    else
-        return json.decode(ext_state)
+    local t = {}
+    local min_versions = math.huge
+    local max_versions = 0
+    local common_sel = -1
+    for i = 0, track_count - 1 do
+        local track = reaper.GetSelectedTrack(0, i)
+        local query = get_ext_state_query(track)
+        if query.num_versions == 0 then query.num_versions = 1 end
+        table.insert(t, {track = track, query = query})
+        
+        min_versions = math.min(min_versions, query.num_versions)
+        max_versions = math.max(max_versions, query.num_versions)
+
+        if common_sel == -1 then 
+            common_sel = query.selected 
+        elseif common_sel ~= -1 and query.selected ~= common_sel then
+            common_sel = 0
+        end
     end
+    local no_versions = max_versions == 0
+    return t, min_versions, common_sel, no_versions
 end
 
-function set_ext_state(track, state)
-    local s = json.encode(state)
-    reaper.GetSetMediaTrackInfo_String(track, ext_name, s, true)
+
+--ITEMS
+function get_track_media_items(track)
+    local items = {}
+    local item_count = reaper.CountTrackMediaItems(track)
+    for i = 0, item_count - 1 do 
+        local item = reaper.GetTrackMediaItem(track, i)
+        table.insert(items, item)
+    end
+    return items
 end
 
-function create_new_version(track, state)
-    set_ext_state(track, state)
+function delete_item_range(track, sp, ep)
+    --SPLIT RANGE
+    local items = get_track_media_items(track)
+    for i = 1, #items do
+        local item = items[i]
+        local new_item = reaper.SplitMediaItem(item, sp)
+        if new_item then
+            reaper.SplitMediaItem(new_item, ep)
+        else
+            reaper.SplitMediaItem(item, ep)
+        end
+    end
+
+    --CLEAR RANGE
+    items = get_track_media_items(track)
+    for i = 1, #items do 
+        local item = items[i]
+        local pos = reaper.GetMediaItemInfo_Value(item, 'D_POSITION')
+        if pos >= sp and pos < ep then
+            reaper.DeleteTrackMediaItem(track, item)
+        end
+    end
 end
 
 function clear_items(track)
@@ -148,173 +276,4 @@ function get_razor_edits(track)
         i = i + 3
     end
     return razor_edits
-end
-
-local new_items = {}
-function load_chunk(track, item_chunks, partial_load)
-    if not partial_load then
-        clear_items(track)
-    end
-
-    --GET RAZOR EDITS
-    local razor_edits = {}
-    if partial_load then
-        razor_edits = get_razor_edits(track)
-    end
-    
-    --INSERT ITEMS FROM CHUNKS
-    for i = 1, #item_chunks do
-        local chunk = item_chunks[i]
-        
-        --CREATE ITEM
-        local item = reaper.AddMediaItemToTrack(track)
-        reaper.SetItemStateChunk(item, chunk, false)
-        
-        --PARTIAL LOADING
-        local del
-        if partial_load then
-            local edit = razor_edits[1]
-            if edit then
-                del = delete_out_of_bounds_item(track, item, edit.s, edit.e)
-                if not del then
-                    trim_item_right_edge(track, item, edit.e)
-                    item = trim_item_left_edge(track, item, edit.s)
-                end
-            end
-        end
-    end
-end
-
-function get_item_chunks(chunk_lines)
-    --GET ITEM CHUNKS
-    local item_chunks = {}
-    local last_item_chunk = -1
-    local current_scope = 0
-    local i = 1
-    while i <= #chunk_lines do
-        local line = chunk_lines[i]
-        
-        --MANAGE SCOPE
-        local scope_end = false
-        if string.starts(line, '<ITEM') then       
-            last_item_chunk = i
-            current_scope = current_scope + 1
-        elseif string.starts(line, '<') then
-            current_scope = current_scope + 1
-        elseif string.starts(line, '>') then
-            current_scope = current_scope - 1
-            scope_end = true
-        end
-        
-        --GRAB ITEM CHUNKS
-        if current_scope == 1 and last_item_chunk ~= -1 and scope_end then
-            local s = ''
-            for j = last_item_chunk, i do
-                if not string.starts(chunk_lines[j], 'POOLEDEVTS') and not
-                string.starts(chunk_lines[j], 'GUID') and not
-                string.starts(chunk_lines[j], 'IGUID') then
-                    s = s .. chunk_lines[j] .. '\n'
-                end
-            end
-            last_item_chunk = -1
-            table.insert(item_chunks, s)
-        end
-        i = i + 1
-    end
-
-    return item_chunks
-end
-
---FUNCTIONS
-function switch_versions(track, state, selected_id, no_save, partial_load)
-    --SAVE CURRENT VERSION TO STATE
-    local retval, chunk = reaper.GetTrackStateChunk(track, "", false)
-    local chunk_lines = str_split(chunk, '\n')
-    local item_chunks = get_item_chunks(chunk_lines)
-    if not no_save and #state.versions > 0 then
-        state.versions[state.data.selected] = item_chunks
-    end
-
-    --SWITCH VERSION
-    local i = selected_id
-    local t_chunk = state.versions[i]
-    if not partial_load then
-        state.data.selected = i
-    end
-    
-    load_chunk(track, t_chunk, partial_load)
-    set_ext_state(track, state)
-end
-
-function delete_current_version(track, state)
-    if #state.versions > 1 then
-        local selected = state.data.selected
-        table.remove(state.versions, selected)
-        
-        selected = selected - 1
-        if selected == 0 then selected = selected + #state.versions end
-        switch_versions(track, state, selected, true)
-    end
-end
-
-function add_new_version(track, state, clear)
-    --NEW VERSION
-    local retval, chunk = reaper.GetTrackStateChunk(track, "", false)
-    local chunk_lines = str_split(chunk, '\n')
-    local item_chunks = get_item_chunks(chunk_lines)
-    if #state.versions > 0 then
-        state.versions[state.data.selected] = item_chunks
-    end
-    
-    --CREATE NEW VERSION
-    state.versions[#state.versions+1] = item_chunks
-    state.data.selected = #state.versions
-    create_new_version(track, state)
-
-    --CLEAR ITEMS
-    if clear then
-        clear_items(track)
-    end
-end
-
-function collapse_versions(track, state)
-    local new_state = get_empty_state()
-    add_new_version(track, new_state)
-    return new_state
-end
-
-function get_selected_tracks()
-    local all_selected = true
-    local last_selected = -1
-
-    local tracks = {}
-    local min_versions = 65532
-    local selected_track_count = reaper.CountSelectedTracks(0)
-    for i = 0, selected_track_count - 1 do
-        local track = reaper.GetSelectedTrack(0, i)
-        local state = get_ext_state(track)
-
-        --INIT EMPTY TRACKS
-        if #state.versions == 0 then
-            local retval, chunk = reaper.GetTrackStateChunk(track, "", false)
-            local chunk_lines = str_split(chunk, '\n')
-            local item_chunks = get_item_chunks(chunk_lines)
-            state.versions[#state.versions+1] = item_chunks
-            state.data.selected = #state.versions
-            create_new_version(track, state)
-        end
-        
-        min_versions = math.min(#state.versions, min_versions)
-        if i > 0 then
-            all_selected = all_selected and (state.data.selected == last_selected)
-        end
-        
-        tracks[i+1] = {}
-        tracks[i+1].track = track
-        tracks[i+1].state = state
-
-        last_selected = state.data.selected
-    end
-
-    return tracks, min_versions, all_selected and last_selected or -1
 end
