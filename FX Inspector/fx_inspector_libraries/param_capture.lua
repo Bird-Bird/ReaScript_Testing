@@ -1,4 +1,4 @@
---@ noindex
+-- @noindex
 
 --RETROSPECTIVE PARAMETER CAPTURE
 function create_edge_points(env, s, e)

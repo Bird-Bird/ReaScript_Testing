@@ -1,4 +1,4 @@
---@ noindex
+-- @noindex
 
 local info = debug.getinfo(1,'S')
 local path = info.source:match[[^@?(.*[\/])[^\/]-$]]
