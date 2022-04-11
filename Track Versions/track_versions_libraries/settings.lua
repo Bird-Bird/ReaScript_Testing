@@ -7,7 +7,8 @@ local default_settings = {
     prefix_tracks = false, 
     clear_selection_versions = true,
     debug_mode = false,
-    use_full_height_versions = false
+    use_full_height_versions = false,
+    slim_mode = false
 }
 
 function get_settings()

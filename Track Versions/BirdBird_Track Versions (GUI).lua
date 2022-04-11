@@ -28,6 +28,12 @@ function settings_menu()
         end
         reaper.ImGui_Separator(ctx)
 
+        rv, settings.slim_mode = reaper.ImGui_Checkbox(ctx, 'Slim mode', settings.slim_mode)
+        if rv then
+            save = true
+        end
+        reaper.ImGui_Separator(ctx)
+
         rv, settings.debug_mode = reaper.ImGui_Checkbox(ctx, 'Debug mode', settings.debug_mode)
         if rv then
             save = true
@@ -47,13 +53,17 @@ end
 
 function selection_indicator(sel_data)
     local t = '' 
-    if #sel_data == 0 then 
-        t = 'No tracks selected.' 
-    elseif #sel_data == 1 
-    then 
-        t = '1 track selected.' 
+    if not settings.slim_mode then
+      if #sel_data == 0 then 
+          t = 'No tracks selected.' 
+      elseif #sel_data == 1 
+      then 
+          t = '1 track selected.' 
+      else
+          t = #sel_data .. ' tracks selected.'
+      end
     else
-        t = #sel_data .. ' tracks selected.'
+        t = 'Sel - ' .. #sel_data
     end
     reaper.ImGui_Text(ctx, t)
 
@@ -90,9 +100,21 @@ function init_empty_tracks(sel_data)
     end
 end
 
+local bt_labels = {
+  add = 'Add',
+  del = 'Delete',
+  col = 'Collapse'
+}
+local bt_labels_slim = {
+  add = '+',
+  del = '-',
+  col = 'c'
+}
 function buttons(sel_data, switch)
+    local lb = settings.slim_mode and bt_labels_slim or bt_labels
+
     --ADD NEW VERSION
-    if reaper.ImGui_Button(ctx, 'Add') then
+    if theme_button(ctx, lb.add) then
         init_empty_tracks(sel_data)
         reaper.PreventUIRefresh(1)
         reaper.Undo_BeginBlock()
@@ -110,7 +132,7 @@ function buttons(sel_data, switch)
 
     --DELETE VERSION
     reaper.ImGui_SameLine(ctx)
-    if reaper.ImGui_Button(ctx, 'Delete') then
+    if theme_button(ctx, lb.del) then
         init_empty_tracks(sel_data)
         reaper.PreventUIRefresh(1)
         reaper.Undo_BeginBlock()
@@ -137,8 +159,9 @@ function buttons(sel_data, switch)
     end
 
     --COLLAPSE VERSIONS
-    right_align_padding(calc_button_offs)
-    if reaper.ImGui_Button(ctx, 'Collapse') then
+    local bt_offs = settings.slim_mode and 14 or calc_button_offs
+    right_align_padding(bt_offs)
+    if theme_button(ctx, lb.col) then
         init_empty_tracks(sel_data)
         reaper.PreventUIRefresh(1)
         reaper.Undo_BeginBlock()

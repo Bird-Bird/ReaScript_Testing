@@ -50,6 +50,14 @@ function top_frame()
     reaper.ImGui_Separator(ctx)
 end
 
+function theme_button(ctx, text)
+  if settings.slim_mode then
+    return reaper.ImGui_SmallButton(ctx, text)
+  else
+    return reaper.ImGui_Button(ctx, text)
+  end
+end
+
 function get_ctrl()
     local key_mods = reaper.ImGui_GetKeyMods(ctx)
     local ctrl = reaper.ImGui_KeyModFlags_Ctrl()
