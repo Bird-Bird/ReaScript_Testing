@@ -365,6 +365,20 @@ function init_console(reactive)
     end
 end
 
+function override_select_all()
+  for i = 1, #clear_batch do
+    local batch = clear_batch[i]
+    for j = 1, #batch do
+      local item = batch[j]
+      if reaper.ValidatePtr(item, 'MediaItem*') then
+        table.insert(initial_item_sel, item)
+      end
+    end
+  end
+  clear_batch = {}
+  restore_selection()
+end
+
 function reset_seed()
     seed = reaper.time_precise()*100
     init_random()

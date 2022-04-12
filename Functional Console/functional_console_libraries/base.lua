@@ -69,6 +69,7 @@ local grammar_table = {
     --ITEM -> SELECTION
     ["sm"]  = {func = select_muted},
     ["sa"]  = {func = restore_selection},
+    ["osa"]  = {func = override_select_all},
 }
 
 local help_menu = {
