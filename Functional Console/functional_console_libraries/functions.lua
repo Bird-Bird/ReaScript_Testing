@@ -405,6 +405,13 @@ function validate_random_arg(arg)
     return true
 end
 
+function print_example()
+  local ex = [[
+dofile(reaper.GetResourcePath() .. '/Scripts/BirdBird ReaScript Testing/Functional Console/functional_console_libraries/base.lua')
+local ret, err = ext_execute("*p1", true)]]
+  reaper.ShowConsoleMsg(ex)
+end
+
 --ADD ITEMS TO A CLEAR BATCH
 function bake_selection()
     table.insert(clear_batch, initial_item_sel)

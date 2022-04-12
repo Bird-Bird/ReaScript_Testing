@@ -25,6 +25,7 @@ local grammar_table = {
     --SYNTAX
     ["d"]   = "do_times",
     [">"]   = "exit scope",
+    ["example"] = {func = print_example},
 
     --ITEM -> IMMEDIATE
     ["del"] = {func = delete_item},
