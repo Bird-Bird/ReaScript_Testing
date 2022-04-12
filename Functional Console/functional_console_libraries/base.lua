@@ -327,6 +327,7 @@ function save_macro(macro, reactive)
 end
 
 function ext_execute(input, has_undo, clear_items)
+  if not clear_items then full_reset() end
   local success, err = execute_command(input, true)
   if success then
       reaper.PreventUIRefresh(1)
@@ -344,5 +345,9 @@ function ext_execute(input, has_undo, clear_items)
   else
       return false, err.description
   end
+end
+
+function ext_reset()
+  full_reset()
 end
 
