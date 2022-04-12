@@ -1,5 +1,4 @@
 -- @noindex
--- @version 0.99.5.3
 
 function p(msg) reaper.ShowConsoleMsg(tostring(msg)..'\n')end
 function reaper_do_file(file) local info = debug.getinfo(1,'S'); local path = info.source:match[[^@?(.*[\/])[^\/]-$]]; dofile(path .. file); end
@@ -324,5 +323,25 @@ function save_macro(macro, reactive)
             return false, macro
         end
     end
+end
+
+function ext_execute(input, has_undo, clear_items)
+  local success, err = execute_command(input, true)
+  if success then
+      reaper.PreventUIRefresh(1)
+      if has_undo then
+          reaper.Undo_BeginBlock()
+      end
+      init_console(clear_items)
+      execute_reactive_stack()
+      if has_undo then
+          reaper.Undo_EndBlock('Functional Console Command', -1)
+      end
+      reaper.PreventUIRefresh(-1)
+      reaper.UpdateArrange()
+      return true, nil
+  else
+      return false, err.description
+  end
 end
 
