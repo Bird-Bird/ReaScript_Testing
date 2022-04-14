@@ -54,11 +54,17 @@ tr arg1: Transposes selected items by incrementing/decrementing take pitch
 - arg1: Pitch offset in semitones
 len arg1: Sets the length of the selected items
 - arg1: Length in seconds by default. However using the suffix "b" will set the item length in beats instead. (ie. "len 4b")
+lenb arg1: Sets the length of the selected items in beats
+- arg1: Length in beats
+lenr arg1: Sets the length of the selected items by ratio
+- arg1: A value in the range [0, 1], ie. passing in 1 will not change the item length, 0.5 will set it to half length, 0.25 will set it to quarter...
 rep arg1: Duplicates items to repeat selection
 - arg1: Number of repeats
 col: Creates a color gradient on selected items
 nud arg1: Nudges items
 - arg1: Nudge distance in seconds. However using the suffix "b" will set the item nudge in beats instead. (ie. "nud 1b")
+nudb arg1: Nudges items in beats
+- arg1: Nudge distance in beats
 fxo: Fixes overlaps on selected items
 fxe: Fixes overlaps on selected items, extends items to fill empty space
 sfo: Applies a small fade out (10ms) to selected items.
@@ -67,6 +73,8 @@ fo arg1: Adds a fade out to items.
 ten arg1: Squashes item positions towards their start or end position. May require running "fxe" or "fxo" afterwards to fix overlaps.
 - arg1: The tension amount in a range between [-10,10], negative values will squash item positions towards their start position while positive values will squash them towards their end point.
 v arg1: Offsets item volume in dBs.
+- arg1: Offset in dBs.
+vr arg1: Creates a volume ramp offsetting volume every item.
 - arg1: Offset in dBs.
 rev: Reverses selected items, will also reverse envelopes and fades.
 spl arg1: Splits items.
@@ -80,12 +88,17 @@ sf: Keeps the first item in the selection selected.
 sl: Keeps the last item in the selection selected.
 sa: Selects all initial items and the items that were created during the execution of commands. Useful to restore selection after running other commands in series that filter the selection.
 bs: Bakes selection to initial selection, running the command "sa" after this will only return the baked items
+osa: Selects all items, ignoring bakes.
 is: Inverts selection
 rs: Keeps random items selected, with approximately 50% chance.
 rss arg1: Keeps random items selected, based on probability.
 - arg1: A value between [0,1] that determines what percentage of items get randomly selected. As an example, "rss 0" will deselect all items, "rss 0.5" will approximately keep half the items selected, "rss 1" will keep all items selected.
 sel arg1: Uses a custom pattern to filter the selection.
 - arg1: Selection pattern. The selection pattern has a format of sequence of 1 and 0s seperated by a '-'. For example the command "sel 1-0" will select every other item, "sel 0-0-1" will select every third item, "sel 0-1-1-0" will select every second and third item out of every four items...
+tag arg1: Tags a selection of items with the specified name. You can later restore this selection by calling the "get" command.
+- arg1: Name for the tag.
+get arg1: Restores the item selection to a specific tag, deselecting all other items. If the tag isn't found no items will be selected.
+- arg1: Name for the tag.
 si arg1: Keeps item at a specific index selected while deselecting others.
 -arg1: Target item. As an example, if you have 4 items selected and run the command "si 3" only the third item will remain selected.
 di arg1: Deselects an item a specific index.
@@ -341,8 +354,10 @@ end
 local initial_item_sel
 local reactive_items
 local clear_batch = {}
+local tags ={}
 function init_console(reactive)
-    init_random()
+  tags = {}  
+  init_random()
     if reactive then
         --CLEAR LINGERING ITEMS
         if #clear_batch > 0 then
@@ -365,6 +380,27 @@ function init_console(reactive)
     end
 end
 
+function tag_items(tag)
+  local items = get_selected_items()
+  tags[tag] = items
+end
+
+function select_tag(tag)
+  local items = get_selected_items()
+  for i = 1, #items do
+    reaper.SetMediaItemSelected(items[i], false)
+  end
+  local tag_items = tags[tag]
+  if tag_items then
+    for i = 1, #tag_items do
+      local item = tag_items[i]
+      if reaper.ValidatePtr2(0, item, 'MediaItem*') then
+        reaper.SetMediaItemSelected(item, true)
+      end
+    end
+  end
+end
+
 function override_select_all()
   for i = 1, #clear_batch do
     local batch = clear_batch[i]
@@ -384,12 +420,15 @@ function reset_seed()
     init_random()
 end
 
-function full_reset()
+function full_reset(no_reset)
     initial_item_sel = nil
     reactive_items = nil
     clear_batch = {}
+    tags = {}
 
-    init_console(true)
+    if not no_reset then
+      init_console(true)
+    end
 end
 
 function get_random_num(arg)
@@ -586,6 +625,15 @@ function delete_item()
     end    
 end
 
+function delete_item_at_index(i)
+  local items = get_selected_items()
+  if i >= 1 and i <= #items then
+    local item = items[i]
+    local track = reaper.GetMediaItem_Track(item)
+    reaper.DeleteTrackMediaItem(track, item)
+  end
+end
+
 function sanitize_initial_selection()
     for i = #initial_item_sel, 1, -1 do
         local item = initial_item_sel[i]
@@ -669,6 +717,24 @@ function set_length(length)
         local item = items[i]
         reaper.SetMediaItemInfo_Value(item, 'D_LENGTH', value)
     end
+end
+
+function set_length_beats(length)
+  local len_beat =  reaper.TimeMap2_beatsToTime(0, 1)
+  local items = get_selected_items()
+  for i = 1, #items do 
+      local item = items[i]
+      reaper.SetMediaItemInfo_Value(item, 'D_LENGTH', len_beat * length)
+  end
+end
+
+function set_length_ratio(ratio)
+  local items = get_selected_items()
+  for i = 1, #items do 
+      local item = items[i]
+      local len = reaper.GetMediaItemInfo_Value(item, 'D_LENGTH')
+      reaper.SetMediaItemInfo_Value(item, 'D_LENGTH', len*ratio)
+  end
 end
 
 function validate_len_arg(arg)
@@ -760,6 +826,16 @@ function nudge(length)
         local pos = reaper.GetMediaItemInfo_Value(item, 'D_POSITION')
         reaper.SetMediaItemInfo_Value(item, 'D_POSITION', pos + value)
     end
+end
+
+function nudge_beats(value)
+  local len_beat =  reaper.TimeMap2_beatsToTime(0, 1)
+  local items = get_selected_items()
+  for i = 1, #items do
+      local item = items[i]
+      local pos = reaper.GetMediaItemInfo_Value(item, 'D_POSITION')
+      reaper.SetMediaItemInfo_Value(item, 'D_POSITION', pos + value*len_beat)
+  end
 end
 
 function fix_overlaps()
@@ -857,6 +933,15 @@ function volume(nudge)
         local item_vol = reaper.GetMediaItemInfo_Value(item, 'D_VOL')
         reaper.SetMediaItemInfo_Value(item, 'D_VOL', item_vol*10^(0.05*nudge))
     end
+end
+
+function volume_ramp(nudge)
+  local items = get_selected_items()
+  for i = 1, #items do
+      local item = items[i]
+      local item_vol = reaper.GetMediaItemInfo_Value(item, 'D_VOL')
+      reaper.SetMediaItemInfo_Value(item, 'D_VOL', item_vol*10^(0.05*nudge*(i-1)))
+  end
 end
 
 function select_index(index)

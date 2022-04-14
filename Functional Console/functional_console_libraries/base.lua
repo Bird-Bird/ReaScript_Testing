@@ -29,6 +29,7 @@ local grammar_table = {
 
     --ITEM -> IMMEDIATE
     ["del"] = {func = delete_item},
+    ["dei"] = {func = delete_item_at_index, args = {"num"}},
     ["sfo"] = {func = small_fade_out},
     ["fo"]  = {func = fade_out, args = {"num"}},
  
@@ -40,10 +41,13 @@ local grammar_table = {
     ["pir"] = {func = pitch_ramp, args = {"num"}},
     ["tr"]  = {func = transpose, args = {"num"}},
     ["len"] = {func = set_length, args = {"str"}},
+    ["lenb"] = {func = set_length_beats, args = {"num"}},
+    ["lenr"] = {func = set_length_ratio, args = {"num"}},
     ["ofs"] = {func = offset, args = {"str"}},
     ["rep"] = {func = repeat_item, args = {"num"}},
     ["col"] = {func = random_col_grad},
     ["nud"] = {func = nudge, args = {"str"}},
+    ["nudb"] = {func = nudge_beats, args = {"num"}},
     ["fxo"] = {func = fix_overlaps},
     ["fxe"] = {func = fix_overlaps_extend},
     ["sel"] = {func = select_pattern, args = {"str"}},
@@ -51,6 +55,7 @@ local grammar_table = {
     ["sf"]  = {func = select_first},
     ["ten"] = {func = tension, args = {"num"}},
     ["v"]   = {func = volume, args = {"num"}},
+    ["vr"]   = {func = volume_ramp, args = {"num"}},
     ["si"]  = {func = select_index, args = {"num"}},
     ["di"]  = {func = deselect_index, args = {"num"}},
     ["spl"]  = {func = split, args = {"num"}},
@@ -70,6 +75,8 @@ local grammar_table = {
     ["sm"]  = {func = select_muted},
     ["sa"]  = {func = restore_selection},
     ["osa"]  = {func = override_select_all},
+    ["tag"] = {func = tag_items, args = {"str"}},
+    ["get"] = {func = select_tag, args = {"str"}}
 }
 
 local help_menu = {
@@ -171,7 +178,7 @@ function check_input_errors(macro)
     i = 1
     while i <= #macro do 
         local c = macro[i]
-        if string.starts(c, 'd') and c ~= "del" and c ~= 'di' then
+        if string.starts(c, 'd') and c ~= "del" and c ~= 'di' and c ~= 'dei' then
             scope_count = scope_count + 1
         elseif c == ">" then
             scope_count = scope_count - 1
@@ -203,7 +210,7 @@ function get_stack(macro)
     local i = 1
     while i <= #macro do
         local c = macro[i]
-        if string.starts(c, 'd') and c ~= "del" then
+        if string.starts(c, 'd') and c ~= "del" and c ~= 'di' and c ~= 'dei' then
             table.insert(scope_start, i)
         elseif c == ">" then
             --COMPILE SCOPE
@@ -331,24 +338,24 @@ function ext_execute(input, has_undo, clear_items)
   if not clear_items then full_reset() end
   local success, err = execute_command(input, true)
   if success then
-      reaper.PreventUIRefresh(1)
-      if has_undo then
-          reaper.Undo_BeginBlock()
-      end
-      init_console(clear_items)
-      execute_reactive_stack()
-      if has_undo then
-          reaper.Undo_EndBlock('Functional Console Command', -1)
-      end
-      reaper.PreventUIRefresh(-1)
-      reaper.UpdateArrange()
-      return true, nil
+    reaper.PreventUIRefresh(1)
+    if has_undo then
+        reaper.Undo_BeginBlock()
+    end
+    init_console(clear_items)
+    execute_reactive_stack()
+    if has_undo then
+        reaper.Undo_EndBlock('Functional Console Command', -1)
+    end
+    reaper.PreventUIRefresh(-1)
+    reaper.UpdateArrange()
+    return true, nil
   else
-      return false, err.description
+    return false, err.description
   end
 end
 
-function ext_reset()
-  full_reset()
+function ext_reset(no_reset)
+  full_reset(no_reset)
 end
 
