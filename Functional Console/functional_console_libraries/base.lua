@@ -4,6 +4,7 @@ function p(msg) reaper.ShowConsoleMsg(tostring(msg)..'\n')end
 function reaper_do_file(file) local info = debug.getinfo(1,'S'); local path = info.source:match[[^@?(.*[\/])[^\/]-$]]; dofile(path .. file); end
 reaper_do_file('functions.lua')
 reaper_do_file('macro_library.lua')
+console_is_item_modifiers_compatible = true
 
 function load_macros()
     --LOAD USER MACROS INTO MACROS
@@ -36,6 +37,7 @@ local grammar_table = {
     ["m"]   = {func = mute},
     ["st"]  = {func = stutter},
     ["stt"]  = {func = stutter_div, args = {"num"}},
+    ["shf"]  = {func = shuffle_item_positions},
     ["p"]   = {func = pan},
     ["is"]  = {func = invert_selection},
     ["pir"] = {func = pitch_ramp, args = {"num"}},
@@ -57,6 +59,7 @@ local grammar_table = {
     ["v"]   = {func = volume, args = {"num"}},
     ["vr"]   = {func = volume_ramp, args = {"num"}},
     ["si"]  = {func = select_index, args = {"num"}},
+    ["sai"]  = {func = select_at_index, args = {"num"}},
     ["di"]  = {func = deselect_index, args = {"num"}},
     ["spl"]  = {func = split, args = {"num"}},
     ["rev"] = {func = reverse},
@@ -334,6 +337,7 @@ function save_macro(macro, reactive)
     end
 end
 
+--ExTERNAL HOOKS
 function ext_execute(input, has_undo, clear_items)
   if not clear_items then full_reset() end
   local success, err = execute_command(input, true)
@@ -359,3 +363,10 @@ function ext_reset(no_reset)
   full_reset(no_reset)
 end
 
+function ext_select_all()
+  override_select_all()
+end
+
+function ext_reset_seed()
+  reset_seed()
+end

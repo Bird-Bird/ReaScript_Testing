@@ -1,5 +1,5 @@
 -- @description Functional Console
--- @version 0.99.6.5
+-- @version 0.99.6.6
 -- @author BirdBird
 -- @provides
 --    [nomain]functional_console_libraries/functions.lua

@@ -402,17 +402,47 @@ function select_tag(tag)
 end
 
 function override_select_all()
-  for i = 1, #clear_batch do
-    local batch = clear_batch[i]
-    for j = 1, #batch do
-      local item = batch[j]
+  if initial_item_sel then
+    for i = 1, #clear_batch do
+      local batch = clear_batch[i]
+      for j = 1, #batch do
+        local item = batch[j]
+        if reaper.ValidatePtr(item, 'MediaItem*') then
+          table.insert(initial_item_sel, item)
+        end
+      end
+    end
+    clear_batch = {}
+    restore_selection()
+  end
+end
+
+function select_at_index(index)
+  local tbl = {}
+  if initial_item_sel then
+    for i = 1, #clear_batch do
+      local batch = clear_batch[i]
+      for j = 1, #batch do
+        local item = batch[j]
+        if reaper.ValidatePtr(item, 'MediaItem*') then
+          table.insert(tbl, item)
+        end
+      end
+    end
+    for i = 1, #initial_item_sel do 
+      local item = initial_item_sel[i]
       if reaper.ValidatePtr(item, 'MediaItem*') then
-        table.insert(initial_item_sel, item)
+        table.insert(tbl, item)
       end
     end
   end
-  clear_batch = {}
-  restore_selection()
+  if #tbl > 0 then
+    local i = index
+    if index > #tbl then i = #tbl 
+    elseif index < 1 then i = 1 end
+    local item = tbl[i]
+    reaper.SetMediaItemSelected(item, true)
+  end
 end
 
 function reset_seed()
@@ -482,6 +512,33 @@ function grid_is_triplet()
     else
         return false
     end
+end
+
+function shuffle(t)
+  local tbl = {}
+  for i = 1, #t do
+    tbl[i] = t[i]
+  end
+  for i = #tbl, 2, -1 do
+    local j = math.random(i)
+    tbl[i], tbl[j] = tbl[j], tbl[i]
+  end
+  return tbl
+end
+
+function shuffle_item_positions()
+  local items = get_selected_items()
+  local items_shuffled = shuffle(items)
+  local pos = {}
+  for i = 1, #items do
+    local item_s = items_shuffled[i]
+    local item_pos = reaper.GetMediaItemInfo_Value(item_s, 'D_POSITION')
+    table.insert(pos, item_pos)
+  end
+  for i = 1, #pos do
+    local pos_sh = pos[i]
+    reaper.SetMediaItemInfo_Value(items[i], 'D_POSITION', pos_sh)
+  end
 end
 
 --https://forums.cockos.com/showpost.php?p=2456585&postcount=24
