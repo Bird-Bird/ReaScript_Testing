@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" commit="6bf5513e9637b059bec696932bea06727d0efadd" name="BirdBird ReaScript Testing">
+<index version="1" commit="4c6b610111bdd8f907bf1c5526c646935aa865f1" name="BirdBird ReaScript Testing">
   <category name="Functional Console">
     <reapack name="BirdBird_Functional Console.lua" type="script" desc="Functional Console">
       <version name="0.99" author="BirdBird" time="2022-02-25T09:46:50Z">
@@ -287,6 +287,28 @@
         <source main="main" file="BirdBird_Sample Last Playthrough.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/764cda5f1125be408789c7760155548a08604317/Global%20Sampler/BirdBird_Sample%20Last%20Playthrough.lua</source>
         <source main="main" file="BirdBird_Sample Last X Seconds.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/764cda5f1125be408789c7760155548a08604317/Global%20Sampler/BirdBird_Sample%20Last%20X%20Seconds.lua</source>
         <source type="effect" file="BirdBird_Global Sampler.jsfx">https://github.com/Bird-Bird/ReaScript_Testing/raw/764cda5f1125be408789c7760155548a08604317/Global%20Sampler/BirdBird_Global%20Sampler.jsfx</source>
+      </version>
+    </reapack>
+  </category>
+  <category name="Item Modifiers">
+    <reapack name="BirdBird_Item Modifiers.lua" type="script" desc="Item Modifiers">
+      <version name="0.4" author="BirdBird" time="2022-04-15T18:52:31Z">
+        <source main="main">https://github.com/Bird-Bird/ReaScript_Testing/raw/4c6b610111bdd8f907bf1c5526c646935aa865f1/Item%20Modifiers/BirdBird_Item%20Modifiers.lua</source>
+        <source file="libraries/functions.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/4c6b610111bdd8f907bf1c5526c646935aa865f1/Item%20Modifiers/libraries/functions.lua</source>
+        <source file="libraries/json.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/4c6b610111bdd8f907bf1c5526c646935aa865f1/Item%20Modifiers/libraries/json.lua</source>
+        <source file="libraries/modifiers.json">https://github.com/Bird-Bird/ReaScript_Testing/raw/4c6b610111bdd8f907bf1c5526c646935aa865f1/Item%20Modifiers/libraries/modifiers.json</source>
+        <source file="libraries/settings.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/4c6b610111bdd8f907bf1c5526c646935aa865f1/Item%20Modifiers/libraries/settings.lua</source>
+        <source file="libraries/builder_parser.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/4c6b610111bdd8f907bf1c5526c646935aa865f1/Item%20Modifiers/libraries/builder_parser.lua</source>
+        <source file="libraries/command_table.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/4c6b610111bdd8f907bf1c5526c646935aa865f1/Item%20Modifiers/libraries/command_table.lua</source>
+        <source file="libraries/modifiers.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/4c6b610111bdd8f907bf1c5526c646935aa865f1/Item%20Modifiers/libraries/modifiers.lua</source>
+        <source file="libraries/modifier_stacks.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/4c6b610111bdd8f907bf1c5526c646935aa865f1/Item%20Modifiers/libraries/modifier_stacks.lua</source>
+        <source file="libraries/gui/gui_main.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/4c6b610111bdd8f907bf1c5526c646935aa865f1/Item%20Modifiers/libraries/gui/gui_main.lua</source>
+        <source file="libraries/gui/gui.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/4c6b610111bdd8f907bf1c5526c646935aa865f1/Item%20Modifiers/libraries/gui/gui.lua</source>
+        <source file="libraries/gui/gui_common.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/4c6b610111bdd8f907bf1c5526c646935aa865f1/Item%20Modifiers/libraries/gui/gui_common.lua</source>
+        <source file="libraries/gui/gui_builder.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/4c6b610111bdd8f907bf1c5526c646935aa865f1/Item%20Modifiers/libraries/gui/gui_builder.lua</source>
+        <source file="libraries/user_files/generated_scripts/example.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/4c6b610111bdd8f907bf1c5526c646935aa865f1/Item%20Modifiers/libraries/user_files/generated_scripts/example.lua</source>
+        <source file="libraries/user_files/modifier_stacks/Beat Chopper Stutter.modstk">https://github.com/Bird-Bird/ReaScript_Testing/raw/4c6b610111bdd8f907bf1c5526c646935aa865f1/Item%20Modifiers/libraries/user_files/modifier_stacks/Beat%20Chopper%20Stutter.modstk</source>
+        <source main="main" file="BirdBird_Item Modifier Builder.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/4c6b610111bdd8f907bf1c5526c646935aa865f1/Item%20Modifiers/BirdBird_Item%20Modifier%20Builder.lua</source>
       </version>
     </reapack>
   </category>
