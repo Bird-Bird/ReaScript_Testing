@@ -1,5 +1,5 @@
 -- @description Item Modifiers
--- @version 0.4.3.2
+-- @version 0.4.3.5
 -- @author BirdBird
 -- @provides
 --    [nomain]libraries/functions.lua

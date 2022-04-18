@@ -366,6 +366,7 @@ end
 function ext_select_all()
   sanitize_items()
   override_select_all()
+  reaper.UpdateArrange()
 end
 
 function ext_reset_seed()
