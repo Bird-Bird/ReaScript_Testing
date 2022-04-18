@@ -121,7 +121,7 @@ function get_modifier_stack_from_clipboard()
   return false, nil
 end
 
-local script_lines = [[dofile(reaper.GetResourcePath() .. '/Scripts/BirdBird ReaScript Testing/Functional Console/functional_console_libraries/base.lua')
+local script_lines = [[dofile(reaper.GetResourcePath() .. '/Scripts/BirdBird ReaScript Testing/Item Modifiers/libraries/functional_console/base.lua')
 local ret, err = ext_execute("CMDCMD", true)]]
 function generate_lua_script_from_stack(stack)
   local cmd_str = compile_modifier_stack(stack)
@@ -134,5 +134,4 @@ function generate_lua_script_from_stack(stack)
     new_file:close()
   end
 end
-
 

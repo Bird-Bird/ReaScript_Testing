@@ -93,4 +93,3 @@ function loop()
     reaper.ImGui_DestroyContext(ctx)
   end
 end
-loop()

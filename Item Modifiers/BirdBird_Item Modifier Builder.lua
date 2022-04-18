@@ -1,18 +1,5 @@
 -- @noindex
 
---CONSOLE
-local console_path = reaper.GetResourcePath() .. '/Scripts/BirdBird ReaScript Testing/Functional Console/functional_console_libraries/base.lua'
-if not reaper.file_exists(console_path) then
-  reaper.ShowMessageBox('Unable to find Functional Console. Make sure it is installed through ReaPack.', 'Error - Missing File', 0)
-  return
-end
-dofile(console_path)
-if not console_is_item_modifiers_compatible then
-  reaper.ShowMessageBox('Item Modifiers requires the latest version of Functional Console to run. You can update it through ReaPack', 'Error - Old Version', 0)
-  return
-end
-
-
 function p(msg) reaper.ShowConsoleMsg(tostring(msg)..'\n')end
 function debug_print(msg) if settings.debug_mode then reaper.ShowConsoleMsg(tostring(msg)..'\n') end end
 function reaper_do_file(file) local info = debug.getinfo(1,'S'); local path = info.source:match[[^@?(.*[\/])[^\/]-$]]; dofile(path .. file); end
@@ -69,3 +56,5 @@ reaper_do_file('libraries/gui/gui.lua')
 window_data.frame = builder_frame
 
 reaper_do_file('libraries/gui/gui_common.lua')
+reaper_do_file('libraries/functional_console/base.lua')
+loop()

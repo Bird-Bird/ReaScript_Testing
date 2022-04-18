@@ -4,6 +4,7 @@ local modifier_stack = {}
 local focus_filter = true
 local auto_focus_filter = false
 local exec = false
+local load_stack = false
 local has_js_API = reaper.APIExists('JS_ReaScriptAPI_Version')
 
 function filter_auto_focus()
@@ -51,6 +52,11 @@ function load_context()
   if reaper.ImGui_MenuItem(ctx, 'Load from file') then
     local r, stack = load_modifier_stack()
     if r then
+      if #modifier_stack ~= 0 then
+        unselect_all_items()
+      end
+      ext_clear()
+      ext_reset()
       modifier_stack = stack
       exec = true
       focus_filter = true
@@ -59,6 +65,11 @@ function load_context()
   if reaper.ImGui_MenuItem(ctx, 'Load from clipboard') then
     local ret, stack = get_modifier_stack_from_clipboard()
     if ret then
+      if #modifier_stack ~= 0 then
+        unselect_all_items()
+      end
+      ext_clear()
+      ext_reset()
       modifier_stack = stack
       exec = true
     end
@@ -115,8 +126,8 @@ function buttons()
     colored_frame(0xFFFFFF20)
     reaper.ImGui_SameLine(ctx)
     if reaper.ImGui_Button(ctx, 'Clear') then
+      ext_clear()
       modifier_stack = {}
-      exec = true
       focus_filter = true
     end
     colored_frame(0xFFFFFF20)
@@ -128,9 +139,10 @@ function buttons()
     colored_frame(0xFFFFFF20)
     reaper.ImGui_SameLine(ctx)
     if reaper.ImGui_Button(ctx, 'Select') then
+      ext_clear(true)
       ext_reset()
-      modifier_stack = {}
       focus_filter = true
+      exec = true
     end
     colored_frame(0xFFFFFF20)
     reaper.ImGui_SameLine(ctx, 0, button_spacing)
@@ -157,12 +169,33 @@ function buttons()
 end
 
 local display_id = 0
+local active_item_peaks = {}
+local last_sel_items = {}
+local last_sel_tracks = {}
 function item_modifiers_frame()
-  exec = false
+  load_stack = false
+  exec = false 
+  
+  
   local modifier_menu_size = 154
   local w = get_window()
   local cx, cy = get_cur()
   local h = w.h - cy - w.pd_y - 1
+  local stack_width = w.w - cx - w.pd_x - modifier_menu_size - 4
+
+  
+  
+  --PEAKS
+  if #modifier_stack == 0 then
+    local items, total_len, tracks = get_selected_items_tracks()
+    if not shallow_table_equals_items(items, last_sel_items, tracks, last_sel_tracks) then
+      local peak_data = fetch_item_peak_data(items, stack_width, total_len, peak_display_padding)
+      active_item_peaks = peak_data
+    end
+    last_sel_items = items
+    last_sel_tracks = tracks
+  end
+
 
   
   --Tag mods
@@ -229,7 +262,7 @@ function item_modifiers_frame()
 
 
   --Stack
-  if reaper.ImGui_BeginChild(ctx, 'Command Builder', w.w - cx - w.pd_x - modifier_menu_size - 4, h, true) then
+  if reaper.ImGui_BeginChild(ctx, 'Command Builder', stack_width, h, true) then
     
     
     --Title
@@ -255,6 +288,14 @@ function item_modifiers_frame()
     end   
     
 
+    --Item peaks
+    local curx, cury = dl_get_cursor()
+    local peak_h = 50
+    draw_items_batch(active_item_peaks, curx, cury, stack_width - 2*w.pd_x, peak_h, peak_display_padding, false)
+    reaper.ImGui_SetCursorPosY(ctx, cury + peak_h + 3)
+    reaper.ImGui_Separator(ctx)
+    
+    
     --Stack
     local pending_removal = {}
     local pending_swap = {}
@@ -332,11 +373,10 @@ function item_modifiers_frame()
 
     --Execute
     if exec then
+      unselect_all_items()
       local cmd_str = compile_modifier_stack(modifier_stack)
       ext_execute(cmd_str, false, true)
     end
     reaper.ImGui_EndChild(ctx)
   end
-
-
 end

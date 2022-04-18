@@ -1,6 +1,7 @@
 -- @noindex
 
 --UTILITY
+function pt(...) local m = {...}; for i = 1, #m do reaper.ShowConsoleMsg(tostring(m[i]) .. '\n') end end
 function str_split(s, delimiter)
   result = {};
   for match in (s..delimiter):gmatch("(.-)"..delimiter) do
@@ -29,6 +30,27 @@ function table.shallow_copy(t)
   return t2
 end
 
+function shallow_table_equals_items(t1, t2, tr1, tr2)
+  if #t1 ~= #t2 then return false end
+  for i = 1, #t1 do
+    if t1[i] ~= t2[i] then return false end
+    if tr1[i] ~= tr2[i] then
+      return false 
+    end
+  end
+  return true
+end
+
+local timer_start = reaper.time_precise()
+function tm_s()
+  timer_start = reaper.time_precise()
+end
+
+function tm_e()
+  local tn = (reaper.time_precise() - timer_start) * 1000
+  reaper.ShowConsoleMsg(tn .. ' ms' .. '\n')
+end
+
 function deepcopy(orig)
   local orig_type = type(orig)
   local copy
@@ -42,4 +64,11 @@ function deepcopy(orig)
       copy = orig
   end
   return copy
+end
+
+function unselect_all_items()
+  local sc = reaper.CountSelectedMediaItems(0)
+  for i = sc - 1, 0, -1 do
+    reaper.SetMediaItemSelected(reaper.GetSelectedMediaItem(0, i),false)
+  end
 end
