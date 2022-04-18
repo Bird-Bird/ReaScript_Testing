@@ -19,8 +19,6 @@
 --    [nomain]libraries/user_files/generated_scripts/example.lua
 --    [nomain]libraries/user_files/modifier_stacks/Beat Chopper Stutter.modstk
 --    [main]BirdBird_Item Modifier Builder.lua
---    [nomain]libraries/drawing/drawlist_API.lua
---    [nomain]libraries/drawing/waveform_peaks.lua
 --    [nomain]libraries/functional_console/base.lua
 --    [nomain]libraries/functional_console/basic_commands.lua
 --    [nomain]libraries/functional_console/functions.lua
