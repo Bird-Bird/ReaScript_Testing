@@ -21,8 +21,8 @@ function fc_reset_to_initial_state()
   tags = {}
 end
 
-function fc_clear_state(clear_selection)
-  if initial_selection.items then
+function fc_clear_state(clear_selection, no_reset)
+  if initial_selection.items and not no_reset then
     fc_reset_to_initial_state()
     if clear_selection then
       for i = 1, #initial_selection.items do
@@ -37,13 +37,15 @@ function fc_clear_state(clear_selection)
 end
 
 function fc_run(input)
+  local no_reset = false
   if not initial_selection.items then
-    return false, 'No items selected.'
+    fc_grab_initial_state()
+    no_reset = true
   end
   local success, err = execute_command(input, true)
   if success then
     reaper.PreventUIRefresh(1)
-    fc_reset_to_initial_state()
+    if not no_reset then fc_reset_to_initial_state() end
     fc_push_items()
     
     reaper.Undo_BeginBlock()

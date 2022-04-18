@@ -93,6 +93,7 @@ function draw_mods(mods, filter)
       if r then 
         local new_mod = deepcopy(mod)
         table.insert(modifier_stack, new_mod)
+        --Set selection
         if #modifier_stack == 1 then
           ext_reset()
         end
@@ -113,7 +114,7 @@ function buttons()
     reaper.ImGui_PushStyleVar(ctx, reaper.ImGui_StyleVar_FramePadding(), 5, 4)
     if reaper.ImGui_Button(ctx, 'Apply') then
       ext_select_all()
-      ext_reset()
+      fc_clear_state(false, true)
       modifier_stack = {}
       focus_filter = true
     end
