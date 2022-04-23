@@ -1,5 +1,5 @@
 -- @description Envelope Palette
--- @version 0.8
+-- @version 0.8.1
 -- @author BirdBird
 -- @provides
 --    [nomain]libraries/functions.lua
