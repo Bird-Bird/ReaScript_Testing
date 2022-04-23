@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" commit="9154f451ad876652924b6b6b7bfb412521a0ebe4" name="BirdBird ReaScript Testing">
+<index version="1" commit="32b6b3c7cfce4cda2c0ad49395bd69a74f5dffd2" name="BirdBird ReaScript Testing">
   <category name="Envelope Palette">
     <reapack name="BirdBird_Envelope Palette.lua" type="script" desc="Envelope Palette">
       <version name="0.8" author="BirdBird" time="2022-04-23T15:04:39Z">
@@ -10,6 +10,15 @@
         <source file="libraries/gui_main.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/9154f451ad876652924b6b6b7bfb412521a0ebe4/Envelope%20Palette/libraries/gui_main.lua</source>
         <source file="libraries/gui.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/9154f451ad876652924b6b6b7bfb412521a0ebe4/Envelope%20Palette/libraries/gui.lua</source>
         <source file="libraries/mouse.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/9154f451ad876652924b6b6b7bfb412521a0ebe4/Envelope%20Palette/libraries/mouse.lua</source>
+      </version>
+      <version name="0.8.1" author="BirdBird" time="2022-04-23T15:37:06Z">
+        <source main="main">https://github.com/Bird-Bird/ReaScript_Testing/raw/32b6b3c7cfce4cda2c0ad49395bd69a74f5dffd2/Envelope%20Palette/BirdBird_Envelope%20Palette.lua</source>
+        <source file="libraries/functions.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/32b6b3c7cfce4cda2c0ad49395bd69a74f5dffd2/Envelope%20Palette/libraries/functions.lua</source>
+        <source file="libraries/drawing.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/32b6b3c7cfce4cda2c0ad49395bd69a74f5dffd2/Envelope%20Palette/libraries/drawing.lua</source>
+        <source file="libraries/envelopes.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/32b6b3c7cfce4cda2c0ad49395bd69a74f5dffd2/Envelope%20Palette/libraries/envelopes.lua</source>
+        <source file="libraries/gui_main.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/32b6b3c7cfce4cda2c0ad49395bd69a74f5dffd2/Envelope%20Palette/libraries/gui_main.lua</source>
+        <source file="libraries/gui.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/32b6b3c7cfce4cda2c0ad49395bd69a74f5dffd2/Envelope%20Palette/libraries/gui.lua</source>
+        <source file="libraries/mouse.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/32b6b3c7cfce4cda2c0ad49395bd69a74f5dffd2/Envelope%20Palette/libraries/mouse.lua</source>
       </version>
     </reapack>
   </category>
