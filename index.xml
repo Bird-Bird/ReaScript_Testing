@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" commit="0e7098557129fbdf5292edce11cc79cca74c5d12" name="BirdBird ReaScript Testing">
+<index version="1" commit="9154f451ad876652924b6b6b7bfb412521a0ebe4" name="BirdBird ReaScript Testing">
+  <category name="Envelope Palette">
+    <reapack name="BirdBird_Envelope Palette.lua" type="script" desc="Envelope Palette">
+      <version name="0.8" author="BirdBird" time="2022-04-23T15:04:39Z">
+        <source main="main">https://github.com/Bird-Bird/ReaScript_Testing/raw/9154f451ad876652924b6b6b7bfb412521a0ebe4/Envelope%20Palette/BirdBird_Envelope%20Palette.lua</source>
+        <source file="libraries/functions.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/9154f451ad876652924b6b6b7bfb412521a0ebe4/Envelope%20Palette/libraries/functions.lua</source>
+        <source file="libraries/drawing.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/9154f451ad876652924b6b6b7bfb412521a0ebe4/Envelope%20Palette/libraries/drawing.lua</source>
+        <source file="libraries/envelopes.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/9154f451ad876652924b6b6b7bfb412521a0ebe4/Envelope%20Palette/libraries/envelopes.lua</source>
+        <source file="libraries/gui_main.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/9154f451ad876652924b6b6b7bfb412521a0ebe4/Envelope%20Palette/libraries/gui_main.lua</source>
+        <source file="libraries/gui.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/9154f451ad876652924b6b6b7bfb412521a0ebe4/Envelope%20Palette/libraries/gui.lua</source>
+        <source file="libraries/mouse.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/9154f451ad876652924b6b6b7bfb412521a0ebe4/Envelope%20Palette/libraries/mouse.lua</source>
+      </version>
+    </reapack>
+  </category>
   <category name="Functional Console">
     <reapack name="BirdBird_Functional Console.lua" type="script" desc="Functional Console">
       <version name="0.99" author="BirdBird" time="2022-02-25T09:46:50Z">
