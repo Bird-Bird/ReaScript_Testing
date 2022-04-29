@@ -1,5 +1,5 @@
 -- @description Track Versions
--- @version 0.99.9.3
+-- @version 0.99.9.4
 -- @author BirdBird
 -- @provides
 --    [nomain]track_versions_libraries/json.lua
@@ -13,7 +13,6 @@
 --    [main]BirdBird_Track Versions - Cycle to previous version.lua
 --    [main]BirdBird_Track Versions Settings.lua
 --    [main]BirdBird_Track Versions (GUI).lua
-
 -- @changelog
 --  Compensate tempo changes
 
