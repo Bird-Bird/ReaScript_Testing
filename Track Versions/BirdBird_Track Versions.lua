@@ -1,5 +1,5 @@
 -- @description Track Versions
--- @version 0.99.9.2
+-- @version 0.99.9.3
 -- @author BirdBird
 -- @provides
 --    [nomain]track_versions_libraries/json.lua
@@ -14,8 +14,8 @@
 --    [main]BirdBird_Track Versions Settings.lua
 --    [main]BirdBird_Track Versions (GUI).lua
 
---@changelog
---  + Compensate tempo changes
+-- @changelog
+--  Compensate tempo changes
 
 function reaper_do_file(file) local info = debug.getinfo(1,'S'); path = info.source:match[[^@?(.*[\/])[^\/]-$]]; dofile(path .. file); end
 reaper_do_file('track_versions_libraries/functions.lua')
