@@ -2,7 +2,7 @@
 
 function load_chunk(track, chunk_data, partial_load)
     local item_chunks = chunk_data.items
-    
+        
     --GET RAZOR EDITS
     local razor_edits = {}
     if partial_load then
@@ -14,6 +14,13 @@ function load_chunk(track, chunk_data, partial_load)
         clear_items(track)
     elseif partial_load and edit then
         delete_item_range(track, edit.s, edit.e)
+    end
+
+    --SET TEMPO
+    local cur_tempo, tempo = reaper.Master_GetTempo(), chunk_data.tempo
+    local do_tempo = tempo and cur_tempo ~= tempo
+    if do_tempo then 
+        reaper.SetCurrentBPM(0, tempo, false)
     end
 
     --INSERT ITEMS FROM CHUNKS
@@ -38,6 +45,10 @@ function load_chunk(track, chunk_data, partial_load)
     local q = get_ext_state_query(track)
     if chunk_data.fx_chain and q.load_fx and not partial_load then
         replace_fx_chunk(track, chunk_data.fx_chain)
+    end
+
+    if do_tempo then
+        reaper.SetCurrentBPM(0, cur_tempo, false)
     end
 end
 
@@ -69,6 +80,7 @@ function switch_versions(track, state, selected_id, no_save, partial_load)
         if q.load_fx then
             state.versions[state.data.selected].fx_chain = chunk_data.fx_chain
         end
+        state.versions[state.data.selected].tempo = chunk_data.tempo
     end
 
     --SWITCH VERSION

@@ -89,8 +89,9 @@ function get_version_data(track)
     local chunk_lines = str_split(chunk, '\n')
     local item_chunks = get_chunk_section(chunk_lines, 'ITEM', item_chunk_blacklist)
     local fx_chain = get_chunk_section(chunk_lines, 'FXCHAIN', fx_chain_blacklist)[1]
+    local tempo = reaper.Master_GetTempo()
     if not fx_chain then fx_chain = '<FXCHAIN\n>' end
-    return {items = item_chunks, fx_chain = fx_chain}
+    return {items = item_chunks, fx_chain = fx_chain, tempo = tempo}
 end
 
 function replace_fx_chunk(track, new_chain)
