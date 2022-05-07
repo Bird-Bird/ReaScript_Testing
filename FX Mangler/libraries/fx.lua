@@ -1,3 +1,4 @@
+-- @noindex
 
 function get_fx_data_at_index(track, i)
   local r, name = reaper.TrackFX_GetFXName(track, i)
