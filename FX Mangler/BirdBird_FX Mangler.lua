@@ -1,5 +1,5 @@
 -- @description FX Mangler
--- @version 0.1
+-- @version 0.1.1
 -- @author BirdBird
 -- @provides
 --    [nomain]libraries/blacklist.lua

@@ -28,10 +28,12 @@ function get_new_group(fx_data, max_param_count, override)
       fx_data_map[fx.name] = get_focused_fx_data(fx)
     end
      
-    local g = {}
+    local g, success = {}, false
     g.fx = fx
-    g.params = get_random_parameters_2(fx_data_map[fx.name], fx, max_param_count)
-    table.insert(group, g)
+    success, g.params = get_random_parameters_2(fx_data_map[fx.name], fx, max_param_count)
+    if success then
+      table.insert(group, g)
+    end
   end
   group.val    = 0
   group.mix    = 1

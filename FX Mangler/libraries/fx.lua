@@ -137,19 +137,20 @@ function get_random_parameters_2(focused_fx_data, fx, num)
         end
       end
     else
-      if not parameter_is_blacklisted(list, par.name) and
+      if not table_has_value(list, par.name) and
       not parameter_is_blacklisted(blacklist, par.name) then
         table.insert(allowed_params, par)
       end
     end
   end
+  if #allowed_params == 0 then return false, nil end
   local par_count = math.random(math.min(#allowed_params, num))
   while #final_params < par_count do
     local ind = math.random(#allowed_params)
     table.insert(final_params, allowed_params[ind])
     table.remove(allowed_params, ind)
   end
-  return final_params
+  return true, final_params
 end
 
 function push_realimit(track)
