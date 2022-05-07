@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" commit="6090e5deeeef3009ed5b2d8342ae3a78e447b861" name="BirdBird ReaScript Testing">
+<index version="1" commit="8e179f83e306c4f3e87686d367e1f0d4323b106f" name="BirdBird ReaScript Testing">
   <category name="Envelope Palette">
     <reapack name="BirdBird_Envelope Palette.lua" type="script" desc="Envelope Palette">
       <version name="0.8" author="BirdBird" time="2022-04-23T15:04:39Z">
@@ -187,6 +187,21 @@
         <source file="libraries/gui/gui_main.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/6090e5deeeef3009ed5b2d8342ae3a78e447b861/FX%20Mangler/libraries/gui/gui_main.lua</source>
         <source file="libraries/gui/gui_param_blacklist.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/6090e5deeeef3009ed5b2d8342ae3a78e447b861/FX%20Mangler/libraries/gui/gui_param_blacklist.lua</source>
         <source file="libraries/gui/gui.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/6090e5deeeef3009ed5b2d8342ae3a78e447b861/FX%20Mangler/libraries/gui/gui.lua</source>
+      </version>
+      <version name="0.1.1" author="BirdBird" time="2022-05-07T22:45:00Z">
+        <changelog><![CDATA[Early alpha version]]></changelog>
+        <source main="main">https://github.com/Bird-Bird/ReaScript_Testing/raw/8e179f83e306c4f3e87686d367e1f0d4323b106f/FX%20Mangler/BirdBird_FX%20Mangler.lua</source>
+        <source file="libraries/blacklist.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/8e179f83e306c4f3e87686d367e1f0d4323b106f/FX%20Mangler/libraries/blacklist.lua</source>
+        <source file="libraries/functions.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/8e179f83e306c4f3e87686d367e1f0d4323b106f/FX%20Mangler/libraries/functions.lua</source>
+        <source file="libraries/fx.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/8e179f83e306c4f3e87686d367e1f0d4323b106f/FX%20Mangler/libraries/fx.lua</source>
+        <source file="libraries/groups.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/8e179f83e306c4f3e87686d367e1f0d4323b106f/FX%20Mangler/libraries/groups.lua</source>
+        <source file="libraries/json.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/8e179f83e306c4f3e87686d367e1f0d4323b106f/FX%20Mangler/libraries/json.lua</source>
+        <source file="libraries/settings.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/8e179f83e306c4f3e87686d367e1f0d4323b106f/FX%20Mangler/libraries/settings.lua</source>
+        <source file="libraries/user_files/plugin_params/plugin_params.txt">https://github.com/Bird-Bird/ReaScript_Testing/raw/8e179f83e306c4f3e87686d367e1f0d4323b106f/FX%20Mangler/libraries/user_files/plugin_params/plugin_params.txt</source>
+        <source file="libraries/gui/gui_common.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/8e179f83e306c4f3e87686d367e1f0d4323b106f/FX%20Mangler/libraries/gui/gui_common.lua</source>
+        <source file="libraries/gui/gui_main.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/8e179f83e306c4f3e87686d367e1f0d4323b106f/FX%20Mangler/libraries/gui/gui_main.lua</source>
+        <source file="libraries/gui/gui_param_blacklist.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/8e179f83e306c4f3e87686d367e1f0d4323b106f/FX%20Mangler/libraries/gui/gui_param_blacklist.lua</source>
+        <source file="libraries/gui/gui.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/8e179f83e306c4f3e87686d367e1f0d4323b106f/FX%20Mangler/libraries/gui/gui.lua</source>
       </version>
     </reapack>
   </category>
