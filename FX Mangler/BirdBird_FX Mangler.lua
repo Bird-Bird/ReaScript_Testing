@@ -1,5 +1,5 @@
 -- @description FX Mangler
--- @version 0.1.1
+-- @version 0.1.3
 -- @author BirdBird
 -- @provides
 --    [nomain]libraries/blacklist.lua
@@ -17,6 +17,7 @@
 --    Early alpha version
 
 --LOAD FILES
+script_version = 0.13
 window_data = {}
 window_data.ctx = 'FX Mangler'
 window_data.style = 'main'

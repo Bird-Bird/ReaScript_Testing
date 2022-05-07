@@ -89,6 +89,33 @@ function reset_groups(mangler_groups)
   end
 end
 
+function reset_groups_to_initial_state(mangler_groups)
+  local param_map = {}
+  
+  for i = 1, #mangler_groups do
+    local group_fx = mangler_groups[i]
+    group_fx.val = 0
+    group_fx.random = 0
+    group_fx.mix = 1
+    for j = 1, #group_fx do
+      local group = group_fx[j]
+      local fx = group.fx
+      local params = group.params
+      for i = 1, #params do
+        local param = params[i]
+        if not param_map[fx.id .. ' | ' .. param.id] then
+          param_map[fx.id .. ' | ' .. param.id] = {fx = fx, param = param}
+        end        
+      end
+    end
+  end
+
+  for k, dat in pairs(param_map) do 
+    local fx, param = dat.fx, dat.param
+    reaper.TrackFX_SetParamNormalized(fx.track, fx.id, param.id, param.norm_value)
+  end
+end
+
 function build_parameter_map_from_groups(mangler_groups)
   local param_map = {}
   for i = 1, #mangler_groups do

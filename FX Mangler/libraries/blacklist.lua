@@ -3,7 +3,7 @@
 local info = debug.getinfo(1,'S')
 local path = info.source:match[[^@?(.*[\/])[^\/]-$]]
 
-local default_blacklist = {"bypass", "solo", "+Wet", "+Delta"}
+local default_blacklist = {"bypass", "solo", "+Wet", "+Delta", "record", "pause", "cancel"}
 local global_blacklist_path = '/user_files/blacklist.json'
 local plugin_blacklist_path = '/user_files/plugin_params/'
 function get_blacklist(bl_path)

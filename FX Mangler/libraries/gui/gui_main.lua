@@ -120,6 +120,7 @@ function top_display(gs, list, mangler_groups, fx_selected_map, track)
   
   local clear_groups = false
   if reaper.ImGui_Button(ctx, "Clear") then
+    reset_groups_to_initial_state(mangler_groups)
     clear_groups = true
   end
 
