@@ -58,8 +58,12 @@ function display_group(group, id)
   return rv, delete
 end
 
-local app_version = tonumber(str_split(reaper.GetAppVersion(), '/')[1])
-local has_realimit = app_version >= 6.37
+local app_str = str_split(reaper.GetAppVersion(), '/')[1]
+if string.find(app_str, "+dev") then app_str = app_str:gsub("%+dev.+", "") end
+local app_version = tonumber(app_str)
+local has_realimit = false
+if app_version and app_version >= 6.37 then has_realimit = true end
+
 realimit = false
 function top_display(gs, list, mangler_groups, fx_selected_map, track)
   
