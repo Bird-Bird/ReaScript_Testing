@@ -16,8 +16,6 @@ reaper_do_file('libraries/gui_toolbar.lua')
 reaper_do_file('libraries/gmem.lua')
 reaper_do_file('libraries/settings.lua')
 
-
-local dock = main_settings.dock_id
 function loop()
   reaper.ImGui_PushFont(ctx, font)
   push_theme()
