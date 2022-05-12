@@ -1,15 +1,15 @@
 -- @description Razor Edit Utility
--- @version 0.6.4
+-- @version 0.6.5
 -- @author BirdBird
 -- @provides
 --  [main]BirdBird_Razor Edit Utility Toolbar.lua
 --  [main]BirdBird_Razor Edit Utility - Comp to selected track.lua
 --  [main]BirdBird_Razor Edit Utility.lua
---  [main]preset_selection/BirdBird_Razor Edit Utility - Select Preset 1.lua
---  [main]preset_selection/BirdBird_Razor Edit Utility - Select Preset 2.lua
---  [main]preset_selection/BirdBird_Razor Edit Utility - Select Preset 3.lua
---  [main]preset_selection/BirdBird_Razor Edit Utility - Select Preset 4.lua
---  [main]preset_selection/BirdBird_Razor Edit Utility - Select Preset 5.lua
+--  [main]BirdBird_Razor Edit Utility - Select Preset 1.lua
+--  [main]BirdBird_Razor Edit Utility - Select Preset 2.lua
+--  [main]BirdBird_Razor Edit Utility - Select Preset 3.lua
+--  [main]BirdBird_Razor Edit Utility - Select Preset 4.lua
+--  [main]BirdBird_Razor Edit Utility - Select Preset 5.lua
 --  [nomain]libraries/functions.lua
 --  [nomain]libraries/gmem.lua
 --  [nomain]libraries/gui_main.lua
