@@ -13,7 +13,7 @@ function get_default_setting()
       folder_has_prefix = false,
       folder_prefix_mode = 0,  --(0 -> prefix,    1 -> suffix, 2 --> match)
       folder_prefix = "-F",
-      track_is_empty    = 0,   --(0 -> is empty,  1 -> has items)
+      track_is_empty    = false,   --(0 -> is empty,  1 -> has items)
 
     --TIME
     move_time = false,
