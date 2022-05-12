@@ -1,5 +1,5 @@
 -- @description Razor Edit Utility
--- @version 0.6.3
+-- @version 0.6.4
 -- @author BirdBird
 -- @provides
 --  [main]BirdBird_Razor Edit Utility Toolbar.lua

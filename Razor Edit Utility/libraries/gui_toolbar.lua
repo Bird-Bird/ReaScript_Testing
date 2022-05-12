@@ -17,9 +17,9 @@ function toolbar_frame(selected_button, adapt_to_window, window_is_docked)
   
   local bw = (ww - (button_padding * (num_buttons + 1))) /num_buttons
   
-  local bh = math.min(40, wh - 17 - 8)
+  local bh = math.min(40, wh - title_offset - 8)
   if adapt_to_window then
-    bh = wh - 17 - 8
+    bh = wh - title_offset - 8
   end
   
   local xp = button_padding
