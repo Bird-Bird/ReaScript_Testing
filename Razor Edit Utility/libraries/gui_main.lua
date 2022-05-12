@@ -75,9 +75,9 @@ function settings_gui(settings)
       disable(not settings.select_tracks)
       rv, settings.exclude_folders = reaper.ImGui_Checkbox(ctx, "Exclude folders", settings.exclude_folders)
       if rv then save = true end
+      end_disable(not settings.select_tracks)
       rv, settings.solo_tracks = reaper.ImGui_Checkbox(ctx, "Solo tracks", settings.solo_tracks)
       if rv then save = true end
-      end_disable(not settings.select_tracks)
     reaper.ImGui_Unindent(ctx, indent)
     
     --Items
