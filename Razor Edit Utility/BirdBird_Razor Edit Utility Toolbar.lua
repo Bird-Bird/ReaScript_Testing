@@ -39,7 +39,8 @@ function loop()
   
   if visible then
     local sel_preset_id = gmem_get_selected_preset()
-    local reload = toolbar_frame(sel_preset_id, true, window_is_docked)
+    local num_buttons = gm_get_num_buttons()
+    local reload = toolbar_frame(sel_preset_id, true, window_is_docked, num_buttons)
     if reload then
       gm_update_selected_only()
     end

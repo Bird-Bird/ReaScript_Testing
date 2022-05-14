@@ -68,10 +68,30 @@ function actions(settings)
 end
 
 local indent = 8
-function settings_gui(settings)
+function settings_gui(settings, all_settings, selected_preset)
   local rv, save = false, false
 
   reaper.ImGui_Text(ctx, "After Razor Edits:")
+
+  local ww, wh = reaper.ImGui_GetWindowContentRegionMax(ctx)
+  local but_size = 16
+  local b_offs = but_size*2 + 2
+  reaper.ImGui_SameLine(ctx, ww - b_offs)
+  if reaper.ImGui_Button(ctx, "+", but_size, but_size) then
+    table.insert(all_settings, get_default_setting())
+    save = true
+  end
+  reaper.ImGui_SameLine(ctx, ww - b_offs + 18)
+  if reaper.ImGui_Button(ctx, "-", but_size, but_size) then
+    if #all_settings > 1 then 
+      local num_presets = #all_settings
+      table.remove(all_settings, selected_preset)
+      if selected_preset > #all_settings then
+        gm_write_selected_preset(#all_settings)
+      end
+      save = true
+    end
+  end
   reaper.ImGui_Separator(ctx)
 
   --SELECT CHILD TRACKS
@@ -161,9 +181,10 @@ end
 
 function frame()
   local preset_id = gmem_get_selected_preset()
-  local save_1, save_2 = toolbar_frame(preset_id)
+  local num_buttons = gm_get_num_buttons()
+  local save_1, save_2 = toolbar_frame(preset_id, false, false, num_buttons)
   if reaper.ImGui_BeginChild(ctx, "##st", -FLT_MIN, -FLT_MIN, false) then
-    save_2 = settings_gui(settings[preset_id])
+    save_2 = settings_gui(settings[preset_id], settings, preset_id)
     reaper.ImGui_EndChild(ctx)
   end
   if save_1 or save_2 then

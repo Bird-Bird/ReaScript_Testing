@@ -4,10 +4,13 @@ local toolbar_font_size = 22
 local toolbar_font = reaper.ImGui_CreateFont('Courier New', toolbar_font_size,  reaper.ImGui_FontFlags_Bold() |  reaper.ImGui_FontFlags_Italic())
 reaper.ImGui_AttachFont(ctx, toolbar_font)
 
-function toolbar_frame(selected_button, adapt_to_window, window_is_docked)
+function toolbar_frame(selected_button, adapt_to_window, window_is_docked, num_buttons)
+  if num_buttons == 0 then
+    centered_text("~ Razor Edit Utility not running ~")
+  end
+  
   local save_settings = false
   
-  local num_buttons = 5
   local draw_list = reaper.ImGui_GetWindowDrawList(ctx)
   local ww, wh = reaper.ImGui_GetWindowSize(ctx)
   local wx, wy = reaper.ImGui_GetWindowPos(ctx)

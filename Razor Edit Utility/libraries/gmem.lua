@@ -1,5 +1,8 @@
 -- @noindex
 
+-- 1 = reload
+-- 2 = selected preset id
+-- 3 = number of presets
 reaper.gmem_attach("BB_REU")
 function gm_reload_settings()
   reaper.gmem_write(1, 1)
@@ -33,4 +36,13 @@ function gmem_get_selected_preset()
   else
     return id
   end
+end
+
+
+function gm_write_num_buttons(num_buttons)
+  reaper.gmem_write(3, num_buttons)
+end
+
+function gm_get_num_buttons()
+  return reaper.gmem_read(3)
 end

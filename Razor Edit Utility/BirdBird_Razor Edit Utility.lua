@@ -157,7 +157,8 @@ function main_defer()
     end
     gm_flush()
   end
-
+  
+  gm_write_num_buttons(#settings)
   reaper.defer(main_defer)
 end
 

@@ -97,7 +97,8 @@ function get_razor_edits()
           start_pos = tonumber(start_pos),
           end_pos = tonumber(end_pos),
           GUID = GUID,
-          is_envelope = GUID ~= '""' 
+          is_envelope = GUID ~= '""',
+          full_str = edits
         }
         table.insert(r_edits, e)
         razor_min = math.min(razor_min, e.start_pos)
@@ -129,4 +130,25 @@ function get_items_in_range(track, area_start, area_end, exclude_out_bounds)
     end
   end
   return items
+end
+
+function get_previous_visible_track(track)
+  local track_id = reaper.GetMediaTrackInfo_Value(track, 'IP_TRACKNUMBER')
+  for i = track_id - 2, 0, -1 do
+    local new_track = reaper.GetTrack(0, i)
+    if reaper.IsTrackVisible(new_track, false) then
+      return new_track
+    end
+ end
+end
+
+function get_next_visible_track(track)
+  local track_id = reaper.GetMediaTrackInfo_Value(track, 'IP_TRACKNUMBER')
+  local track_count = reaper.CountTracks(0)
+  for i = track_id, track_count - 1 do
+    local new_track = reaper.GetTrack(0, i)
+    if reaper.IsTrackVisible(new_track, false) then
+      return new_track
+    end
+ end
 end

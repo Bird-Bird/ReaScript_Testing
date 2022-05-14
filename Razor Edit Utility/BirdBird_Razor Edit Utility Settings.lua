@@ -1,5 +1,5 @@
 -- @description Razor Edit Utility
--- @version 0.6.5.2
+-- @version 0.6.6
 -- @author BirdBird
 -- @provides
 --  [main]BirdBird_Razor Edit Utility Toolbar.lua
@@ -10,11 +10,14 @@
 --  [main]BirdBird_Razor Edit Utility - Select Preset 3.lua
 --  [main]BirdBird_Razor Edit Utility - Select Preset 4.lua
 --  [main]BirdBird_Razor Edit Utility - Select Preset 5.lua
+--  [main]BirdBird_Razor Edit Utility - Move razor edits down by one track.lua
+--  [main]BirdBird_Razor Edit Utility - Move razor edits up by one track.lua
 --  [nomain]libraries/functions.lua
 --  [nomain]libraries/gmem.lua
 --  [nomain]libraries/gui_main.lua
 --  [nomain]libraries/gui_toolbar.lua
 --  [nomain]libraries/actions_list.lua
+--  [nomain]libraries/comping.lua
 --  [nomain]libraries/gui.lua
 --  [nomain]libraries/items.lua
 --  [nomain]libraries/json.lua
@@ -22,7 +25,8 @@
 --  [nomain]libraries/settings.lua
 --  [nomain]libraries/user_files/user_files.txt
 --@changelog
---  + Initial version
+--  + Scripts to move areas up or down a track
+--  + Configurable number of presets
 
 function p(msg) reaper.ShowConsoleMsg(tostring(msg) .. '\n') end
 function reaper_do_file(file) local info = debug.getinfo(1,'S'); path = info.source:match[[^@?(.*[\/])[^\/]-$]]; dofile(path .. file); end
