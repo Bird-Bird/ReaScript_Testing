@@ -29,7 +29,9 @@ function get_default_setting()
       add_to_selection = false,
       exclude_out_bounds = false,
 
-    solo_tracks = false}
+    solo_tracks = false,
+    actions = {}
+  }
 end
 
 function get_default_settings()
@@ -40,6 +42,15 @@ function get_default_settings()
   return t
 end
 
+function validate_old_settings(all_settings)
+  for i = 1, #all_settings do
+    local settings = all_settings[i]
+    if not settings["actions"] then
+      settings.actions = {}
+    end
+  end
+end
+
 function get_settings()
   local file_name = '/user_files/presets.json'
   local settings = io.open(path .. file_name, 'r')
@@ -48,6 +59,7 @@ function get_settings()
   else
     local st = settings:read("*all")
     st_json = json.decode(st)
+    validate_old_settings(st_json)
     return st_json
   end
 end

@@ -80,3 +80,14 @@ function imgui_palette(t, a)
   local c = palette(t)
   return dl_rgba_to_col(c.r, c.g, c.b, a), c
 end
+
+function custom_separator(y_offs)
+  local draw_list = reaper.ImGui_GetWindowDrawList(ctx)
+  local ww, wh = reaper.ImGui_GetWindowSize(ctx)
+  local wx, wy = reaper.ImGui_GetWindowPos(ctx)
+  local cx, cy = reaper.ImGui_GetCursorPos(ctx)
+  cy = cy + y_offs
+  reaper.ImGui_DrawList_AddLine( draw_list,
+  cx + wx, cy + wy,
+  cx + ww + wx, cy + wy, 0x14296FAFF, 2)
+end

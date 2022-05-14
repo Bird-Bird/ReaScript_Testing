@@ -1,5 +1,5 @@
 -- @description Razor Edit Utility
--- @version 0.6.5.1
+-- @version 0.6.5.2
 -- @author BirdBird
 -- @provides
 --  [main]BirdBird_Razor Edit Utility Toolbar.lua
@@ -14,6 +14,7 @@
 --  [nomain]libraries/gmem.lua
 --  [nomain]libraries/gui_main.lua
 --  [nomain]libraries/gui_toolbar.lua
+--  [nomain]libraries/actions_list.lua
 --  [nomain]libraries/gui.lua
 --  [nomain]libraries/items.lua
 --  [nomain]libraries/json.lua
@@ -34,6 +35,7 @@ end
 reaper_do_file('libraries/json.lua')
 reaper_do_file('libraries/settings.lua')
 reaper_do_file('libraries/razor.lua')
+reaper_do_file('libraries/actions_list.lua')
 
 ctx = reaper.ImGui_CreateContext('Razor Edit Utiliy')
 flt_min, flt_max   = reaper.ImGui_NumericLimits_Float()

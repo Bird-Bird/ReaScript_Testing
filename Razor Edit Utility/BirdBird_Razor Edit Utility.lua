@@ -41,6 +41,8 @@ function on_project_change(settings)
   local select_items         = settings.select_items
   local exclude_larger_items = settings.exclude_out_bounds
   local add_to_selection     = false
+
+  local actions = settings.actions
   
   --FOLDER SELECTION
   local prefix_mode, prefix = 0, "-F"
@@ -118,6 +120,12 @@ function on_project_change(settings)
         reaper.SetMediaItemSelected(item, true)
       end
     end
+  end
+
+  --CUSTOM ACTIONS
+  for i = 1, #actions do
+    local action = actions[i]
+    reaper.Main_OnCommand(action.id, 0)
   end
 
   reaper.Undo_EndBlock("Razor Edit Utility", -1)

@@ -1,4 +1,5 @@
 -- @noindex
+local FLT_MIN, FLT_MAX = reaper.ImGui_NumericLimits_Float()
 local settings = get_settings()
 function disable(cond)
   if cond then
@@ -9,6 +10,61 @@ function end_disable(cond)
   if cond then
     reaper.ImGui_EndDisabled(ctx)
   end
+end
+
+function actions(settings)
+  local save = false
+  if reaper.ImGui_BeginListBox(ctx, '##AA', -FLT_MIN, 100) then
+    local removal, swap = {}, {}
+    for i = 1, #settings.actions do
+      local action = settings.actions[i]
+      reaper.ImGui_PushID(ctx, i)
+      if reaper.ImGui_Selectable(ctx, action.name, false) then
+        table.insert(removal, i)
+      end
+      
+      --DRAG/DROP
+      if reaper.ImGui_BeginDragDropSource(ctx,  
+      reaper.ImGui_DragDropFlags_AcceptBeforeDelivery() |  
+      reaper.ImGui_DragDropFlags_AcceptNoDrawDefaultRect() | 
+      reaper.ImGui_DragDropFlags_SourceNoPreviewTooltip()) then
+        reaper.ImGui_SetDragDropPayload(ctx, 'ACTION_SWAP', i)
+        reaper.ImGui_EndDragDropSource(ctx)
+      end
+      if reaper.ImGui_BeginDragDropTarget(ctx) then
+        local _, _, pa = reaper.ImGui_GetDragDropPayload( ctx )
+        local sp_offs = -17
+        if tonumber(pa) < i then
+          sp_offs = -2
+        end
+        custom_separator(sp_offs)
+        local r, payload = reaper.ImGui_AcceptDragDropPayload(ctx, 'ACTION_SWAP')
+        if r then
+          local payload = tonumber(payload)
+          table.insert(swap, {s = payload, e = i})
+        end
+        reaper.ImGui_EndDragDropTarget(ctx)
+      end
+      reaper.ImGui_PopID(ctx)
+    end
+    for i = 1, #removal do
+      table.remove(settings.actions, removal[i])
+      save = true
+    end
+    for i = 1, #swap do
+      local s = swap[i]
+      local action = settings.actions[s.s]
+      local offset = s.e < s.s and 1 or 0
+      table.insert(settings.actions, s.e + 1 - offset, action)
+      table.remove(settings.actions, s.s + offset)
+      save = true
+    end
+    reaper.ImGui_EndListBox(ctx)
+  end
+  reaper.ImGui_Text(ctx, "From:")
+  local rv, action = action_listbox(ctx, 100)
+  if rv then table.insert(settings.actions, action); save = true end
+  return save
 end
 
 local indent = 8
@@ -92,14 +148,24 @@ function settings_gui(settings)
       end_disable(not settings.select_items)
     reaper.ImGui_Unindent(ctx, indent)
   reaper.ImGui_Unindent(ctx, indent)
+  reaper.ImGui_Separator(ctx)
+
+  --Actions
+  centered_text("Actions")
+  reaper.ImGui_Text(ctx, "Run:")
+  local rv = actions(settings)
+  if rv then save = true end
 
   return save
 end
 
 function frame()
   local preset_id = gmem_get_selected_preset()
-  local save_1 = toolbar_frame(preset_id)
-  local save_2 = settings_gui(settings[preset_id])
+  local save_1, save_2 = toolbar_frame(preset_id)
+  if reaper.ImGui_BeginChild(ctx, "##st", -FLT_MIN, -FLT_MIN, false) then
+    save_2 = settings_gui(settings[preset_id])
+    reaper.ImGui_EndChild(ctx)
+  end
   if save_1 or save_2 then
     save_settings(settings)
     gm_reload_settings()
