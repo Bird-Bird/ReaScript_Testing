@@ -196,18 +196,6 @@ function item_modifiers_frame()
     last_sel_items = items
     last_sel_tracks = tracks
   end
-
-
-  
-  --Tag mods
-  for i = 1, #modifier_stack do
-    local mod = modifier_stack[i]
-    if not mod.display_id then
-      mod.display_id = display_id
-      display_id = display_id + 1
-    end
-  end
-
   
   --Keyboard focus
   local ctrl = get_ctrl()
@@ -306,6 +294,10 @@ function item_modifiers_frame()
       push_mod_stack_theme()   
       for i = 1, #modifier_stack do
         local mod = modifier_stack[i]
+        if not mod.display_id then
+          mod.display_id = display_id
+          display_id = display_id + 1
+        end
         reaper.ImGui_PushID(ctx, mod.display_id)
         
         

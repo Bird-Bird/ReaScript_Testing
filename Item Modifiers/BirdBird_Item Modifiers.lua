@@ -1,5 +1,5 @@
 -- @description Item Modifiers
--- @version 0.4.3.5
+-- @version 0.4.3.6
 -- @author BirdBird
 -- @provides
 --    [nomain]libraries/functions.lua
@@ -28,6 +28,8 @@
 --    [nomain]libraries/functional_console/state.lua
 --    [nomain]libraries/functional_console/validation.lua
 --    [nomain]libraries/functional_console/user_files/user_files.txt
+-- @changelog
+--  Fix crash when adding modifiers in certain REAPER versions
 
 --LOAD FILES
 window_data = {}
