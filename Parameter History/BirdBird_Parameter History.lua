@@ -1,5 +1,5 @@
 -- @description Parameter History
--- @version 0.4
+-- @version 0.4.1
 -- @author BirdBird
 -- @provides
 --    [nomain]libraries/functions.lua

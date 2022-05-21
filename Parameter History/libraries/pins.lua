@@ -20,7 +20,7 @@ end
 function load_pins()
   local pins, pins_map = {}, {}
   local r, val = reaper.GetProjExtState(0, "BB_Param_History", "pins")
-  if r then
+  if r and val ~= "" then
     local pins_load = json.decode(val)
     local f_pins = {}
     for i = 1, #pins_load do
