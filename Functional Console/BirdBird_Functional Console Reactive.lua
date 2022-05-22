@@ -14,12 +14,12 @@ end
 
 local ctx = reaper.ImGui_CreateContext('My script')
 local size = reaper.GetAppVersion():match('OSX') and 12 or 14
-local font = reaper.ImGui_CreateFont('courier-new', size)
-local font_normal = reaper.ImGui_CreateFont('courier-new', size)
-local font_normal_bold = reaper.ImGui_CreateFont('courier-new', size,  reaper.ImGui_FontFlags_Bold())
-local font_normal_bold_title = reaper.ImGui_CreateFont('courier-new', math.floor(size*1.5),  reaper.ImGui_FontFlags_Bold())
-local italic_font = reaper.ImGui_CreateFont('courier-new', math.floor(size*1.7))
-local italic_font_small = reaper.ImGui_CreateFont('courier-new', math.floor(size*1.2))
+local font = reaper.ImGui_CreateFont('sans-serif', size)
+local font_normal = reaper.ImGui_CreateFont('sans-serif', size)
+local font_normal_bold = reaper.ImGui_CreateFont('sans-serif', size,  reaper.ImGui_FontFlags_Bold())
+local font_normal_bold_title = reaper.ImGui_CreateFont('sans-serif', math.floor(size*1.5),  reaper.ImGui_FontFlags_Bold())
+local italic_font = reaper.ImGui_CreateFont('sans-serif', math.floor(size*1.7))
+local italic_font_small = reaper.ImGui_CreateFont('sans-serif', math.floor(size*1.2))
 
 reaper.ImGui_AttachFont(ctx, font)
 reaper.ImGui_AttachFont(ctx, font_normal)

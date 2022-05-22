@@ -79,7 +79,7 @@ vr arg1: Creates a volume ramp offsetting volume every item.
 rev: Reverses selected items, will also reverse envelopes and fades.
 spl arg1: Splits items.
 - arg1: Number of splits
-offs arg1: Changes take offset in items.
+ofs arg1: Changes take offset in items.
 - arg1: Offset amount in seconds. However using the suffix "b" will offset the take in beats instead. (ie. "offs 1b")
 
 [b]SELECTION COMMANDS
