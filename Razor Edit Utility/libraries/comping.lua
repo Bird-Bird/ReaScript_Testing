@@ -1,6 +1,5 @@
 -- @noindex
 
---Pass in an override in the future
 function do_comp(has_undo, track_override)
   local tracks = {}
   if not track_override then
@@ -52,4 +51,25 @@ function do_comp(has_undo, track_override)
   end
   if has_undo then reaper.Undo_EndBlock("Comp razor edits to selected track", -1) end
   reaper.PreventUIRefresh(-1)
+end
+
+function get_previous_comp_track(track)
+  local track_id = reaper.GetMediaTrackInfo_Value(track, 'IP_TRACKNUMBER')
+  for i = track_id - 2, 0, -1 do
+    local new_track = reaper.GetTrack(0, i)
+    local _, new_track_name = reaper.GetSetMediaTrackInfo_String(new_track, 'P_NAME', '', false)
+    if string.find(new_track_name:lower(), "comp") then
+      return new_track
+    end
+ end
+end
+
+function get_first_track_with_edits()
+  for i = 0, reaper.CountTracks(0)-1 do
+    local track = reaper.GetTrack(0, i)
+    local _, edits = reaper.GetSetMediaTrackInfo_String(track, "P_RAZOREDITS", '', false)
+    if edits ~= "" then
+      return track
+    end
+  end
 end

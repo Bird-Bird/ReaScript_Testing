@@ -13,6 +13,12 @@ local settings = get_settings()
 local sel_preset_id = gmem_get_selected_preset()
 gm_write_selected_preset(sel_preset_id)
 
+local self = ({reaper.get_action_context()})[4]
+reaper.SetToggleCommandState(0, self, 1)
+reaper.atexit(function()
+  reaper.SetToggleCommandState(0, self, 0)
+end)
+
 function on_project_change(settings)
   local edits, min, max = get_razor_edits()
   if #edits == 0 then

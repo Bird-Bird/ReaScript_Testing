@@ -1,9 +1,10 @@
 -- @description Razor Edit Utility
--- @version 0.6.6
+-- @version 0.6.7
 -- @author BirdBird
 -- @provides
 --  [main]BirdBird_Razor Edit Utility Toolbar.lua
 --  [main]BirdBird_Razor Edit Utility - Comp to selected track.lua
+--  [main]BirdBird_Razor Edit Utility - Comp to nearest comp track (above).lua
 --  [main]BirdBird_Razor Edit Utility.lua
 --  [main]BirdBird_Razor Edit Utility - Select Preset 1.lua
 --  [main]BirdBird_Razor Edit Utility - Select Preset 2.lua
@@ -25,8 +26,8 @@
 --  [nomain]libraries/settings.lua
 --  [nomain]libraries/user_files/user_files.txt
 --@changelog
---  + Scripts to move areas up or down a track
---  + Configurable number of presets
+--  + Fix toolbar state
+--  + Add new script to comp
 
 function p(msg) reaper.ShowConsoleMsg(tostring(msg) .. '\n') end
 function reaper_do_file(file) local info = debug.getinfo(1,'S'); path = info.source:match[[^@?(.*[\/])[^\/]-$]]; dofile(path .. file); end

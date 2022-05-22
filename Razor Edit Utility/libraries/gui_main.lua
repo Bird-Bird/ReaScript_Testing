@@ -77,11 +77,6 @@ function settings_gui(settings, all_settings, selected_preset)
   local but_size = 16
   local b_offs = but_size*2 + 2
   reaper.ImGui_SameLine(ctx, ww - b_offs)
-  if reaper.ImGui_Button(ctx, "+", but_size, but_size) then
-    table.insert(all_settings, get_default_setting())
-    save = true
-  end
-  reaper.ImGui_SameLine(ctx, ww - b_offs + 18)
   if reaper.ImGui_Button(ctx, "-", but_size, but_size) then
     if #all_settings > 1 then 
       local num_presets = #all_settings
@@ -92,6 +87,12 @@ function settings_gui(settings, all_settings, selected_preset)
       save = true
     end
   end
+  reaper.ImGui_SameLine(ctx, ww - b_offs + 18)
+  if reaper.ImGui_Button(ctx, "+", but_size, but_size) then
+    table.insert(all_settings, get_default_setting())
+    save = true
+  end
+
   reaper.ImGui_Separator(ctx)
 
   --SELECT CHILD TRACKS
