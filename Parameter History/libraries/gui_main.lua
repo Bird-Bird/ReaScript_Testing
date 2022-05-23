@@ -83,8 +83,26 @@ end
 local history = {}
 local history_map = {}
 local pins, pins_map = load_pins()
+
+local project_state = {}
+local last_proj = reaper.EnumProjects(-1)
 function frame(window_is_docked)
-  
+
+  --Handle project tabs
+  local cur_proj = reaper.EnumProjects(-1)
+  if last_proj ~= cur_proj then
+    project_state[last_proj] = {
+      history = deepcopy(history), 
+      history_map = deepcopy(history_map)}
+    if project_state[cur_proj] then
+      local m = project_state[cur_proj]
+      history = m.history
+      history_map = m.history_map
+    end
+    pins, pins_map = load_pins()
+  end
+  last_proj = cur_proj
+
   --Get Parameter
   local p = {}
   p.r, p.track_id, p.fx_id, p.param_id = reaper.GetLastTouchedFX()
