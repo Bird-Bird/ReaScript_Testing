@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" commit="85ea7b887ede23d5ca6f16b714890e5d3353ad70" name="BirdBird ReaScript Testing">
+<index version="1" commit="35ba3f810934591cbfb91fc495c47867063e33f1" name="BirdBird ReaScript Testing">
   <category name="Envelope Palette">
     <reapack name="BirdBird_Envelope Palette.lua" type="script" desc="Envelope Palette">
       <version name="0.8" author="BirdBird" time="2022-04-23T15:04:39Z">
@@ -380,6 +380,16 @@
         <source main="main" file="BirdBird_Sample Last Playthrough.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/764cda5f1125be408789c7760155548a08604317/Global%20Sampler/BirdBird_Sample%20Last%20Playthrough.lua</source>
         <source main="main" file="BirdBird_Sample Last X Seconds.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/764cda5f1125be408789c7760155548a08604317/Global%20Sampler/BirdBird_Sample%20Last%20X%20Seconds.lua</source>
         <source type="effect" file="BirdBird_Global Sampler.jsfx">https://github.com/Bird-Bird/ReaScript_Testing/raw/764cda5f1125be408789c7760155548a08604317/Global%20Sampler/BirdBird_Global%20Sampler.jsfx</source>
+      </version>
+      <version name="0.99.7.7" author="BirdBird" time="2022-05-23T14:37:29Z">
+        <changelog><![CDATA[+ Fix empty audio for large selections]]></changelog>
+        <source main="main">https://github.com/Bird-Bird/ReaScript_Testing/raw/35ba3f810934591cbfb91fc495c47867063e33f1/Global%20Sampler/BirdBird_Global%20Sampler.lua</source>
+        <source file="global_sampler_libraries/global_resampler_lib.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/35ba3f810934591cbfb91fc495c47867063e33f1/Global%20Sampler/global_sampler_libraries/global_resampler_lib.lua</source>
+        <source file="global_sampler_libraries/json.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/35ba3f810934591cbfb91fc495c47867063e33f1/Global%20Sampler/global_sampler_libraries/json.lua</source>
+        <source file="global_sampler_libraries/themes.json">https://github.com/Bird-Bird/ReaScript_Testing/raw/35ba3f810934591cbfb91fc495c47867063e33f1/Global%20Sampler/global_sampler_libraries/themes.json</source>
+        <source main="main" file="BirdBird_Sample Last Playthrough.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/35ba3f810934591cbfb91fc495c47867063e33f1/Global%20Sampler/BirdBird_Sample%20Last%20Playthrough.lua</source>
+        <source main="main" file="BirdBird_Sample Last X Seconds.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/35ba3f810934591cbfb91fc495c47867063e33f1/Global%20Sampler/BirdBird_Sample%20Last%20X%20Seconds.lua</source>
+        <source type="effect" file="BirdBird_Global Sampler.jsfx">https://github.com/Bird-Bird/ReaScript_Testing/raw/35ba3f810934591cbfb91fc495c47867063e33f1/Global%20Sampler/BirdBird_Global%20Sampler.jsfx</source>
       </version>
     </reapack>
   </category>
