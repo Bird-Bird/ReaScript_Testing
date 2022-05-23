@@ -159,17 +159,19 @@ lock_writehead == 0 && pause_state != 1 ? (
     //RECALCULATE BUFFER
     i = 0;
     while(i < buf_len) (
-      n_i = i/buf_len;
-      disp_buf_i = floor(n_i*disp_buf_size + 0.5);
-      
-      l = buf_pos[i];
-      r = buf_pos[i+1];
-      disp_val = (l+r)/2;
-
-      cur_val = gmem[disp_buf + disp_buf_i];
-      gmem[disp_buf + disp_buf_i] = max(cur_val, disp_val);
-      
-      i = i+2;
+      while(i < buf_len) (
+        n_i = i/buf_len;
+        disp_buf_i = floor(n_i*disp_buf_size + 0.5);
+        
+        l = buf_pos[i];
+        r = buf_pos[i+1];
+        disp_val = (l+r)/2;
+  
+        cur_val = gmem[disp_buf + disp_buf_i];
+        gmem[disp_buf + disp_buf_i] = max(cur_val, disp_val);
+        
+        i = i+2;
+      );
     );
     gmem[14] = 0;
   );
@@ -220,14 +222,16 @@ function sample_buf(start_index, len) local(temp_buf, track, i) (
     
     i = 0;
     while(i < len*2) (
-      x1 = start_index;
-      x2 = start_index + 1;
-      x1 = wmod(x1 + i, buf_len);
-      x2 = wmod(x2 + i, buf_len);
-      
-      temp_buf[i] =   buf_pos[x1];
-      temp_buf[i+1] = buf_pos[x2];
-      i += 2;
+      while(i < len*2) (
+        x1 = start_index;
+        x2 = start_index + 1;
+        x1 = wmod(x1 + i, buf_len);
+        x2 = wmod(x2 + i, buf_len);
+        
+        temp_buf[i] =   buf_pos[x1];
+        temp_buf[i+1] = buf_pos[x2];
+        i += 2;
+      );
     );
     
     track = gmem[2] - 1;

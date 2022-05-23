@@ -1,5 +1,5 @@
 -- @description Global Sampler
--- @version 0.99.7.6
+-- @version 0.99.7.7
 -- @author BirdBird
 -- @provides
 --    [nomain]global_sampler_libraries/global_resampler_lib.lua
@@ -8,9 +8,8 @@
 --    [main] BirdBird_Sample Last Playthrough.lua
 --    [main] BirdBird_Sample Last X Seconds.lua
 --    [effect] BirdBird_Global Sampler.jsfx
-
 --@changelog
---  + Development version
+--  + Fix empty audio for large selections
 
 --CHECK DEPENDENCIES
 function open_url(url)
