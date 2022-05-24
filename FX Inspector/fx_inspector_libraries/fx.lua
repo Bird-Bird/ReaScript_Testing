@@ -131,7 +131,6 @@ function create_sidechain(source_tracks, fx, chs)
   num_channels = num_channels + 2
   reaper.SetMediaTrackInfo_Value(fx.track, 'I_NCHAN', num_channels)
   if is_melda then
-      --WHY, ALEKSEY
     channels = {num_channels + 1, num_channels + 2}
   end
   

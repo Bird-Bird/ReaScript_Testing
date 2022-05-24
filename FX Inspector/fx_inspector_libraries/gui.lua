@@ -67,16 +67,16 @@ function custom_close_button()
   reaper.ImGui_PopClipRect(ctx)
 end
 
-function get_alt()
-  local key_mods = reaper.ImGui_GetKeyMods(ctx)
-  local alt = reaper.ImGui_KeyModFlags_Alt()
-  return key_mods & alt > 0 
-end
-
 function get_shift()
   local key_mods = reaper.ImGui_GetKeyMods(ctx)
-  local shift = reaper.ImGui_KeyModFlags_Shift()
-  return key_mods & shift > 0 
+  local mod = reaper.ImGui_KeyModFlags_Shift and reaper.ImGui_KeyModFlags_Shift() or reaper.ImGui_ModFlags_Shift()
+  return (key_mods & mod) ~= 0 
+end
+
+function get_alt()
+  local key_mods = reaper.ImGui_GetKeyMods(ctx)
+  local mod = reaper.ImGui_KeyModFlags_Alt and reaper.ImGui_KeyModFlags_Alt() or reaper.ImGui_ModFlags_Alt()
+  return (key_mods & mod) ~= 0 
 end
 
 function offset_y_cursor(offs)
