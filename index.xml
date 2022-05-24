@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" commit="a62ff0eca9e639f40515cc9ad803832ef00f584f" name="BirdBird ReaScript Testing">
+<index version="1" commit="49d4670ca3c2600847abc15bb2eaa45c216ea443" name="BirdBird ReaScript Testing">
   <category name="Envelope Palette">
     <reapack name="BirdBird_Envelope Palette.lua" type="script" desc="Envelope Palette">
       <version name="0.8" author="BirdBird" time="2022-04-23T15:04:39Z">
@@ -946,6 +946,11 @@
         <source main="main">https://github.com/Bird-Bird/ReaScript_Testing/raw/3d3244a0482ade046a391e495c6a3c11b7aa8282/Track%20Tags/BirdBird_Track%20Tags.lua</source>
         <source file="libraries/functions.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/3d3244a0482ade046a391e495c6a3c11b7aa8282/Track%20Tags/libraries/functions.lua</source>
         <source file="libraries/json.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/3d3244a0482ade046a391e495c6a3c11b7aa8282/Track%20Tags/libraries/json.lua</source>
+      </version>
+      <version name="0.5.4" author="BirdBird" time="2022-05-24T19:19:30Z">
+        <source main="main">https://github.com/Bird-Bird/ReaScript_Testing/raw/49d4670ca3c2600847abc15bb2eaa45c216ea443/Track%20Tags/BirdBird_Track%20Tags.lua</source>
+        <source file="libraries/functions.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/49d4670ca3c2600847abc15bb2eaa45c216ea443/Track%20Tags/libraries/functions.lua</source>
+        <source file="libraries/json.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/49d4670ca3c2600847abc15bb2eaa45c216ea443/Track%20Tags/libraries/json.lua</source>
       </version>
     </reapack>
   </category>
