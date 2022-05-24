@@ -1,5 +1,5 @@
 -- @description FX Mangler
--- @version 0.1.4
+-- @version 0.1.5
 -- @author BirdBird
 -- @provides
 --    [nomain]libraries/blacklist.lua
@@ -14,7 +14,7 @@
 --    [nomain]libraries/gui/gui_param_blacklist.lua
 --    [nomain]libraries/gui/gui.lua
 -- @changelog
---    Early alpha version
+--    Prepare KeyMods for future ReaImGui updates
 
 --LOAD FILES
 script_version = 0.13

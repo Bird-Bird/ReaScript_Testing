@@ -258,18 +258,6 @@ function top_frame()
     reaper.ImGui_Separator(ctx)
 end
 
-function get_ctrl()
-    local key_mods = reaper.ImGui_GetKeyMods(ctx)
-    local ctrl = reaper.ImGui_KeyModFlags_Ctrl()
-    return key_mods & ctrl > 0 
-end
-
-function get_shift()
-    local key_mods = reaper.ImGui_GetKeyMods(ctx)
-    local shift = reaper.ImGui_KeyModFlags_Shift()
-    return key_mods & shift > 0 
-end
-
 function right_align_padding(offs)
     local w, h = reaper.ImGui_GetWindowSize(ctx)
     local pd_x, pd_y = reaper.ImGui_GetStyleVar(ctx, reaper.ImGui_StyleVar_FramePadding())
@@ -370,13 +358,20 @@ function centered_text(text)
   reaper.ImGui_Text(ctx, text)
 end
 
+function get_ctrl()
+  local key_mods = reaper.ImGui_GetKeyMods(ctx)
+  local mod = reaper.ImGui_KeyModFlags_Ctrl and reaper.ImGui_KeyModFlags_Ctrl() or reaper.ImGui_ModFlags_Ctrl()
+  return (key_mods & mod) ~= 0 
+end
+
+function get_shift()
+  local key_mods = reaper.ImGui_GetKeyMods(ctx)
+  local mod = reaper.ImGui_KeyModFlags_Shift and reaper.ImGui_KeyModFlags_Shift() or reaper.ImGui_ModFlags_Shift()
+  return (key_mods & mod) ~= 0 
+end
+
 function get_alt()
-  if reaper.ImGui_GetKeyMods then
-    local key_mods = reaper.ImGui_GetKeyMods(ctx)
-    local alt = reaper.ImGui_KeyModFlags_Shift()
-    return key_mods & alt > 0 
-  else
-    local alt = reaper.ImGui_IsKeyDown(ctx, reaper.ImGui_Key_ModAlt())
-    return alt
-  end
+  local key_mods = reaper.ImGui_GetKeyMods(ctx)
+  local mod = reaper.ImGui_KeyModFlags_Alt and reaper.ImGui_KeyModFlags_Alt() or reaper.ImGui_ModFlags_Alt()
+  return (key_mods & mod) ~= 0 
 end
