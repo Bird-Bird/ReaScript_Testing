@@ -333,9 +333,8 @@ function param_capture(fx, pd, param)
       reaper.ImGui_SameLine(ctx, w - 2*pd_x - 10)
       if reaper.ImGui_SmallButton(ctx, '+') then
         --CREATE ENVELOPE
-        local key_mods = reaper.ImGui_GetKeyMods(ctx)
-        local ctrl = reaper.ImGui_KeyModFlags_Ctrl()
-        if key_mods & ctrl > 0 then
+        local ctrl = get_ctrl()
+        if ctrl then
           write_buffer_at_edit_cursor(param)               
         else
           local par = param.par
