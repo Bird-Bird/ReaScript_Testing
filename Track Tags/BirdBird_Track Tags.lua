@@ -1,5 +1,5 @@
 -- @description Track Tags
--- @version 0.5.3
+-- @version 0.5.4
 -- @author BirdBird
 -- @provides
 --    [nomain]libraries/functions.lua
@@ -21,7 +21,7 @@ if not reaper.APIExists('ImGui_GetVersion') then
 end
 
 --GUI
-local ctx = reaper.ImGui_CreateContext('Track Tags', reaper.ImGui_ConfigFlags_DockingEnable())
+ctx = reaper.ImGui_CreateContext('Track Tags', reaper.ImGui_ConfigFlags_DockingEnable())
 local size = reaper.GetAppVersion():match('OSX') and 12 or 14
 local size_big = math.floor(size*1.3)
 
