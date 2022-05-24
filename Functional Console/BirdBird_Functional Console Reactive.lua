@@ -56,8 +56,8 @@ function main_frame()
     if reaper.ImGui_Button(ctx, 'FUNCTIONAL CONSOLE', -FLT_MIN, 30) then
         full_reset()
         reset_seed()
-        local mod = reaper.ImGui_GetKeyMods(ctx)
-        if not (mod & 1 > 0) then
+        local ctrl = get_ctrl(ctx)
+        if not ctrl then
             input = ''
         else
             --HOLDING CTRL

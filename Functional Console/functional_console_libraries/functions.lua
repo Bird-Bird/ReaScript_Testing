@@ -13,6 +13,12 @@ function string.starts(String,Start)
     return string.sub(String,1,string.len(Start))==Start
 end
 
+function get_ctrl(ctx)
+  local key_mods = reaper.ImGui_GetKeyMods(ctx)
+  local mod = reaper.ImGui_KeyModFlags_Ctrl and reaper.ImGui_KeyModFlags_Ctrl() or reaper.ImGui_ModFlags_Ctrl()
+  return (key_mods & mod) ~= 0 
+end
+
 function table.shallow_copy(t)
     local t2 = {}
     for k,v in pairs(t) do
