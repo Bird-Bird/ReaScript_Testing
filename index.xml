@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" commit="35ba3f810934591cbfb91fc495c47867063e33f1" name="BirdBird ReaScript Testing">
+<index version="1" commit="92122fecd70dbc302892dbde757c04b05e245eec" name="BirdBird ReaScript Testing">
   <category name="Envelope Palette">
     <reapack name="BirdBird_Envelope Palette.lua" type="script" desc="Envelope Palette">
       <version name="0.8" author="BirdBird" time="2022-04-23T15:04:39Z">
@@ -123,6 +123,13 @@
         <source file="functional_console_libraries/macro_library.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/ea9b4cf3b160dd1283f30e57504d7c354cbc1ff9/Functional%20Console/functional_console_libraries/macro_library.lua</source>
         <source main="main" file="BirdBird_Functional Console Reactive.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/ea9b4cf3b160dd1283f30e57504d7c354cbc1ff9/Functional%20Console/BirdBird_Functional%20Console%20Reactive.lua</source>
       </version>
+      <version name="0.99.6.8" author="BirdBird" time="2022-05-24T18:51:10Z">
+        <source main="main">https://github.com/Bird-Bird/ReaScript_Testing/raw/cb754befd17ef8c13fa21cb4c94a4a1e86a412e5/Functional%20Console/BirdBird_Functional%20Console.lua</source>
+        <source file="functional_console_libraries/functions.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/cb754befd17ef8c13fa21cb4c94a4a1e86a412e5/Functional%20Console/functional_console_libraries/functions.lua</source>
+        <source file="functional_console_libraries/base.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/cb754befd17ef8c13fa21cb4c94a4a1e86a412e5/Functional%20Console/functional_console_libraries/base.lua</source>
+        <source file="functional_console_libraries/macro_library.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/cb754befd17ef8c13fa21cb4c94a4a1e86a412e5/Functional%20Console/functional_console_libraries/macro_library.lua</source>
+        <source main="main" file="BirdBird_Functional Console Reactive.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/cb754befd17ef8c13fa21cb4c94a4a1e86a412e5/Functional%20Console/BirdBird_Functional%20Console%20Reactive.lua</source>
+      </version>
     </reapack>
   </category>
   <category name="FX Inspector">
@@ -175,6 +182,18 @@
         <source file="fx_inspector_libraries/presets.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/e0df72f744500339644e989f6fb96f974f026263/FX%20Inspector/fx_inspector_libraries/presets.lua</source>
         <source file="fx_inspector_libraries/blacklist.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/e0df72f744500339644e989f6fb96f974f026263/FX%20Inspector/fx_inspector_libraries/blacklist.lua</source>
         <source main="main" file="BirdBird_FX Inspector insert parameter capture.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/e0df72f744500339644e989f6fb96f974f026263/FX%20Inspector/BirdBird_FX%20Inspector%20insert%20parameter%20capture.lua</source>
+      </version>
+      <version name="0.6.2" author="BirdBird" time="2022-05-24T18:20:50Z">
+        <source main="main">https://github.com/Bird-Bird/ReaScript_Testing/raw/c181a03f5843e911422b06c70aa05768c82d2aee/FX%20Inspector/BirdBird_FX%20Inspector.lua</source>
+        <source file="fx_inspector_libraries/functions.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/c181a03f5843e911422b06c70aa05768c82d2aee/FX%20Inspector/fx_inspector_libraries/functions.lua</source>
+        <source file="fx_inspector_libraries/json.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/c181a03f5843e911422b06c70aa05768c82d2aee/FX%20Inspector/fx_inspector_libraries/json.lua</source>
+        <source file="fx_inspector_libraries/gui.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/c181a03f5843e911422b06c70aa05768c82d2aee/FX%20Inspector/fx_inspector_libraries/gui.lua</source>
+        <source file="fx_inspector_libraries/settings.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/c181a03f5843e911422b06c70aa05768c82d2aee/FX%20Inspector/fx_inspector_libraries/settings.lua</source>
+        <source file="fx_inspector_libraries/fx.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/c181a03f5843e911422b06c70aa05768c82d2aee/FX%20Inspector/fx_inspector_libraries/fx.lua</source>
+        <source file="fx_inspector_libraries/param_capture.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/c181a03f5843e911422b06c70aa05768c82d2aee/FX%20Inspector/fx_inspector_libraries/param_capture.lua</source>
+        <source file="fx_inspector_libraries/presets.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/c181a03f5843e911422b06c70aa05768c82d2aee/FX%20Inspector/fx_inspector_libraries/presets.lua</source>
+        <source file="fx_inspector_libraries/blacklist.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/c181a03f5843e911422b06c70aa05768c82d2aee/FX%20Inspector/fx_inspector_libraries/blacklist.lua</source>
+        <source main="main" file="BirdBird_FX Inspector insert parameter capture.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/c181a03f5843e911422b06c70aa05768c82d2aee/FX%20Inspector/BirdBird_FX%20Inspector%20insert%20parameter%20capture.lua</source>
       </version>
     </reapack>
   </category>
@@ -239,6 +258,21 @@
         <source file="libraries/gui/gui_main.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/d91fad5ddfe97268731451b4a14475887df6b6a0/FX%20Mangler/libraries/gui/gui_main.lua</source>
         <source file="libraries/gui/gui_param_blacklist.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/d91fad5ddfe97268731451b4a14475887df6b6a0/FX%20Mangler/libraries/gui/gui_param_blacklist.lua</source>
         <source file="libraries/gui/gui.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/d91fad5ddfe97268731451b4a14475887df6b6a0/FX%20Mangler/libraries/gui/gui.lua</source>
+      </version>
+      <version name="0.1.5" author="BirdBird" time="2022-05-24T18:16:05Z">
+        <changelog><![CDATA[Prepare KeyMods for future ReaImGui updates]]></changelog>
+        <source main="main">https://github.com/Bird-Bird/ReaScript_Testing/raw/6a5c441a32c97fdea7b3d16f1162e90152681be2/FX%20Mangler/BirdBird_FX%20Mangler.lua</source>
+        <source file="libraries/blacklist.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/6a5c441a32c97fdea7b3d16f1162e90152681be2/FX%20Mangler/libraries/blacklist.lua</source>
+        <source file="libraries/functions.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/6a5c441a32c97fdea7b3d16f1162e90152681be2/FX%20Mangler/libraries/functions.lua</source>
+        <source file="libraries/fx.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/6a5c441a32c97fdea7b3d16f1162e90152681be2/FX%20Mangler/libraries/fx.lua</source>
+        <source file="libraries/groups.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/6a5c441a32c97fdea7b3d16f1162e90152681be2/FX%20Mangler/libraries/groups.lua</source>
+        <source file="libraries/json.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/6a5c441a32c97fdea7b3d16f1162e90152681be2/FX%20Mangler/libraries/json.lua</source>
+        <source file="libraries/settings.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/6a5c441a32c97fdea7b3d16f1162e90152681be2/FX%20Mangler/libraries/settings.lua</source>
+        <source file="libraries/user_files/plugin_params/plugin_params.txt">https://github.com/Bird-Bird/ReaScript_Testing/raw/6a5c441a32c97fdea7b3d16f1162e90152681be2/FX%20Mangler/libraries/user_files/plugin_params/plugin_params.txt</source>
+        <source file="libraries/gui/gui_common.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/6a5c441a32c97fdea7b3d16f1162e90152681be2/FX%20Mangler/libraries/gui/gui_common.lua</source>
+        <source file="libraries/gui/gui_main.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/6a5c441a32c97fdea7b3d16f1162e90152681be2/FX%20Mangler/libraries/gui/gui_main.lua</source>
+        <source file="libraries/gui/gui_param_blacklist.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/6a5c441a32c97fdea7b3d16f1162e90152681be2/FX%20Mangler/libraries/gui/gui_param_blacklist.lua</source>
+        <source file="libraries/gui/gui.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/6a5c441a32c97fdea7b3d16f1162e90152681be2/FX%20Mangler/libraries/gui/gui.lua</source>
       </version>
     </reapack>
   </category>
@@ -577,6 +611,36 @@
         <source file="libraries/functional_console/validation.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/030480c19f9722d6afbf2ce29afb4f0c8837c210/Item%20Modifiers/libraries/functional_console/validation.lua</source>
         <source file="libraries/functional_console/user_files/user_files.txt">https://github.com/Bird-Bird/ReaScript_Testing/raw/030480c19f9722d6afbf2ce29afb4f0c8837c210/Item%20Modifiers/libraries/functional_console/user_files/user_files.txt</source>
       </version>
+      <version name="0.4.3.7" author="BirdBird" time="2022-05-24T18:24:49Z">
+        <changelog><![CDATA[Fix crash when adding modifiers in certain REAPER versions]]></changelog>
+        <source main="main">https://github.com/Bird-Bird/ReaScript_Testing/raw/fd23acbb50b5f0e86da4a2fd209c966a88d9083c/Item%20Modifiers/BirdBird_Item%20Modifiers.lua</source>
+        <source file="libraries/functions.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/fd23acbb50b5f0e86da4a2fd209c966a88d9083c/Item%20Modifiers/libraries/functions.lua</source>
+        <source file="libraries/json.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/fd23acbb50b5f0e86da4a2fd209c966a88d9083c/Item%20Modifiers/libraries/json.lua</source>
+        <source file="libraries/modifiers.json">https://github.com/Bird-Bird/ReaScript_Testing/raw/fd23acbb50b5f0e86da4a2fd209c966a88d9083c/Item%20Modifiers/libraries/modifiers.json</source>
+        <source file="libraries/settings.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/fd23acbb50b5f0e86da4a2fd209c966a88d9083c/Item%20Modifiers/libraries/settings.lua</source>
+        <source file="libraries/builder_parser.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/fd23acbb50b5f0e86da4a2fd209c966a88d9083c/Item%20Modifiers/libraries/builder_parser.lua</source>
+        <source file="libraries/command_table.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/fd23acbb50b5f0e86da4a2fd209c966a88d9083c/Item%20Modifiers/libraries/command_table.lua</source>
+        <source file="libraries/modifiers.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/fd23acbb50b5f0e86da4a2fd209c966a88d9083c/Item%20Modifiers/libraries/modifiers.lua</source>
+        <source file="libraries/modifier_stacks.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/fd23acbb50b5f0e86da4a2fd209c966a88d9083c/Item%20Modifiers/libraries/modifier_stacks.lua</source>
+        <source file="libraries/gui/gui_main.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/fd23acbb50b5f0e86da4a2fd209c966a88d9083c/Item%20Modifiers/libraries/gui/gui_main.lua</source>
+        <source file="libraries/gui/gui.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/fd23acbb50b5f0e86da4a2fd209c966a88d9083c/Item%20Modifiers/libraries/gui/gui.lua</source>
+        <source file="libraries/gui/gui_common.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/fd23acbb50b5f0e86da4a2fd209c966a88d9083c/Item%20Modifiers/libraries/gui/gui_common.lua</source>
+        <source file="libraries/gui/gui_builder.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/fd23acbb50b5f0e86da4a2fd209c966a88d9083c/Item%20Modifiers/libraries/gui/gui_builder.lua</source>
+        <source file="libraries/drawing/drawlist_API.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/fd23acbb50b5f0e86da4a2fd209c966a88d9083c/Item%20Modifiers/libraries/drawing/drawlist_API.lua</source>
+        <source file="libraries/drawing/waveform_peaks.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/fd23acbb50b5f0e86da4a2fd209c966a88d9083c/Item%20Modifiers/libraries/drawing/waveform_peaks.lua</source>
+        <source file="libraries/user_files/generated_scripts/example.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/fd23acbb50b5f0e86da4a2fd209c966a88d9083c/Item%20Modifiers/libraries/user_files/generated_scripts/example.lua</source>
+        <source file="libraries/user_files/modifier_stacks/Beat Chopper Stutter.modstk">https://github.com/Bird-Bird/ReaScript_Testing/raw/fd23acbb50b5f0e86da4a2fd209c966a88d9083c/Item%20Modifiers/libraries/user_files/modifier_stacks/Beat%20Chopper%20Stutter.modstk</source>
+        <source main="main" file="BirdBird_Item Modifier Builder.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/fd23acbb50b5f0e86da4a2fd209c966a88d9083c/Item%20Modifiers/BirdBird_Item%20Modifier%20Builder.lua</source>
+        <source file="libraries/functional_console/base.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/fd23acbb50b5f0e86da4a2fd209c966a88d9083c/Item%20Modifiers/libraries/functional_console/base.lua</source>
+        <source file="libraries/functional_console/basic_commands.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/fd23acbb50b5f0e86da4a2fd209c966a88d9083c/Item%20Modifiers/libraries/functional_console/basic_commands.lua</source>
+        <source file="libraries/functional_console/functions.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/fd23acbb50b5f0e86da4a2fd209c966a88d9083c/Item%20Modifiers/libraries/functional_console/functions.lua</source>
+        <source file="libraries/functional_console/item_data.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/fd23acbb50b5f0e86da4a2fd209c966a88d9083c/Item%20Modifiers/libraries/functional_console/item_data.lua</source>
+        <source file="libraries/functional_console/macro_library.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/fd23acbb50b5f0e86da4a2fd209c966a88d9083c/Item%20Modifiers/libraries/functional_console/macro_library.lua</source>
+        <source file="libraries/functional_console/random.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/fd23acbb50b5f0e86da4a2fd209c966a88d9083c/Item%20Modifiers/libraries/functional_console/random.lua</source>
+        <source file="libraries/functional_console/state.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/fd23acbb50b5f0e86da4a2fd209c966a88d9083c/Item%20Modifiers/libraries/functional_console/state.lua</source>
+        <source file="libraries/functional_console/validation.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/fd23acbb50b5f0e86da4a2fd209c966a88d9083c/Item%20Modifiers/libraries/functional_console/validation.lua</source>
+        <source file="libraries/functional_console/user_files/user_files.txt">https://github.com/Bird-Bird/ReaScript_Testing/raw/fd23acbb50b5f0e86da4a2fd209c966a88d9083c/Item%20Modifiers/libraries/functional_console/user_files/user_files.txt</source>
+      </version>
     </reapack>
   </category>
   <category name="Parameter History">
@@ -877,6 +941,11 @@
         <source main="main">https://github.com/Bird-Bird/ReaScript_Testing/raw/e028a1d503e9b1c8e64291a2932b062e858482d1/Track%20Tags/BirdBird_Track%20Tags.lua</source>
         <source file="libraries/functions.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/e028a1d503e9b1c8e64291a2932b062e858482d1/Track%20Tags/libraries/functions.lua</source>
         <source file="libraries/json.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/e028a1d503e9b1c8e64291a2932b062e858482d1/Track%20Tags/libraries/json.lua</source>
+      </version>
+      <version name="0.5.3" author="BirdBird" time="2022-05-24T18:33:10Z">
+        <source main="main">https://github.com/Bird-Bird/ReaScript_Testing/raw/3d3244a0482ade046a391e495c6a3c11b7aa8282/Track%20Tags/BirdBird_Track%20Tags.lua</source>
+        <source file="libraries/functions.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/3d3244a0482ade046a391e495c6a3c11b7aa8282/Track%20Tags/libraries/functions.lua</source>
+        <source file="libraries/json.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/3d3244a0482ade046a391e495c6a3c11b7aa8282/Track%20Tags/libraries/json.lua</source>
       </version>
     </reapack>
   </category>
