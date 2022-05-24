@@ -362,9 +362,8 @@ function param_capture(fx, pd, param)
           local pos = reaper.BR_GetMouseCursorContext_Position()
           
           --SNAP
-          local key_mods = reaper.ImGui_GetKeyMods(ctx)
-          local shift = reaper.ImGui_KeyModFlags_Shift()
-          if not (key_mods & shift > 0) then
+          local shift = get_shift()
+          if not shift then
               pos = reaper.SnapToGrid(0, pos)
           end
           reaper.SetEditCurPos(pos, false, false)
