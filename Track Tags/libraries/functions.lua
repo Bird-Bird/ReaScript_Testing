@@ -104,6 +104,12 @@ function palette(t, alpha)
     return im_col
 end
 
+function get_shift()
+  local key_mods = reaper.ImGui_GetKeyMods(ctx)
+  local mod = reaper.ImGui_KeyModFlags_Shift and reaper.ImGui_KeyModFlags_Shift() or reaper.ImGui_ModFlags_Shift()
+  return (key_mods & mod) ~= 0 
+end
+
 --BLACKLIST
 local info = debug.getinfo(1,'S')
 local path = info.source:match[[^@?(.*[\/])[^\/]-$]]

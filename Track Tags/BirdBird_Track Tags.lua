@@ -1,5 +1,5 @@
 -- @description Track Tags
--- @version 0.5.2
+-- @version 0.5.3
 -- @author BirdBird
 -- @provides
 --    [nomain]libraries/functions.lua
@@ -349,9 +349,8 @@ function frame()
 
             local r, p_selected = reaper.ImGui_Selectable(ctx, tag.name, tag_selected)
             if r then
-                local key_mods = reaper.ImGui_GetKeyMods(ctx)
-                local shift = reaper.ImGui_KeyModFlags_Shift()
-                if key_mods & shift > 0 then
+                local shift = get_shift()
+                if shift then
                     reaper.Undo_BeginBlock()
                     select_tag_only(tag)
                     reaper.Undo_EndBlock('Select tracks containing tag', -1)
