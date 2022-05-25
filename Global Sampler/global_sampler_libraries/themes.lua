@@ -144,6 +144,10 @@ function get_themes()
   else
     local st = settings:read("*all")
     st_json = json.decode(st)
+    if st_json["theme_sundial"] then
+      st_json["theme_sundial"] = nil
+      save_themes(st_json)
+    end
     return st_json
   end
 end
