@@ -1,10 +1,10 @@
 -- @description Global Sampler
--- @version 0.99.7.7
+-- @version 0.99.7.8
 -- @author BirdBird
 -- @provides
 --    [nomain]global_sampler_libraries/global_resampler_lib.lua
 --    [nomain]global_sampler_libraries/json.lua
---    [nomain]global_sampler_libraries/themes.json
+--    [nomain]global_sampler_libraries/themes.lua
 --    [main] BirdBird_Sample Last Playthrough.lua
 --    [main] BirdBird_Sample Last X Seconds.lua
 --    [effect] BirdBird_Global Sampler.jsfx
@@ -44,6 +44,7 @@ function p(msg) reaper.ShowConsoleMsg(tostring(msg) .. ' \n') end
 function reaper_do_file(file) local info = debug.getinfo(1,'S'); path = info.source:match[[^@?(.*[\/])[^\/]-$]]; dofile(path .. file); end
 reaper_do_file('global_sampler_libraries/global_resampler_lib.lua')
 reaper_do_file('json.lua')
+reaper_do_file('themes.lua')
 
 local st = load_settings()
 if not st then 
@@ -55,16 +56,8 @@ if not st.waveform_zoom then
 end
 
 --THEMES
-local themes_file = io.open(path .. 'themes.json', 'r')
-if not themes_file then
-    local text = 'Cannot find themes.json in the installation directory, are you sure Global Sampler is installed correctly?'
-    local ret = reaper.ShowMessageBox(text, 'Global Sampler - Dependency Error', 0)
-    return
-end
-local themes_json = themes_file:read("*all")
-local themes = json.decode(themes_json)
+local themes = get_themes()
 local theme = themes[st.theme]
-
 function swap_theme(theme_name)
     local new_theme = themes[theme_name]
     local settings = load_settings()
