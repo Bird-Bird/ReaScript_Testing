@@ -1,14 +1,17 @@
 -- @description Global Sampler
--- @version 0.99.7.8
+-- @version 0.99.7.9
 -- @author BirdBird
 -- @provides
 --    [nomain]global_sampler_libraries/global_resampler_lib.lua
 --    [nomain]global_sampler_libraries/json.lua
 --    [nomain]global_sampler_libraries/themes.lua
---    [main] BirdBird_Sample Last Playthrough.lua
---    [main] BirdBird_Sample Last X Seconds.lua
+--    [main]BirdBird_Sample Last Playthrough.lua
+--    [main]BirdBird_Sample Last X Seconds.lua
+--    [main]BirdBird_Global Sampler Theme Editor.lua
 --    [effect] BirdBird_Global Sampler.jsfx
 --@changelog
+--  + Add theme editor
+--  + Refactor theme logic
 --  + Fix empty audio for large selections
 
 --CHECK DEPENDENCIES
@@ -45,6 +48,7 @@ function reaper_do_file(file) local info = debug.getinfo(1,'S'); path = info.sou
 reaper_do_file('global_sampler_libraries/global_resampler_lib.lua')
 reaper_do_file('json.lua')
 reaper_do_file('themes.lua')
+reaper.gmem_write(16, 0)
 
 local st = load_settings()
 if not st then 
@@ -654,6 +658,16 @@ function main()
     end
 
     --THEME SWITCHING
+    local sel_id = reaper.gmem_read(16)
+    if sel_id ~= 0 then
+      themes = get_themes()
+      local sel_name = theme_index_name[sel_id]
+      if sel_name then
+        swap_theme(sel_name)
+      end
+      reaper.gmem_write(16, 0)
+    end
+    
     char = gfx.getchar()
     if char == 49 then 
         swap_theme('theme_carbon')

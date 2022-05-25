@@ -1,5 +1,20 @@
 -- @noindex
 
+function deepcopy(orig)
+  local orig_type = type(orig)
+  local copy
+  if orig_type == 'table' then
+    copy = {}
+    for orig_key, orig_value in next, orig, nil do
+      copy[deepcopy(orig_key)] = deepcopy(orig_value)
+    end
+    setmetatable(copy, deepcopy(getmetatable(orig)))
+  else
+    copy = orig
+  end
+  return copy
+end
+
 local theme_classic = {
   bg = {r = 255,g = 249,b = 232},
   
@@ -66,28 +81,6 @@ local theme_violet = {
   trail_alpha = 0.3
 }
 
-local theme_sundial = {
-  bg = {r = 70, g = 85, b = 100},
-  
-  border =  {r = 89, g = 94, b = 94},
-  border_margin = 1,
-  
-  crop_region = {r = 182, g = 102, b = 103},
-  crop_region_alpha = 0.2,
-  
-  waveform_line = {r = 223, g = 150, b = 116},
-  waveform_fill_alpha = 0.3,
-  wave_fade_len = 20,
-  wave_fade_alpha_intensity = 1,
-  rainbow_waveform_col = false,
-
-  writer_col = {r = 247, g = 234, b = 223},
-  
-  trail_len = 50,
-  trail_pow = 4,
-  trail_alpha = 0.3
-}
-
 local theme_rainbow = {
   bg = {r = 32, g = 32, b = 32},
   
@@ -132,11 +125,10 @@ local theme_reaper_default = {
   trail_alpha = 0.3
 }
 
-local default_themes = {}
+default_themes = {}
 default_themes['theme_classic'] =        theme_classic
 default_themes['theme_carbon']  =        theme_carbon
 default_themes['theme_violet']  =        theme_violet
-default_themes['theme_sundial'] =        theme_sundial
 default_themes['theme_rainbow'] =        theme_rainbow
 default_themes['theme_reaper_default'] = theme_reaper_default
 
@@ -162,3 +154,17 @@ function save_themes(data)
   settings:write(d)
   settings:close()
 end
+
+theme_index = {
+  theme_carbon = 1,
+  theme_reaper_default = 2,
+  theme_rainbow = 3,
+  theme_violet = 4,
+  theme_classic = 5
+}
+theme_index_name = {}
+theme_index_name[1] = "theme_carbon"
+theme_index_name[2] = "theme_reaper_default"
+theme_index_name[3] = "theme_rainbow"
+theme_index_name[4] = "theme_violet"
+theme_index_name[5] = "theme_classic"
