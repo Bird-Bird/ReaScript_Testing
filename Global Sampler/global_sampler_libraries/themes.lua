@@ -1,7 +1,5 @@
 -- @noindex
 
--- @noindex
-
 local theme_classic = {
   bg = {r = 255,g = 249,b = 232},
   
