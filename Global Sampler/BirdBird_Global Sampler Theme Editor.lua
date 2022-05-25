@@ -201,7 +201,7 @@ end
 function loop()
   push_theme()
   reaper.ImGui_PushFont(ctx, font)
-  reaper.ImGui_SetNextWindowSize(ctx, 400, 80, reaper.ImGui_Cond_FirstUseEver())
+  reaper.ImGui_SetNextWindowSize(ctx, 257, 641, reaper.ImGui_Cond_FirstUseEver())
   local visible, open = reaper.ImGui_Begin(ctx, 'Global Sampler Theme Editor', true)
   if visible then
     frame()
