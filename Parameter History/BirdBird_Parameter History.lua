@@ -1,5 +1,5 @@
 -- @description Parameter History
--- @version 0.4.2
+-- @version 0.4.3
 -- @author BirdBird
 -- @provides
 --    [nomain]libraries/functions.lua
@@ -13,7 +13,7 @@
 --    [nomain]libraries/user_files/user_files.txt
 --    [nomain]libraries/resources/Icons.ttf
 --@changelog
---  + Fix project tabs
+--  + Fix stuck parameters in touch mode
 
 function pr(msg) reaper.ShowConsoleMsg(tostring(msg) .. '\n') end
 function reaper_do_file(file) local info = debug.getinfo(1,'S'); path = info.source:match[[^@?(.*[\/])[^\/]-$]]; dofile(path .. file); end

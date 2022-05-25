@@ -72,6 +72,9 @@ function display_history(history, pins, pins_map)
       p.undo_count = reaper.GetProjectStateChangeCount(0)
       last_tweaked_gui = p.param_identifier
     end
+    if reaper.ImGui_IsItemDeactivated(ctx) then
+      reaper.TrackFX_EndParamEdit(p.track, p.fx_id, p.param_id)
+    end
 
     reaper.ImGui_PopID(ctx)
   end
