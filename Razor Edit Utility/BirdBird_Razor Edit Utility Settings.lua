@@ -1,5 +1,5 @@
 -- @description Razor Edit Utility
--- @version 0.6.7
+-- @version 0.6.8
 -- @author BirdBird
 -- @provides
 --  [main]BirdBird_Razor Edit Utility Toolbar.lua
@@ -26,8 +26,7 @@
 --  [nomain]libraries/settings.lua
 --  [nomain]libraries/user_files/user_files.txt
 --@changelog
---  + Fix toolbar state
---  + Add new script to comp
+--  + Fix crash on newer ReaImGui versions
 
 function p(msg) reaper.ShowConsoleMsg(tostring(msg) .. '\n') end
 function reaper_do_file(file) local info = debug.getinfo(1,'S'); path = info.source:match[[^@?(.*[\/])[^\/]-$]]; dofile(path .. file); end
