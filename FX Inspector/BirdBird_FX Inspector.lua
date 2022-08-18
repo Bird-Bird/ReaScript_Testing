@@ -1,5 +1,5 @@
 -- @description FX Inspector
--- @version 0.6.2
+-- @version 0.6.3
 -- @author BirdBird
 -- @provides
 --    [nomain]fx_inspector_libraries/functions.lua
@@ -13,7 +13,7 @@
 --    [main]BirdBird_FX Inspector insert parameter capture.lua
 
 --@changelog
---  + Early version
+--  + Fix graphical glitch and crash at parameter capture insertion.
 
 function p(msg) reaper.ShowConsoleMsg(tostring(msg) .. '\n') end
 function reaper_do_file(file) local info = debug.getinfo(1,'S'); path = info.source:match[[^@?(.*[\/])[^\/]-$]]; dofile(path .. file); end
@@ -25,6 +25,8 @@ reaper_do_file('fx_inspector_libraries/param_capture.lua')
 reaper_do_file('fx_inspector_libraries/presets.lua')
 reaper_do_file('fx_inspector_libraries/fx.lua')
 reaper_do_file('fx_inspector_libraries/blacklist.lua')
+dofile(reaper.GetResourcePath() .. '/Scripts/ReaTeam Extensions/API/imgui.lua')
+  ('0.6')
 
 --INIT GMEM
 local gmem_name = 'BB_FXI'
@@ -416,7 +418,7 @@ function param_capture(fx, pd, param)
     if reaper.ImGui_IsItemClicked(ctx) then
       param_writer_paused = not param_writer_paused
     end
-    offset_y_cursor(-20)
+    --offset_y_cursor(-20)
 end
 
 function preset_display(fx, pd, param)
