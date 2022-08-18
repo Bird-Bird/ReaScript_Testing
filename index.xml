@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" commit="557d49bf330fa6de3158dfcc0066c2abf386c4b4" name="BirdBird ReaScript Testing">
+<index version="1" commit="4646f35f100056a7a3cc36823f52c79f14d0408b" name="BirdBird ReaScript Testing">
   <category name="Envelope Palette">
     <reapack name="BirdBird_Envelope Palette.lua" type="script" desc="Envelope Palette">
       <version name="0.8" author="BirdBird" time="2022-04-23T15:04:39Z">
@@ -768,6 +768,20 @@
         <source file="libraries/settings.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/1665ccebb9bd49899dae482154c40d79d73059a8/Parameter%20History/libraries/settings.lua</source>
         <source file="libraries/user_files/user_files.txt">https://github.com/Bird-Bird/ReaScript_Testing/raw/1665ccebb9bd49899dae482154c40d79d73059a8/Parameter%20History/libraries/user_files/user_files.txt</source>
         <source file="libraries/resources/Icons.ttf">https://github.com/Bird-Bird/ReaScript_Testing/raw/1665ccebb9bd49899dae482154c40d79d73059a8/Parameter%20History/libraries/resources/Icons.ttf</source>
+      </version>
+      <version name="0.4.4" author="BirdBird" time="2022-08-18T13:00:45Z">
+        <changelog><![CDATA[+ Prevent parameters from getting stuck in history]]></changelog>
+        <source main="main">https://github.com/Bird-Bird/ReaScript_Testing/raw/4646f35f100056a7a3cc36823f52c79f14d0408b/Parameter%20History/BirdBird_Parameter%20History.lua</source>
+        <source file="libraries/functions.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/4646f35f100056a7a3cc36823f52c79f14d0408b/Parameter%20History/libraries/functions.lua</source>
+        <source file="libraries/fx.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/4646f35f100056a7a3cc36823f52c79f14d0408b/Parameter%20History/libraries/fx.lua</source>
+        <source file="libraries/gui_main.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/4646f35f100056a7a3cc36823f52c79f14d0408b/Parameter%20History/libraries/gui_main.lua</source>
+        <source file="libraries/gui.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/4646f35f100056a7a3cc36823f52c79f14d0408b/Parameter%20History/libraries/gui.lua</source>
+        <source file="libraries/json.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/4646f35f100056a7a3cc36823f52c79f14d0408b/Parameter%20History/libraries/json.lua</source>
+        <source file="libraries/parameters.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/4646f35f100056a7a3cc36823f52c79f14d0408b/Parameter%20History/libraries/parameters.lua</source>
+        <source file="libraries/pins.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/4646f35f100056a7a3cc36823f52c79f14d0408b/Parameter%20History/libraries/pins.lua</source>
+        <source file="libraries/settings.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/4646f35f100056a7a3cc36823f52c79f14d0408b/Parameter%20History/libraries/settings.lua</source>
+        <source file="libraries/user_files/user_files.txt">https://github.com/Bird-Bird/ReaScript_Testing/raw/4646f35f100056a7a3cc36823f52c79f14d0408b/Parameter%20History/libraries/user_files/user_files.txt</source>
+        <source file="libraries/resources/Icons.ttf">https://github.com/Bird-Bird/ReaScript_Testing/raw/4646f35f100056a7a3cc36823f52c79f14d0408b/Parameter%20History/libraries/resources/Icons.ttf</source>
       </version>
     </reapack>
   </category>
