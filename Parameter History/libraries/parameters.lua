@@ -32,7 +32,7 @@ end
 --Remove entries for FX plugins that have been removed
 --Fix IDs for FX plugins that have been moved
 --Remove extra entries
-function validate_fx_history(history, do_size)
+function validate_fx_history(history, do_size, history_map)
   local removal = {}
   for i = 1, #history do
     local p = history[i]
@@ -51,12 +51,16 @@ function validate_fx_history(history, do_size)
 
   for i = #removal, 1, -1 do 
     local ind = removal[i]
+    local par = history[ind]
     table.remove(history, ind)
+    history_map[par.param_identifier] = nil
   end
 
   if do_size then
     local history_size = settings.history_size
     while #history > history_size do
+      local par = history[#history]
+      history_map[par.param_identifier] = nil
       table.remove(history, #history)
     end
   end
@@ -114,6 +118,7 @@ function try_insert_parameter(history, history_map, p, last_tweaked_gui)
       
       table.insert(history, 1, param_dat)
       history_map[param_identifier] = param_dat
+      return true
     else
       --Move FX to top of history
       local map = history_map[param_identifier]
@@ -128,7 +133,9 @@ function try_insert_parameter(history, history_map, p, last_tweaked_gui)
             map.undo_count = undo_count
           end
         end
+        return true
       end
+      return false
     end
   end
 end

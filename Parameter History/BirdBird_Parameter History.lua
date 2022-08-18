@@ -1,5 +1,5 @@
 -- @description Parameter History
--- @version 0.4.3
+-- @version 0.4.4
 -- @author BirdBird
 -- @provides
 --    [nomain]libraries/functions.lua
@@ -13,7 +13,7 @@
 --    [nomain]libraries/user_files/user_files.txt
 --    [nomain]libraries/resources/Icons.ttf
 --@changelog
---  + Fix stuck parameters in touch mode
+--  + Prevent parameters from getting stuck in history
 
 function pr(msg) reaper.ShowConsoleMsg(tostring(msg) .. '\n') end
 function reaper_do_file(file) local info = debug.getinfo(1,'S'); path = info.source:match[[^@?(.*[\/])[^\/]-$]]; dofile(path .. file); end
@@ -32,6 +32,7 @@ if not reaper.APIExists('ImGui_GetVersion') then
   local ret = reaper.ShowMessageBox(text, 'Error - Missing Dependency', 0)
   return
 end
+dofile(reaper.GetResourcePath() .. '/Scripts/ReaTeam Extensions/API/imgui.lua')('0.6')
 reaper_do_file('libraries/functions.lua')
 reaper_do_file('libraries/json.lua')
 reaper_do_file('libraries/pins.lua')

@@ -111,10 +111,13 @@ function frame(window_is_docked)
   p.r, p.track_id, p.fx_id, p.param_id = reaper.GetLastTouchedFX()
   if p.r then 
     p.track_id = p.track_id - 1
-    try_insert_parameter(history, history_map, p, last_tweaked_gui)
+    local rmv = try_insert_parameter(history, history_map, p, last_tweaked_gui)
+    if rmv then
+      last_tweaked_gui = ''
+    end
   end
 
-  validate_fx_history(history, true)
+  validate_fx_history(history, true, history_map)
   validate_fx_history(pins)
 
   if reaper.ImGui_BeginTabBar(ctx, 'Tabs', reaper.ImGui_TabBarFlags_None()) then
