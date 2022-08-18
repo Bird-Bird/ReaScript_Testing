@@ -64,7 +64,22 @@ function display_history(history, pins, pins_map)
     end
 
     reaper.ImGui_Text(ctx, p.param_name .. ': ' .. p_dat.format_val)
-    
+    if settings.show_extra_buttons then
+      if reaper.ImGui_Button(ctx, "Learn") then
+        reaper.TrackFX_SetParam(p.track, p.fx_id, p.param_id, p_dat.v)
+        reaper.Main_OnCommand(41144, -1)
+      end
+      reaper.ImGui_SameLine(ctx)
+      if reaper.ImGui_Button(ctx, "TCP") then
+        reaper.TrackFX_SetParam(p.track, p.fx_id, p.param_id, p_dat.v)
+        reaper.Main_OnCommand(41141, -1)
+      end
+      reaper.ImGui_SameLine(ctx)
+      if reaper.ImGui_Button(ctx, "Mod") then
+        reaper.TrackFX_SetParam(p.track, p.fx_id, p.param_id, p_dat.v)
+        reaper.Main_OnCommand(41143, -1)
+      end
+    end
     local col = imgui_palette(i/15 + 0.8, 1)
     local rv, v = custom_slider_double(ctx, "##A", p_dat.v, p.min_v, p.max_v, p.disp_col)
     if rv then
@@ -141,6 +156,13 @@ function frame(window_is_docked)
         settings.selected_theme = v
         save_settings(settings)
       end
+      reaper.ImGui_Separator(ctx)
+      local rv, v = reaper.ImGui_Checkbox(ctx, "Show Extra Buttons", settings.show_extra_buttons)
+      if rv then
+        settings.show_extra_buttons = v 
+        save_settings(settings)
+      end
+
       
       local rv, v = reaper.ImGui_Checkbox(ctx, "Dock", window_is_docked)
       if rv then
