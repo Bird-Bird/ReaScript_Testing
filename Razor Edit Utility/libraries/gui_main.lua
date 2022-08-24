@@ -69,6 +69,10 @@ end
 
 local indent = 8
 function settings_gui(settings, all_settings, selected_preset)
+  if not settings then
+    gm_write_selected_preset(1)
+    return false
+  end
   local rv, save = false, false
 
   reaper.ImGui_Text(ctx, "After Razor Edits:")

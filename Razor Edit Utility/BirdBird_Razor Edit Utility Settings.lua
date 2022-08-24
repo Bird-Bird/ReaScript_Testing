@@ -1,5 +1,5 @@
 -- @description Razor Edit Utility
--- @version 0.6.8
+-- @version 0.6.9
 -- @author BirdBird
 -- @provides
 --  [main]BirdBird_Razor Edit Utility Toolbar.lua
@@ -26,7 +26,11 @@
 --  [nomain]libraries/settings.lua
 --  [nomain]libraries/user_files/user_files.txt
 --@changelog
---  + Fix crash on newer ReaImGui versions
+--  + Fix non-stable action IDs
+--  + Fix crashes when selecting non-existing presets
+--  + Fix crashes when resizing the UI
+--  + Add new feature to generate selection presets
+
 
 function p(msg) reaper.ShowConsoleMsg(tostring(msg) .. '\n') end
 function reaper_do_file(file) local info = debug.getinfo(1,'S'); path = info.source:match[[^@?(.*[\/])[^\/]-$]]; dofile(path .. file); end

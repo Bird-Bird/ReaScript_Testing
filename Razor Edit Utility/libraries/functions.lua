@@ -103,3 +103,43 @@ function print_table(node)
   output_str = table.concat(output)
   p(output_str)
 end
+
+function iterate_actions(sectionID)
+  local i = 0
+  return function()
+    local retval, name = reaper.CF_EnumerateActions(sectionID, i, '')
+    if retval > 0 then
+      i = i + 1
+      return retval, name
+    end
+  end
+end
+
+function get_all_actions_map()
+  local actions = {}
+  for id, name in iterate_actions(0) do
+    local action = {id = id, name = name, native = true}
+    local lookup = reaper.ReverseNamedCommandLookup(id)
+    if lookup then
+      action.native = false
+      action.str_id = "_" .. lookup
+    end
+    actions[action.name] = action
+  end
+  return actions
+end
+
+function get_all_actions()
+  local actions = {}
+  for id, name in iterate_actions(0) do
+    local action = {id = id, name = name, native = true}
+    local lookup = reaper.ReverseNamedCommandLookup(id)
+    if lookup then
+      action.native = false
+      action.str_id = "_" .. lookup
+    end
+    table.insert(actions, action)
+  end
+  table.sort(actions, function(a, b) return a.name < b.name end)
+  return actions
+end

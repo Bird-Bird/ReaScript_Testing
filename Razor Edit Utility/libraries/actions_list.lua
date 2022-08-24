@@ -1,25 +1,6 @@
 -- @noindex
 
 local FLT_MIN, FLT_MAX = reaper.ImGui_NumericLimits_Float()
-local function iterate_actions(sectionID)
-  local i = 0
-  return function()
-    local retval, name = reaper.CF_EnumerateActions(sectionID, i, '')
-    if retval > 0 then
-      i = i + 1
-      return retval, name
-    end
-  end
-end
-
-function get_all_actions()
-  local actions = {}
-  for id, name in iterate_actions(0) do
-    table.insert(actions, {id = id, name = name})
-  end
-  table.sort(actions, function(a, b) return a.name < b.name end)
-  return actions
-end
 
 function filter_actions(actions, filter_text)
   local filter = reaper.ImGui_CreateTextFilter(filter_text)

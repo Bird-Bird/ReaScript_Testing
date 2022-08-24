@@ -131,6 +131,9 @@ function on_project_change(settings)
   --CUSTOM ACTIONS
   for i = 1, #actions do
     local action = actions[i]
+    if action.native == false then
+      action.id = reaper.NamedCommandLookup(action.str_id)
+    end
     reaper.Main_OnCommand(action.id, 0)
   end
 

@@ -3,10 +3,32 @@
 local toolbar_font_size = 22
 local toolbar_font = reaper.ImGui_CreateFont('Courier New', toolbar_font_size,  reaper.ImGui_FontFlags_Bold() |  reaper.ImGui_FontFlags_Italic())
 reaper.ImGui_AttachFont(ctx, toolbar_font)
+local small_font = reaper.ImGui_CreateFont('sans-serif', 12)
+reaper.ImGui_AttachFont(ctx, small_font)
+local has_js_API = reaper.APIExists('JS_ReaScriptAPI_Version')
+
+
+local script_lines = [[dofile(reaper.GetResourcePath() .. '/Scripts/BirdBird ReaScript Testing/Razor Edit Utility/libraries/gmem.lua')
+gm_write_selected_preset(id)
+gm_reload_settings()]]
+function generate_selector_script(id)
+  local script_str = script_lines:gsub("id", id)
+  local r, file_name = reaper.JS_Dialog_BrowseForSaveFile('Save generated script file', '', 'BirdBird_Razor Edit Utility - Select Preset ' .. id, '.lua')
+  if r == 1 then
+    file_name = file_name .. '.lua'
+    local new_file = io.open(file_name, 'w')
+    new_file:write(script_str)
+    new_file:close()
+    reaper.AddRemoveReaScript(true, 0, file_name, true)
+  end
+end
 
 function toolbar_frame(selected_button, adapt_to_window, window_is_docked, num_buttons)
   if num_buttons == 0 then
     centered_text("~ Razor Edit Utility not running ~")
+  end
+  if selected_button > num_buttons then
+    gm_write_selected_preset(1)
   end
   
   local save_settings = false
@@ -55,15 +77,31 @@ function toolbar_frame(selected_button, adapt_to_window, window_is_docked, num_b
     
     --Hover
     reaper.ImGui_SetCursorPos(ctx, lxs, lys)
-    reaper.ImGui_InvisibleButton(ctx, tostring(i), bw, bh)
-    if reaper.ImGui_IsItemHovered(ctx) and not button_selected then
-      local col = dl_rgba_to_col(col_p.r, col_p.g, col_p.b, 0.03)
-      reaper.ImGui_DrawList_AddRectFilled(draw_list, 
-      fxs, fys, fxe, fye, col)
-    end
-    if reaper.ImGui_IsItemClicked(ctx) then
-      gm_write_selected_preset(i)
-      save_settings = true
+    if bw ~= 0 and bh ~= 0 then
+      reaper.ImGui_InvisibleButton(ctx, tostring(i), bw, bh)
+      if reaper.ImGui_IsItemHovered(ctx) and not button_selected then
+        local col = dl_rgba_to_col(col_p.r, col_p.g, col_p.b, 0.03)
+        reaper.ImGui_DrawList_AddRectFilled(draw_list, 
+        fxs, fys, fxe, fye, col)
+      end
+      if reaper.ImGui_IsItemClicked(ctx) then
+        gm_write_selected_preset(i)
+        save_settings = true
+      end
+      reaper.ImGui_PushFont(ctx, small_font)
+      if reaper.ImGui_BeginPopupContextItem(ctx) then
+        if not has_js_API then
+          reaper.ImGui_BeginDisabled(ctx)
+        end
+        if reaper.ImGui_MenuItem(ctx, 'Generate Selector') then
+          generate_selector_script(i)
+        end
+        if not has_js_API then
+          reaper.ImGui_EndDisabled(ctx)
+        end
+        reaper.ImGui_EndPopup(ctx)
+      end
+      reaper.ImGui_PopFont(ctx)
     end
     
     --Label

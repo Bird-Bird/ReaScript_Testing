@@ -43,10 +43,20 @@ function get_default_settings()
 end
 
 function validate_old_settings(all_settings)
+  local action_map = get_all_actions_map()
   for i = 1, #all_settings do
     local settings = all_settings[i]
     if not settings["actions"] then
       settings.actions = {}
+    else
+      local actions = settings.actions
+      for i = 1, #actions do
+        local action = actions[i]
+        if action_map[action.name].native == false then
+          local new_action = deepcopy(action_map[action.name])
+          actions[i] = new_action
+        end
+      end
     end
   end
 end
