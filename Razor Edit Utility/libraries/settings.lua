@@ -52,7 +52,7 @@ function validate_old_settings(all_settings)
       local actions = settings.actions
       for i = 1, #actions do
         local action = actions[i]
-        if action_map[action.name].native == false then
+        if action_map[action.name] and action_map[action.name].native == false then
           local new_action = deepcopy(action_map[action.name])
           actions[i] = new_action
         end

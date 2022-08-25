@@ -1,5 +1,5 @@
 -- @description Razor Edit Utility
--- @version 0.6.9
+-- @version 0.7
 -- @author BirdBird
 -- @provides
 --  [main]BirdBird_Razor Edit Utility Toolbar.lua
@@ -26,10 +26,7 @@
 --  [nomain]libraries/settings.lua
 --  [nomain]libraries/user_files/user_files.txt
 --@changelog
---  + Fix non-stable action IDs
---  + Fix crashes when selecting non-existing presets
---  + Fix crashes when resizing the UI
---  + Add new feature to generate selection presets
+--  + Fix crash when migrating old settings
 
 
 function p(msg) reaper.ShowConsoleMsg(tostring(msg) .. '\n') end
