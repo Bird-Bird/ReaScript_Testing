@@ -162,7 +162,7 @@ function check_input_errors(macro)
                         if cmd == "len" and not validate_len_arg(arg) then
                             return {description = "Invalid argument for command: " .. cmd}
                         end
-                        if cmd == "offs" and not validate_len_arg(arg) then
+                        if cmd == "ofs" and not validate_len_arg(arg) then
                             return {description = "Invalid argument for command: " .. cmd}
                         end
                         if cmd == "nud" and not validate_len_arg(arg) then
