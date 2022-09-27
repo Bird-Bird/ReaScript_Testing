@@ -766,6 +766,19 @@ function pitch_ramp(offset)
     end
 end
 
+function pitch_ramp_max(offset)
+    local items = get_selected_items()
+    local offset = offset/(#items - 1)
+    for i = 1, #items do
+        local item = items[i]
+        local take = reaper.GetMediaItemTake(item, 0)
+        reaper.SetMediaItemTakeInfo_Value(take,'B_PPITCH', 0)
+        local po = 2 ^ ((offset * (i-1))/12)
+        local playrate = reaper.GetMediaItemTakeInfo_Value(take, 'D_PLAYRATE')
+        reaper.SetMediaItemTakeInfo_Value(take, 'D_PLAYRATE', playrate*po)
+    end
+end
+
 function set_length(length) 
     local value
     if length:sub(-1) == 'b' then
@@ -1004,6 +1017,49 @@ function volume_ramp(nudge)
       local item = items[i]
       local item_vol = reaper.GetMediaItemInfo_Value(item, 'D_VOL')
       reaper.SetMediaItemInfo_Value(item, 'D_VOL', item_vol*10^(0.05*nudge*(i-1)))
+  end
+end
+
+function volume_ramp_max(n)
+  local items = get_selected_items()
+  local nudge = n/(#items - 1)
+  for i = 1, #items do
+      local item = items[i]
+      local item_vol = reaper.GetMediaItemInfo_Value(item, 'D_VOL')
+      reaper.SetMediaItemInfo_Value(item, 'D_VOL', item_vol*10^(0.05*nudge*(i-1)))
+  end
+end
+
+function pan(amount)
+  local amount = math.min(math.max(-1, amount), 1)
+  local items = get_selected_items()
+  for i = 1, #items do
+    local item = items[i]
+    local take = reaper.GetMediaItemTake(item, 0)
+    reaper.SetMediaItemTakeInfo_Value(take, 'D_PAN', amount)
+  end
+end
+
+function pan_ramp(offset)
+  local offset = math.min(math.max(-1, offset), 1)
+  local items = get_selected_items()
+  for i = 1, #items do
+    local item = items[i]
+    local take = reaper.GetMediaItemTake(item, 0)
+    local pan = reaper.GetMediaItemTakeInfo_Value(take, 'D_PAN')
+    reaper.SetMediaItemTakeInfo_Value(take, 'D_PAN', pan + offset*(i - 1))
+  end
+end
+
+function pan_ramp_max(o)
+  local offset = math.min(math.max(-1, o), 1)
+  local items = get_selected_items()
+  local offset = o/(#items - 1)
+  for i = 1, #items do
+    local item = items[i]
+    local take = reaper.GetMediaItemTake(item, 0)
+    local pan = reaper.GetMediaItemTakeInfo_Value(take, 'D_PAN')
+    reaper.SetMediaItemTakeInfo_Value(take, 'D_PAN', pan + offset*(i - 1))
   end
 end
 

@@ -1,5 +1,5 @@
 -- @description Functional Console
--- @version 0.99.7
+-- @version 0.99.7.1
 -- @author BirdBird
 -- @provides
 --    [nomain]functional_console_libraries/functions.lua
@@ -7,7 +7,7 @@
 --    [nomain]functional_console_libraries/macro_library.lua
 --    [main]BirdBird_Functional Console Reactive.lua
 --@changelog
---  + Fix crashes when using invalid inputs as arguments for the ofs command.
+--  + Added new commands: p, pr, par, vor, pirm
 
 function p(msg) reaper.ShowConsoleMsg(tostring(msg)..'\n')end
 function reaper_do_file(file) local info = debug.getinfo(1,'S'); path = info.source:match[[^@?(.*[\/])[^\/]-$]]; dofile(path .. file); end
