@@ -1,12 +1,12 @@
 -- @description Track Tags
--- @version 0.5.4
+-- @version 0.6
 -- @author BirdBird
 -- @provides
 --    [nomain]libraries/functions.lua
 --    [nomain]libraries/json.lua
 
 --@changelog
---  + Early version
+--  + Added support for Ctrl Click a Tag to add/remove from selection
 
 function p(msg) reaper.ShowConsoleMsg(tostring(msg) .. '\n') end
 function reaper_do_file(file) local info = debug.getinfo(1,'S'); path = info.source:match[[^@?(.*[\/])[^\/]-$]]; dofile(path .. file); end
@@ -149,7 +149,7 @@ end
 
 local text_input
 local text
-local selected_tag = nil
+local selected_tag = {}
 local popup_dat = nil
 function frame()
     local open_rename_popup = false
@@ -187,6 +187,7 @@ function frame()
     if r then text = text_input end
     if reaper.ImGui_Button(ctx, 'Tag') and not validate_tag_name(lookup, text) and #sel_tracks > 0 then
         reaper.Undo_BeginBlock()
+        Stevie(text)
         for i = 1, #sel_tracks do
             local track = sel_tracks[i]
             local id = #tags > 0 and tags[#tags].id + 1 or 1
@@ -260,12 +261,14 @@ function frame()
         if #tags == 0 then
             reaper.ImGui_Text(ctx, 'No tags found.')
         else
-            if selected_tag then
+            if #selected_tag > 0 then
                 if reaper.ImGui_MenuItem(ctx, 'Add to active tag') then
                     reaper.Undo_BeginBlock()
                     for i = 1, #sel_tracks do
                         local tr = sel_tracks[i]
-                        add_tag_to_track(tr, selected_tag)   
+                        for index, sel_tag in ipairs(selected_tag) do
+                            add_tag_to_track(tr, sel_tag)   
+                        end
                     end
                     reaper.Undo_EndBlock('Add selected tracks to active tag', -1)  
                 end
@@ -293,9 +296,10 @@ function frame()
                         for i = 1, #sel_tracks do
                             local tr = sel_tracks[i]
                             remove_tag_from_track(tr, t)
-                            if selected_tag and selected_tag.name == t.name and 
-                            settings.auto_hide_tracks_when_tag_active then
-                                set_track_visible(tr, nil, 0)
+                            for index, sel_tag in ipairs(selected_tag) do
+                                if sel_tag and sel_tag.name == t.name and settings.auto_hide_tracks_when_tag_active then
+                                    set_track_visible(tr, nil, 0)
+                                end
                             end
                         end
                         reaper.Undo_EndBlock('Remove tag from selected tracks', -1)
@@ -313,13 +317,15 @@ function frame()
 
     --AUTO INSERT NEW TAGS
     local auto_insert = settings.auto_tag_tracks
-    if selected_tag and #new_tracks > 0 and auto_insert then
+    if #selected_tag > 0 and #new_tracks > 0 and auto_insert then
         for i = 1, #new_tracks do
             local track = new_tracks[i]
             local ext = get_ext_state(track)
             if not ext.lock_visibility and not track_is_blacklisted(track) then
                 reaper.Undo_BeginBlock()
-                add_tag_to_track(track, selected_tag)
+                for index, sel_tag in ipairs(selected_tag) do
+                    add_tag_to_track(track, sel_tag)
+                end
                 reaper.Undo_EndBlock('Add new tag to tracks (Automatic tagging)', -1)
             end
         end
@@ -337,33 +343,56 @@ function frame()
         reaper.ImGui_PushStyleColor(ctx, reaper.ImGui_Col_Separator(), 0xFFFFFF00)
         for i = 1, #tags do
             local tag = tags[i]
-            local tag_selected = selected_tag and selected_tag.name == tag.name or false
+
+            local is_tag_selected = false
+            local tag_idx
+            for index, sel_tag in ipairs(selected_tag) do -- Check if this tag is selected to draw it differently.
+                if sel_tag.name == tag.name then
+                    is_tag_selected = true
+                    tag_idx = index
+                end
+            end
 
             local col = palette(i/6, 0.5)
             local h, hh, ha = palette(i/6, 0.5), palette(i/6, 0.03), palette(i/6, 0.5)
             local m_release = reaper.ImGui_IsMouseReleased( ctx, reaper.ImGui_MouseButton_Left())
-            if tag_selected or m_release then hh = h end
+            if is_tag_selected or m_release then hh = h end
             reaper.ImGui_PushStyleColor(ctx, reaper.ImGui_Col_Header(),        h )
             reaper.ImGui_PushStyleColor(ctx, reaper.ImGui_Col_HeaderHovered(), hh)
             reaper.ImGui_PushStyleColor(ctx, reaper.ImGui_Col_HeaderActive(),  ha)
 
-            local r, p_selected = reaper.ImGui_Selectable(ctx, tag.name, tag_selected)
+            local r, p_selected = reaper.ImGui_Selectable(ctx, tag.name, is_tag_selected)
             if r then
                 local shift = get_shift()
-                if shift then
+                local ctrl = get_ctrl()
+                if shift and not ctrl then
                     reaper.Undo_BeginBlock()
                     select_tag_only(tag)
                     reaper.Undo_EndBlock('Select tracks containing tag', -1)
-                else
-                    if not tag_selected then
+                elseif ctrl then -- DL Add Tag, yo!
+                    reaper.Undo_BeginBlock()
+                    if is_tag_selected then
+                        table.remove(selected_tag, tag_idx)
+                    else
+                        table.insert(selected_tag, tag)
+                    end
+                    if #selected_tag > 0 then
+                        load_tag(selected_tag)
+                        reaper.Undo_EndBlock('Select tag', -1)
+                    else
+                        show_all_tracks()
+                        reaper.Undo_EndBlock('Unselect tag', -1)
+                    end
+                elseif not ctrl or shift then -- Select Only tag
+                    if not is_tag_selected then
                         reaper.Undo_BeginBlock()
-                        selected_tag = tag
-                        load_tag(tag)
+                        selected_tag = {tag}
+                        load_tag(selected_tag)
                         reaper.Undo_EndBlock('Select tag', -1)
                     else
                         reaper.Undo_BeginBlock()
                         show_all_tracks()
-                        selected_tag = nil
+                        selected_tag = {}
                         reaper.Undo_EndBlock('Unselect tag', -1)
                     end
                 end
@@ -375,7 +404,7 @@ function frame()
             reaper.ImGui_PushFont(ctx, font)
             reaper.ImGui_PushStyleVar(ctx, reaper.ImGui_StyleVar_WindowPadding(), 4, 5)
             if reaper.ImGui_BeginPopupContextItem(ctx) then
-                if reaper.ImGui_MenuItem(ctx, 'Rename') then
+                if reaper.ImGui_MenuItem(ctx, 'Rename') then 
                     popup_dat = {tag = tag, name = tag.name}
                     open_rename_popup = true
                 end
@@ -383,7 +412,14 @@ function frame()
                     reaper.Undo_BeginBlock()
                     clear_tag(tag)
                     reaper.Undo_EndBlock('Clear tag', -1)
-                    if selected_tag and selected_tag.name == tag.name then selected_tag = nil end
+                    
+                    if selected_tag then
+                        for index, sel_tag in ipairs(selected_tag) do
+                            if sel_tag.name == tag.name then 
+                                table.remove(selected_tag, index)
+                            end
+                        end
+                    end
                 end
                 if #tags > 1 then
                     if reaper.ImGui_BeginMenu(ctx, 'Merge') then
@@ -395,7 +431,7 @@ function frame()
                                     merge_tag(tag, t)
                                     if settings.auto_load_tags_merge then
                                         load_tag(t)
-                                        selected_tag = t
+                                        selected_tag = {t}
                                     end
                                 end
                             end
