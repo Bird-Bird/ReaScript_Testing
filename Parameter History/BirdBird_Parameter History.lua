@@ -1,5 +1,5 @@
 -- @description Parameter History
--- @version 0.4.5
+-- @version 0.4.6
 -- @author BirdBird
 -- @provides
 --    [nomain]libraries/functions.lua
@@ -42,6 +42,7 @@ reaper_do_file('libraries/gui_main.lua')
 reaper_do_file('libraries/fx.lua')
 reaper_do_file('libraries/parameters.lua')
 reaper_do_file('libraries/settings.lua')
+dofile(reaper.GetResourcePath() .. '/Scripts/ReaTeam Extensions/API/imgui.lua')('0.6')
 
 ctx = reaper.ImGui_CreateContext('Parameter History', reaper.ImGui_ConfigFlags_DockingEnable())
 icon_font = reaper.ImGui_CreateFont(reaper_get_path('libraries/resources/Icons.ttf'), 15)

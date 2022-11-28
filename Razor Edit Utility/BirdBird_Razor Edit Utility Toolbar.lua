@@ -15,6 +15,7 @@ reaper_do_file('libraries/gui.lua')
 reaper_do_file('libraries/gui_toolbar.lua')
 reaper_do_file('libraries/gmem.lua')
 reaper_do_file('libraries/settings.lua')
+dofile(reaper.GetResourcePath() .. '/Scripts/ReaTeam Extensions/API/imgui.lua')('0.6')
 
 function loop()
   reaper.ImGui_PushFont(ctx, font)

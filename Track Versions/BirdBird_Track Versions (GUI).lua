@@ -5,6 +5,7 @@ function debug_print(msg) if settings.debug_mode then reaper.ShowConsoleMsg(tost
 function reaper_do_file(file) local info = debug.getinfo(1,'S'); local path = info.source:match[[^@?(.*[\/])[^\/]-$]]; dofile(path .. file); end
 reaper_do_file('track_versions_libraries/functions.lua')
 reaper_do_file('gui.lua')
+dofile(reaper.GetResourcePath() .. '/Scripts/ReaTeam Extensions/API/imgui.lua')('0.6')
 
 local FLT_MIN, FLT_MAX = reaper.ImGui_NumericLimits_Float()
 local window_resize_flag = reaper.ImGui_Cond_Appearing()

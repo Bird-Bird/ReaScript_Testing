@@ -1,5 +1,5 @@
 -- @description Track Tags
--- @version 0.5.4
+-- @version 0.5.5
 -- @author BirdBird
 -- @provides
 --    [nomain]libraries/functions.lua
@@ -12,6 +12,7 @@ function p(msg) reaper.ShowConsoleMsg(tostring(msg) .. '\n') end
 function reaper_do_file(file) local info = debug.getinfo(1,'S'); path = info.source:match[[^@?(.*[\/])[^\/]-$]]; dofile(path .. file); end
 reaper_do_file('libraries/json.lua')
 reaper_do_file('libraries/functions.lua')
+dofile(reaper.GetResourcePath() .. '/Scripts/ReaTeam Extensions/API/imgui.lua')('0.6')
 
 --DEPENDENCY CHECK
 if not reaper.APIExists('ImGui_GetVersion') then

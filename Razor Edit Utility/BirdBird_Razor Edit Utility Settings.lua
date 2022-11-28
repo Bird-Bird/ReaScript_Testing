@@ -1,5 +1,5 @@
 -- @description Razor Edit Utility
--- @version 0.7
+-- @version 0.7.1
 -- @author BirdBird
 -- @provides
 --  [main]BirdBird_Razor Edit Utility Toolbar.lua
@@ -51,6 +51,7 @@ reaper_do_file('libraries/gui.lua')
 reaper_do_file('libraries/gui_main.lua')
 reaper_do_file('libraries/gui_toolbar.lua')
 reaper_do_file('libraries/gmem.lua')
+dofile(reaper.GetResourcePath() .. '/Scripts/ReaTeam Extensions/API/imgui.lua')('0.6')
 
 local show_style_editor = false
 if show_style_editor then 

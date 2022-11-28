@@ -57,4 +57,5 @@ window_data.frame = builder_frame
 
 reaper_do_file('libraries/gui/gui_common.lua')
 reaper_do_file('libraries/functional_console/base.lua')
+dofile(reaper.GetResourcePath() .. '/Scripts/ReaTeam Extensions/API/imgui.lua')('0.6')
 loop()

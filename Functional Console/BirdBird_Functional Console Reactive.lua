@@ -12,6 +12,7 @@ if not reaper.APIExists('ImGui_GetVersion') then
     local ret = reaper.ShowMessageBox(text, 'Functional Console - Missing Dependency', 0)
     return
 end
+dofile(reaper.GetResourcePath() .. '/Scripts/ReaTeam Extensions/API/imgui.lua')('0.6')
 
 
 local ctx = reaper.ImGui_CreateContext('My script')

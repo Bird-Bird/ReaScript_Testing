@@ -1,5 +1,5 @@
 -- @description FX Mangler
--- @version 0.1.5
+-- @version 0.1.6
 -- @author BirdBird
 -- @provides
 --    [nomain]libraries/blacklist.lua
@@ -39,4 +39,5 @@ window_data.frame = main_frame
 
 reaper_do_file('libraries/gui/gui_common.lua')
 reaper_do_file('libraries/gui/gui_param_blacklist.lua')
+dofile(reaper.GetResourcePath() .. '/Scripts/ReaTeam Extensions/API/imgui.lua')('0.6')
 loop()

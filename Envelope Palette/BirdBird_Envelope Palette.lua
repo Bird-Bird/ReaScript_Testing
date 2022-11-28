@@ -1,5 +1,5 @@
 -- @description Envelope Palette
--- @version 0.8.1
+-- @version 0.8.2
 -- @author BirdBird
 -- @provides
 --    [nomain]libraries/functions.lua
@@ -38,6 +38,7 @@ reaper_do_file('libraries/mouse.lua')
 reaper_do_file('libraries/drawing.lua')
 reaper_do_file('libraries/gui.lua')
 reaper_do_file('libraries/gui_main.lua')
+dofile(reaper.GetResourcePath() .. '/Scripts/ReaTeam Extensions/API/imgui.lua')('0.6')
 
 ctx = reaper.ImGui_CreateContext('Envelope Palette')
 flt_min, flt_max = reaper.ImGui_NumericLimits_Float()

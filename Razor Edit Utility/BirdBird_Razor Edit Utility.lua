@@ -8,6 +8,7 @@ reaper_do_file('libraries/json.lua')
 reaper_do_file('libraries/settings.lua')
 reaper_do_file('libraries/razor.lua')
 reaper_do_file('libraries/gmem.lua')
+dofile(reaper.GetResourcePath() .. '/Scripts/ReaTeam Extensions/API/imgui.lua')('0.6')
 
 local settings = get_settings()
 local sel_preset_id = gmem_get_selected_preset()
