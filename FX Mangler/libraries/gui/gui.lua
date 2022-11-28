@@ -114,7 +114,6 @@ function title(text, disp_circles)
     push_big_font()
     centered_text(text)
     pop_big_font()
-    offset_cursor_y(6)
     reaper.ImGui_EndChild(ctx)
   end
 end
