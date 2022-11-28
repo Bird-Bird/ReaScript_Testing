@@ -1,5 +1,5 @@
 -- @description FX Mangler
--- @version 0.1.6
+-- @version 0.1.8
 -- @author BirdBird
 -- @provides
 --    [nomain]libraries/blacklist.lua
@@ -14,7 +14,7 @@
 --    [nomain]libraries/gui/gui_param_blacklist.lua
 --    [nomain]libraries/gui/gui.lua
 -- @changelog
---    Prepare KeyMods for future ReaImGui updates
+--  + Prepare for ReaImGui updates
 
 --LOAD FILES
 script_version = 0.13
@@ -24,6 +24,7 @@ window_data.style = 'main'
 window_data.title = 'FX Mangler'
 function p(msg) reaper.ShowConsoleMsg(tostring(msg)..'\n')end
 function debug_print(msg) if settings.debug_mode then reaper.ShowConsoleMsg(tostring(msg)..'\n') end end
+dofile(reaper.GetResourcePath() .. '/Scripts/ReaTeam Extensions/API/imgui.lua')('0.6')
 function reaper_do_file(file) local info = debug.getinfo(1,'S'); local path = info.source:match[[^@?(.*[\/])[^\/]-$]]; dofile(path .. file); end
 
 reaper_do_file('libraries/functions.lua')
@@ -39,5 +40,4 @@ window_data.frame = main_frame
 
 reaper_do_file('libraries/gui/gui_common.lua')
 reaper_do_file('libraries/gui/gui_param_blacklist.lua')
-dofile(reaper.GetResourcePath() .. '/Scripts/ReaTeam Extensions/API/imgui.lua')('0.6')
 loop()

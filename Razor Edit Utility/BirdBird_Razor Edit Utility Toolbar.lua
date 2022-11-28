@@ -1,6 +1,7 @@
 -- @noindex
 
 function p(msg) reaper.ShowConsoleMsg(tostring(msg) .. '\n') end
+dofile(reaper.GetResourcePath() .. '/Scripts/ReaTeam Extensions/API/imgui.lua')('0.6')
 function reaper_do_file(file) local info = debug.getinfo(1,'S'); path = info.source:match[[^@?(.*[\/])[^\/]-$]]; dofile(path .. file); end
 
 reaper_do_file('libraries/functions.lua')
@@ -15,7 +16,6 @@ reaper_do_file('libraries/gui.lua')
 reaper_do_file('libraries/gui_toolbar.lua')
 reaper_do_file('libraries/gmem.lua')
 reaper_do_file('libraries/settings.lua')
-dofile(reaper.GetResourcePath() .. '/Scripts/ReaTeam Extensions/API/imgui.lua')('0.6')
 
 function loop()
   reaper.ImGui_PushFont(ctx, font)

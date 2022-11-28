@@ -1,6 +1,7 @@
 -- @noindex
 
 function p(msg) reaper.ShowConsoleMsg(tostring(msg) .. '\n') end
+dofile(reaper.GetResourcePath() .. '/Scripts/ReaTeam Extensions/API/imgui.lua')('0.6')
 function reaper_do_file(file) local info = debug.getinfo(1,'S'); path = info.source:match[[^@?(.*[\/])[^\/]-$]]; dofile(path .. file); end
 
 reaper_do_file('libraries/functions.lua')
@@ -8,7 +9,6 @@ reaper_do_file('libraries/json.lua')
 reaper_do_file('libraries/settings.lua')
 reaper_do_file('libraries/razor.lua')
 reaper_do_file('libraries/gmem.lua')
-dofile(reaper.GetResourcePath() .. '/Scripts/ReaTeam Extensions/API/imgui.lua')('0.6')
 
 local settings = get_settings()
 local sel_preset_id = gmem_get_selected_preset()

@@ -1,5 +1,5 @@
 -- @description Razor Edit Utility
--- @version 0.7.1
+-- @version 0.7.2
 -- @author BirdBird
 -- @provides
 --  [main]BirdBird_Razor Edit Utility Toolbar.lua
@@ -26,10 +26,11 @@
 --  [nomain]libraries/settings.lua
 --  [nomain]libraries/user_files/user_files.txt
 --@changelog
---  + Fix crash when migrating old settings
+--  + Prepare for ReaImGui updates
 
 
 function p(msg) reaper.ShowConsoleMsg(tostring(msg) .. '\n') end
+dofile(reaper.GetResourcePath() .. '/Scripts/ReaTeam Extensions/API/imgui.lua')('0.6')
 function reaper_do_file(file) local info = debug.getinfo(1,'S'); path = info.source:match[[^@?(.*[\/])[^\/]-$]]; dofile(path .. file); end
 reaper_do_file('libraries/functions.lua')
 if not reaper.APIExists('ImGui_GetVersion') then
@@ -51,7 +52,6 @@ reaper_do_file('libraries/gui.lua')
 reaper_do_file('libraries/gui_main.lua')
 reaper_do_file('libraries/gui_toolbar.lua')
 reaper_do_file('libraries/gmem.lua')
-dofile(reaper.GetResourcePath() .. '/Scripts/ReaTeam Extensions/API/imgui.lua')('0.6')
 
 local show_style_editor = false
 if show_style_editor then 

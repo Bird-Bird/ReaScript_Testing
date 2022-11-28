@@ -2,6 +2,7 @@
 
 function p(msg) reaper.ShowConsoleMsg(tostring(msg)..'\n')end
 function debug_print(msg) if settings.debug_mode then reaper.ShowConsoleMsg(tostring(msg)..'\n') end end
+dofile(reaper.GetResourcePath() .. '/Scripts/ReaTeam Extensions/API/imgui.lua')('0.6')
 function reaper_do_file(file) local info = debug.getinfo(1,'S'); local path = info.source:match[[^@?(.*[\/])[^\/]-$]]; dofile(path .. file); end
 reaper_do_file('libraries/json.lua')
 
@@ -57,5 +58,4 @@ window_data.frame = builder_frame
 
 reaper_do_file('libraries/gui/gui_common.lua')
 reaper_do_file('libraries/functional_console/base.lua')
-dofile(reaper.GetResourcePath() .. '/Scripts/ReaTeam Extensions/API/imgui.lua')('0.6')
 loop()

@@ -1,5 +1,5 @@
 -- @description Envelope Palette
--- @version 0.8.2
+-- @version 0.8.3
 -- @author BirdBird
 -- @provides
 --    [nomain]libraries/functions.lua
@@ -10,7 +10,7 @@
 --    [nomain]libraries/mouse.lua
 
 --@changelog
---  + Early version
+--  + Prepare for ReaImGui update
 
 function p(msg) reaper.ShowConsoleMsg(tostring(msg) .. '\n') end
 function reaper_do_file(file) local info = debug.getinfo(1,'S'); path = info.source:match[[^@?(.*[\/])[^\/]-$]]; dofile(path .. file); end
@@ -28,6 +28,7 @@ if not reaper.APIExists('ImGui_GetVersion') then
   local ret = reaper.ShowMessageBox(text, 'Error - Missing Dependency', 0)
   return
 end
+dofile(reaper.GetResourcePath() .. '/Scripts/ReaTeam Extensions/API/imgui.lua')('0.6')
 if not reaper.APIExists('JS_ReaScriptAPI_Version') then
   local text = 'Envelope Palette requires the js_ReaScriptAPI extension to run. You can install it through ReaPack.'
   local ret = reaper.ShowMessageBox(text, 'Error - Missing Dependency', 0)
@@ -38,7 +39,6 @@ reaper_do_file('libraries/mouse.lua')
 reaper_do_file('libraries/drawing.lua')
 reaper_do_file('libraries/gui.lua')
 reaper_do_file('libraries/gui_main.lua')
-dofile(reaper.GetResourcePath() .. '/Scripts/ReaTeam Extensions/API/imgui.lua')('0.6')
 
 ctx = reaper.ImGui_CreateContext('Envelope Palette')
 flt_min, flt_max = reaper.ImGui_NumericLimits_Float()

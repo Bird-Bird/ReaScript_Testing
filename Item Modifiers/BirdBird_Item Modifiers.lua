@@ -1,5 +1,5 @@
 -- @description Item Modifiers
--- @version 0.4.3.8
+-- @version 0.4.4
 -- @author BirdBird
 -- @provides
 --    [nomain]libraries/functions.lua
@@ -29,7 +29,7 @@
 --    [nomain]libraries/functional_console/validation.lua
 --    [nomain]libraries/functional_console/user_files/user_files.txt
 -- @changelog
---  Fix crash when adding modifiers in certain REAPER versions
+--  + Prepare for ReaImGui updates
 
 --LOAD FILES
 window_data = {}
@@ -37,6 +37,7 @@ window_data.ctx = 'Item Modifiers'
 window_data.style = 'main'
 window_data.title = 'Item Modifiers'
 function p(msg) reaper.ShowConsoleMsg(tostring(msg)..'\n')end
+dofile(reaper.GetResourcePath() .. '/Scripts/ReaTeam Extensions/API/imgui.lua')('0.6')
 function debug_print(msg) if settings.debug_mode then reaper.ShowConsoleMsg(tostring(msg)..'\n') end end
 function reaper_do_file(file) local info = debug.getinfo(1,'S'); local path = info.source:match[[^@?(.*[\/])[^\/]-$]]; dofile(path .. file); end
 
@@ -58,5 +59,4 @@ window_data.frame = item_modifiers_frame
 
 reaper_do_file('libraries/gui/gui_common.lua')
 reaper_do_file('libraries/functional_console/base.lua')
-dofile(reaper.GetResourcePath() .. '/Scripts/ReaTeam Extensions/API/imgui.lua')('0.6')
 loop()
