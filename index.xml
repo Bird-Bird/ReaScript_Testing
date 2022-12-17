@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" commit="38bd95948160f7e19f187013ba119c7ef9d91330" name="BirdBird ReaScript Testing">
+<index version="1" commit="2050e8ac3bd8d69f8e05d8405dab577a2fac3545" name="BirdBird ReaScript Testing">
   <category name="Envelope Palette">
     <reapack name="BirdBird_Envelope Palette.lua" type="script" desc="Envelope Palette">
       <version name="0.8" author="BirdBird" time="2022-04-23T15:04:39Z">
@@ -178,6 +178,14 @@
         <source file="functional_console_libraries/base.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/71f69bbb230255e0828980d4272d10be7335f200/Functional%20Console/functional_console_libraries/base.lua</source>
         <source file="functional_console_libraries/macro_library.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/71f69bbb230255e0828980d4272d10be7335f200/Functional%20Console/functional_console_libraries/macro_library.lua</source>
         <source main="main" file="BirdBird_Functional Console Reactive.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/71f69bbb230255e0828980d4272d10be7335f200/Functional%20Console/BirdBird_Functional%20Console%20Reactive.lua</source>
+      </version>
+      <version name="0.99.7.3" author="BirdBird" time="2022-12-17T05:43:20Z">
+        <changelog><![CDATA[+ Fix crash on launch]]></changelog>
+        <source main="main">https://github.com/Bird-Bird/ReaScript_Testing/raw/2050e8ac3bd8d69f8e05d8405dab577a2fac3545/Functional%20Console/BirdBird_Functional%20Console.lua</source>
+        <source file="functional_console_libraries/functions.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/2050e8ac3bd8d69f8e05d8405dab577a2fac3545/Functional%20Console/functional_console_libraries/functions.lua</source>
+        <source file="functional_console_libraries/base.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/2050e8ac3bd8d69f8e05d8405dab577a2fac3545/Functional%20Console/functional_console_libraries/base.lua</source>
+        <source file="functional_console_libraries/macro_library.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/2050e8ac3bd8d69f8e05d8405dab577a2fac3545/Functional%20Console/functional_console_libraries/macro_library.lua</source>
+        <source main="main" file="BirdBird_Functional Console Reactive.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/2050e8ac3bd8d69f8e05d8405dab577a2fac3545/Functional%20Console/BirdBird_Functional%20Console%20Reactive.lua</source>
       </version>
     </reapack>
   </category>
