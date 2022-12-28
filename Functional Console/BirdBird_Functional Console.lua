@@ -1,5 +1,5 @@
 -- @description Functional Console
--- @version 0.99.7.3
+-- @version 0.99.7.4
 -- @author BirdBird
 -- @provides
 --    [nomain]functional_console_libraries/functions.lua
@@ -7,7 +7,11 @@
 --    [nomain]functional_console_libraries/macro_library.lua
 --    [main]BirdBird_Functional Console Reactive.lua
 --@changelog
---  + Fix crash on launch
+--  + Added new commands: pl, plm, sr, spe
+--  pl: sets take playrate
+--  plm: multiplies take playrate
+--  sr: stretches items seperately
+--  spe: splits item every given interval, optionally by beats with "b" suffix
 
 function p(msg) reaper.ShowConsoleMsg(tostring(msg)..'\n')end
 function reaper_do_file(file) local info = debug.getinfo(1,'S'); path = info.source:match[[^@?(.*[\/])[^\/]-$]]; dofile(path .. file); end

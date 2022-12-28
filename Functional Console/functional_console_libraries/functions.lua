@@ -754,6 +754,64 @@ function transpose(offset)
     end
 end
 
+function multiply_playrate(amount)
+    local items = get_selected_items()
+    for i = 1, #items do
+        local item = items[i]
+        local take = reaper.GetActiveTake(item)    
+        local playrate = reaper.GetMediaItemTakeInfo_Value( take, "D_PLAYRATE")
+        reaper.SetMediaItemTakeInfo_Value( take, "D_PLAYRATE", playrate*amount)
+    end
+end
+
+function set_playrate(amount)
+    local items = get_selected_items()
+    for i = 1, #items do
+        local item = items[i]
+        local take = reaper.GetActiveTake(item)    
+        reaper.SetMediaItemTakeInfo_Value( take, "D_PLAYRATE", amount)
+    end
+end
+
+function stretch(amount)
+    local items = get_selected_items()
+    for i = 1, #items do
+        local item = items[i]
+        local length = reaper.GetMediaItemInfo_Value(item, "D_LENGTH")
+        local take = reaper.GetActiveTake(item)    
+        local playrate = reaper.GetMediaItemTakeInfo_Value( take, "D_PLAYRATE")
+        reaper.SetMediaItemTakeInfo_Value( take, "D_PLAYRATE", playrate/amount)
+        reaper.SetMediaItemInfo_Value(item, "D_LENGTH", length*amount)
+    end
+end
+
+function split_items_every(interval)
+    if time == 0 then
+        return
+    end
+    local value
+    if interval:sub(-1) == 'b' then
+        local len_beat =  reaper.TimeMap2_beatsToTime(0, 1)
+        value = tonumber(interval:sub(1, -2)) * len_beat
+    else
+        value = tonumber(interval)
+    end
+
+    local items = get_selected_items()
+    local div = value
+    for i = 1, #items do
+        local item = items[i]
+        local pos = reaper.GetMediaItemInfo_Value(item, 'D_POSITION')
+        local length = reaper.GetMediaItemInfo_Value(item, 'D_LENGTH')
+        local new_item, t_pos = item, pos + div
+        while t_pos < pos + length do 
+            new_item = reaper.SplitMediaItem(new_item, t_pos)
+            table.insert(initial_item_sel, new_item)
+            t_pos = t_pos + div
+        end
+    end
+end
+
 function pitch_ramp(offset)
     local items = get_selected_items()
     for i = 1, #items do 

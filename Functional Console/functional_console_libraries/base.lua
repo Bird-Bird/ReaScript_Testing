@@ -68,6 +68,10 @@ local grammar_table = {
     ["spl"]  = {func = split, args = {"num"}},
     ["rev"] = {func = reverse},
     ["bs"] =  {func = bake_selection},
+    ["plm"]  = {func = multiply_playrate, args = {"num"}},
+    ["pl"]  = {func = set_playrate, args = {"num"}},
+    ["sr"]  = {func = stretch, args = {"num"}},
+    ["spe"] = {func = split_items_every, args = {"str"}},
 
     --ITEM -> RANDOM
     ["rs"]  = {func = random_select},
