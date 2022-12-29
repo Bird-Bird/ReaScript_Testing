@@ -176,6 +176,9 @@ function check_input_errors(macro)
                         if cmd == "nud" and not validate_len_arg(arg) then
                             return {description = "Invalid argument for command: " .. cmd}
                         end
+                        if cmd == "spe" and not validate_len_arg(arg) then
+                          return {description = "Invalid argument for command: " .. cmd}
+                        end
                     end
                 end
             end

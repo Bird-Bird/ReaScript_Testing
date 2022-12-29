@@ -786,15 +786,15 @@ function stretch(amount)
 end
 
 function split_items_every(interval)
-    if time == 0 then
-        return
-    end
     local value
     if interval:sub(-1) == 'b' then
         local len_beat =  reaper.TimeMap2_beatsToTime(0, 1)
         value = tonumber(interval:sub(1, -2)) * len_beat
     else
         value = tonumber(interval)
+    end
+    if value == 0 then
+      return
     end
 
     local items = get_selected_items()
