@@ -53,15 +53,19 @@ function validate_fx_history(history, do_size, history_map)
     local ind = removal[i]
     local par = history[ind]
     table.remove(history, ind)
-    history_map[par.param_identifier] = nil
+    if history_map then
+      history_map[par.param_identifier] = nil
+    end
   end
 
   if do_size then
     local history_size = settings.history_size
     while #history > history_size do
       local par = history[#history]
-      history_map[par.param_identifier] = nil
       table.remove(history, #history)
+      if history_map then
+        history_map[par.param_identifier] = nil
+      end
     end
   end
 end

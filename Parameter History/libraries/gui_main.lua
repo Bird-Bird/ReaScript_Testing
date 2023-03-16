@@ -37,12 +37,19 @@ function button_display(p, p_dat, pins, pins_map)
 end
 
 local last_tweaked_gui = ""
-function display_history(history, pins, pins_map)
+function display_history(history, pins, pins_map, is_pins)
   local ww, wh = reaper.ImGui_GetWindowContentRegionMax(ctx)
   local removal = {}
+  local selected_track_count = reaper.CountSelectedTracks(0)
   for i = 1, #history do
     local p = history[i]
     local p_dat = get_param_data(p)
+
+    if(is_pins and (settings.filter_pins_by_selected_track and 
+                    not reaper.IsTrackSelected(p.track) and 
+                    selected_track_count > 0)) then
+      goto continue
+    end
 
     reaper.ImGui_PushID(ctx, i)
     track_display(p_dat)
@@ -92,6 +99,8 @@ function display_history(history, pins, pins_map)
     end
 
     reaper.ImGui_PopID(ctx)
+
+    ::continue::
   end
   for i = 1, #removal do
     remove_parameter_from_pins(pins, pins_map, removal[i])
@@ -137,11 +146,11 @@ function frame(window_is_docked)
 
   if reaper.ImGui_BeginTabBar(ctx, 'Tabs', reaper.ImGui_TabBarFlags_None()) then
     if reaper.ImGui_BeginTabItem(ctx, 'History') then
-      display_history(history, pins, pins_map)
+      display_history(history, pins, pins_map, false)
       reaper.ImGui_EndTabItem(ctx)
     end
     if reaper.ImGui_BeginTabItem(ctx, 'Pins') then
-      display_history(pins, pins, pins_map)
+      display_history(pins, pins, pins_map, true)
       reaper.ImGui_EndTabItem(ctx)
     end
     if reaper.ImGui_BeginTabItem(ctx, 'Settings') then
@@ -157,9 +166,20 @@ function frame(window_is_docked)
         save_settings(settings)
       end
       reaper.ImGui_Separator(ctx)
+      local rv, v = reaper.ImGui_SliderInt(ctx, "Slider Height", settings.slider_height, 2, 40)
+      if rv then 
+        settings.slider_height = v 
+        save_settings(settings)
+      end
+      custom_slider_double(ctx, "Slider", 0.5, 0, 1, imgui_palette(0.87, 1))
       local rv, v = reaper.ImGui_Checkbox(ctx, "Show Extra Buttons", settings.show_extra_buttons)
       if rv then
         settings.show_extra_buttons = v 
+        save_settings(settings)
+      end
+      local rv, v = reaper.ImGui_Checkbox(ctx, "Filter Pins (selection)", settings.filter_pins_by_selected_track)
+      if rv then
+        settings.filter_pins_by_selected_track = v 
         save_settings(settings)
       end
 

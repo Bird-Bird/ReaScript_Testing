@@ -180,7 +180,7 @@ function custom_slider_double(ctx, label, v, min, max, color)
   local scroll    = reaper.ImGui_GetScrollY(ctx)
 
   local sx, sy = cx + wx, cy + wy - scroll
-  local w_full, h = ww - pdx, 20
+  local w_full, h = ww - pdx, settings.slider_height
 
   local button = reaper.ImGui_InvisibleButton(ctx, label, w_full, h)
   if reaper.ImGui_IsItemActive(ctx) then

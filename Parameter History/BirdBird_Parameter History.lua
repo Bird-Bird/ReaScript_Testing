@@ -1,5 +1,5 @@
 -- @description Parameter History
--- @version 0.4.7
+-- @version 0.4.8
 -- @author BirdBird
 -- @provides
 --    [nomain]libraries/functions.lua
@@ -13,7 +13,10 @@
 --    [nomain]libraries/user_files/user_files.txt
 --    [nomain]libraries/resources/Icons.ttf
 --@changelog
---  + Prepare for ReaImGui updates
+--  + Fix crash when removing effects that had parameters pinned
+--  + Added setting to filter pins by track selection
+--  + Added setting to set slider height
+
 
 function pr(msg) reaper.ShowConsoleMsg(tostring(msg) .. '\n') end
 function reaper_do_file(file) local info = debug.getinfo(1,'S'); path = info.source:match[[^@?(.*[\/])[^\/]-$]]; dofile(path .. file); end
@@ -41,7 +44,6 @@ reaper_do_file('libraries/gui_main.lua')
 reaper_do_file('libraries/fx.lua')
 reaper_do_file('libraries/parameters.lua')
 reaper_do_file('libraries/settings.lua')
-dofile(reaper.GetResourcePath() .. '/Scripts/ReaTeam Extensions/API/imgui.lua')('0.6')
 
 ctx = reaper.ImGui_CreateContext('Parameter History', reaper.ImGui_ConfigFlags_DockingEnable())
 icon_font = reaper.ImGui_CreateFont(reaper_get_path('libraries/resources/Icons.ttf'), 15)

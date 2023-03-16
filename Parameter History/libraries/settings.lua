@@ -7,7 +7,9 @@ local default_settings = {
   dock_id = -3, 
   selected_theme = 1, 
   history_size = 10,
-  show_extra_buttons = true
+  show_extra_buttons = true,
+  filter_pins_by_selected_track = false,
+  slider_height = 20
 }
 function save_settings(data)
   local settings = io.open(path .. '/user_files/settings.json', 'w')
@@ -25,7 +27,7 @@ function get_settings()
     st_json = json.decode(st)
     local mod = false
     for k, v in pairs(default_settings) do
-      if default_settings[k] and st_json[k] == nil then
+      if default_settings[k] ~= nil and st_json[k] == nil then
         st_json[k] = default_settings[k]
         mod = true
       end
