@@ -1,5 +1,5 @@
 -- @description Global Sampler
--- @version 0.99.8.1
+-- @version 0.99.8.2
 -- @author BirdBird
 -- @provides
 --    [nomain]global_sampler_libraries/global_resampler_lib.lua
@@ -10,9 +10,7 @@
 --    [main]BirdBird_Global Sampler Theme Editor.lua
 --    [effect] BirdBird_Global Sampler.jsfx
 --@changelog
---  + Add theme editor
---  + Refactor theme logic
---  + Fix empty audio for large selections
+--  + Fix crash when launching the theme editor
 
 --CHECK DEPENDENCIES
 function open_url(url)

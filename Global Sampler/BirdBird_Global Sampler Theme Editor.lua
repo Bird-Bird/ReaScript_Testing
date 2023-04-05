@@ -5,6 +5,7 @@ if not reaper.APIExists('ImGui_GetVersion') then
   local ret = reaper.ShowMessageBox(text, 'Error - Missing Dependency', 0)
   return
 end
+dofile(reaper.GetResourcePath() .. '/Scripts/ReaTeam Extensions/API/imgui.lua')('0.6')
 
 function p(msg) reaper.ShowConsoleMsg(tostring(msg) .. ' \n') end
 function reaper_do_file(file) local info = debug.getinfo(1,'S'); local path = info.source:match[[^@?(.*[\/])[^\/]-$]]; dofile(path .. file); end
