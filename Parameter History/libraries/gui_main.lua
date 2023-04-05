@@ -40,6 +40,7 @@ local last_tweaked_gui = ""
 function display_history(history, pins, pins_map, is_pins)
   local ww, wh = reaper.ImGui_GetWindowContentRegionMax(ctx)
   local removal = {}
+  local removal_history = {}
   local selected_track_count = reaper.CountSelectedTracks(0)
   for i = 1, #history do
     local p = history[i]
@@ -64,7 +65,11 @@ function display_history(history, pins, pins_map, is_pins)
     local is_visible = reaper.TrackFX_GetOpen(p.track, p.fx_id)
     if reaper.ImGui_Selectable(ctx, p.fx_name) then
       if get_alt() then
-        table.insert(removal, i)
+        if is_pins == true then
+          table.insert(removal, p)
+        else
+          table.insert(removal_history, i)
+        end
       else
         if not is_visible then
           reaper.TrackFX_Show(p.track, p.fx_id, 3)
@@ -111,12 +116,14 @@ function display_history(history, pins, pins_map, is_pins)
 
     ::continue::
   end
+  
+  
   for i = 1, #removal do
-    if is_pins == true then
-      remove_parameter_from_pins(pins, pins_map, removal[i])
-    else
-      table.remove(history, removal[i]);
-    end
+    remove_parameter_from_pins(pins, pins_map, removal[i])
+  end
+
+  for i = #removal_history, 1, -1 do
+    table.remove(history, removal_history[i]);
   end
 end
 
