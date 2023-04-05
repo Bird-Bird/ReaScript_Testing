@@ -1,5 +1,5 @@
 -- @description Parameter History
--- @version 0.4.8
+-- @version 0.4.9
 -- @author BirdBird
 -- @provides
 --    [nomain]libraries/functions.lua
@@ -13,9 +13,8 @@
 --    [nomain]libraries/user_files/user_files.txt
 --    [nomain]libraries/resources/Icons.ttf
 --@changelog
---  + Fix crash when removing effects that had parameters pinned
---  + Added setting to filter pins by track selection
---  + Added setting to set slider height
+--  + Added mouse modifier (alt-click on FX name) to remove entries from history
+--  + Added setting to filter history by track selection
 
 
 function pr(msg) reaper.ShowConsoleMsg(tostring(msg) .. '\n') end

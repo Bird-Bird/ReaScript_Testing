@@ -201,3 +201,9 @@ function custom_slider_double(ctx, label, v, min, max, color)
 
   return rv, val
 end
+
+function get_alt()
+  local key_mods = reaper.ImGui_GetKeyMods(ctx)
+  local mod = reaper.ImGui_KeyModFlags_Alt and reaper.ImGui_KeyModFlags_Alt() or reaper.ImGui_ModFlags_Alt()
+  return (key_mods & mod) ~= 0 
+end

@@ -9,6 +9,7 @@ local default_settings = {
   history_size = 10,
   show_extra_buttons = true,
   filter_pins_by_selected_track = false,
+  filter_history_by_selected_track = false,
   slider_height = 20
 }
 function save_settings(data)

@@ -50,6 +50,11 @@ function display_history(history, pins, pins_map, is_pins)
                     selected_track_count > 0)) then
       goto continue
     end
+    if(is_pins == false and (settings.filter_history_by_selected_track and 
+                    not reaper.IsTrackSelected(p.track) and 
+                    selected_track_count > 0)) then
+      goto continue
+    end
 
     reaper.ImGui_PushID(ctx, i)
     track_display(p_dat)
@@ -58,10 +63,14 @@ function display_history(history, pins, pins_map, is_pins)
     
     local is_visible = reaper.TrackFX_GetOpen(p.track, p.fx_id)
     if reaper.ImGui_Selectable(ctx, p.fx_name) then
-      if not is_visible then
-        reaper.TrackFX_Show(p.track, p.fx_id, 3)
+      if get_alt() then
+        table.insert(removal, i)
       else
-        reaper.TrackFX_Show(p.track, p.fx_id, 2)
+        if not is_visible then
+          reaper.TrackFX_Show(p.track, p.fx_id, 3)
+        else
+          reaper.TrackFX_Show(p.track, p.fx_id, 2)
+        end
       end
     end
     if is_visible then
@@ -103,7 +112,11 @@ function display_history(history, pins, pins_map, is_pins)
     ::continue::
   end
   for i = 1, #removal do
-    remove_parameter_from_pins(pins, pins_map, removal[i])
+    if is_pins == true then
+      remove_parameter_from_pins(pins, pins_map, removal[i])
+    else
+      table.remove(history, removal[i]);
+    end
   end
 end
 
@@ -180,6 +193,11 @@ function frame(window_is_docked)
       local rv, v = reaper.ImGui_Checkbox(ctx, "Filter Pins (selection)", settings.filter_pins_by_selected_track)
       if rv then
         settings.filter_pins_by_selected_track = v 
+        save_settings(settings)
+      end
+      local rv, v = reaper.ImGui_Checkbox(ctx, "Filter History (selection)", settings.filter_history_by_selected_track)
+      if rv then
+        settings.filter_history_by_selected_track = v 
         save_settings(settings)
       end
 
