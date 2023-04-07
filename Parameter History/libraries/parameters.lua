@@ -97,6 +97,9 @@ function try_insert_parameter(history, history_map, p, last_tweaked_gui)
   local track = reaper.GetTrack(0, p.track_id)
   if reaper.ValidatePtr(track, "MediaTrack*") then
     local track_GUID, fx_GUID, param_identifier = get_param_identifier(track, p.fx_id, p.param_id)
+    if param_identifier == last_removed_param_identifier then
+      return false
+    end
     if not history_map[param_identifier] then
       --Insert FX to history
       local _, fx_name        = reaper.TrackFX_GetFXName(track, p.fx_id)

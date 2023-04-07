@@ -37,6 +37,8 @@ function button_display(p, p_dat, pins, pins_map)
 end
 
 local last_tweaked_gui = ""
+last_removed_param_identifier = ""
+local history_map = {}
 function display_history(history, pins, pins_map, is_pins)
   local ww, wh = reaper.ImGui_GetWindowContentRegionMax(ctx)
   local removal = {}
@@ -123,12 +125,14 @@ function display_history(history, pins, pins_map, is_pins)
   end
 
   for i = #removal_history, 1, -1 do
+    local identifier = history[removal_history[i]].param_identifier
+    history_map[identifier] = nil
     table.remove(history, removal_history[i]);
+    last_removed_param_identifier = identifier
   end
 end
 
 local history = {}
-local history_map = {}
 local pins, pins_map = load_pins()
 
 local project_state = {}
@@ -158,6 +162,7 @@ function frame(window_is_docked)
     local rmv = try_insert_parameter(history, history_map, p, last_tweaked_gui)
     if rmv then
       last_tweaked_gui = ''
+      last_removed_param_identifier = ''
     end
   end
 

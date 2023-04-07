@@ -1,5 +1,5 @@
 -- @description Parameter History
--- @version 0.4.91
+-- @version 0.4.92
 -- @author BirdBird
 -- @provides
 --    [nomain]libraries/functions.lua
@@ -13,8 +13,7 @@
 --    [nomain]libraries/user_files/user_files.txt
 --    [nomain]libraries/resources/Icons.ttf
 --@changelog
---  + Added mouse modifier (alt-click on FX name) to remove entries from history
---  + Added setting to filter history by track selection
+--  + Fix parameters not showing up after removing them from history
 
 
 function pr(msg) reaper.ShowConsoleMsg(tostring(msg) .. '\n') end
