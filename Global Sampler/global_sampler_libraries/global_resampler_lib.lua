@@ -7,31 +7,43 @@ function reaper_do_file(file) local info = debug.getinfo(1,'S'); path = info.sou
 reaper_do_file('json.lua')
 reaper.gmem_attach('BB_Sampler')
 
+local function get_default_settings() 
+  return  {theme = "theme_reaper_default", waveform_zoom = 1}
+end
+
+local error_strings = {
+  corrupted_settings_on_load = "The settings file of Global Sampler appears to be corrupted. Global Sampler will generate a fresh set of settings instead.",
+  invalid_settings = "Invalid set of settings, please make a bug report on the thread for the script with a description of the events that lead up to it.",
+}
+
 function load_settings()
     local settings_file = io.open(path .. "sampler_settings.json", 'r')
     if not settings_file then
-        local default_settings = '{"theme":"theme_reaper_default", "waveform_zoom":1}'
-        settings_file = io.open(path .. "sampler_settings.json", 'w')
-        settings_file:write(default_settings)
-        settings_file:close()
+        return get_default_settings()
+    else
+      local settings_str = settings_file:read("*all")
+      settings_file:close(settings_file)
+      
+      local status, settings = pcall(json.decode, settings_str)
+      if not status then
+          reaper.ShowMessageBox(error_strings.corrupted_settings_on_load, 'Global Sampler - Error', 0)
+          return get_default_settings()
+      else
+          return settings
+      end
     end
-    settings_file = io.open(path .. "sampler_settings.json", 'r')
-    local settings_str = settings_file:read("*all")
-    local settings = json.decode(settings_str)
-    settings_file:close(settings_file)
-    return settings
 end
 
 function save_settings(set)
     settings_file = io.open(path .. "sampler_settings.json", 'w')
-    local settings_str = json.encode(set)
-    settings_file:write(settings_str)
+    local status, settings_str = pcall(json.encode, set)
+    if status == false or type(set) ~= "table" then
+        reaper.ShowMessageBox(error_strings.invalid_settings, 'Global Sampler - Error', 0)
+        settings_file:write(json.encode(get_default_settings()))
+    else
+        settings_file:write(settings_str)
+    end
     settings_file:close()
-end
-
-local settings = load_settings()
-if not settings then
-    return
 end
 
 function instance_enabled(i)

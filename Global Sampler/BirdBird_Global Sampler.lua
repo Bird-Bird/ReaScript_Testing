@@ -1,5 +1,5 @@
 -- @description Global Sampler
--- @version 0.99.8.2
+-- @version 0.99.8.3
 -- @author BirdBird
 -- @provides
 --    [nomain]global_sampler_libraries/global_resampler_lib.lua
@@ -10,7 +10,8 @@
 --    [main]BirdBird_Global Sampler Theme Editor.lua
 --    [effect] BirdBird_Global Sampler.jsfx
 --@changelog
---  + Fix crash when launching the theme editor
+--  + Avoid crashes if settings file got corrupted.
+--  + Clear selection after dragging files out.
 
 --CHECK DEPENDENCIES
 function open_url(url)
@@ -48,21 +49,21 @@ reaper_do_file('json.lua')
 reaper_do_file('themes.lua')
 reaper.gmem_write(16, 0)
 
-local st = load_settings()
-if not st then 
+local settings = load_settings()
+if not settings then 
+    reaper.ShowMessageBox("Cannot locate settings.", 'Global Sampler - Error', 0)
     return
 end
-if not st.waveform_zoom then
-    st.waveform_zoom = 1
+if not settings.waveform_zoom then
+    settings.waveform_zoom = 1
     save_settings(st)
 end
 
 --THEMES
 local themes = get_themes()
-local theme = themes[st.theme]
+local theme = themes[settings.theme]
 function swap_theme(theme_name)
     local new_theme = themes[theme_name]
-    local settings = load_settings()
     settings.theme = theme_name
     save_settings(settings)
 
@@ -121,7 +122,7 @@ function wmod(num, mod)
 end
 
 local draw_state = {cs = 0, cw = 0, bw = 0, bh = 0, offset = 0, start_offset = 0, start_cs = 0}
-draw_state.waveform_zoom = st.waveform_zoom
+draw_state.waveform_zoom = settings.waveform_zoom
 local simulations = {}
 function draw(m, mouse_state, drag_info)
     local w = gfx.w
@@ -411,6 +412,9 @@ function draw(m, mouse_state, drag_info)
 
                         sample_normalized(nx, nw)
                         reaper.GetSet_ArrangeView2(0, true, 0,0, start_time, end_time)
+
+                        draw_state.cs = -1
+                        draw_state.cw = -1
                     end
                 end
             elseif draw_state.offset_buffer then
@@ -420,7 +424,6 @@ function draw(m, mouse_state, drag_info)
                 draw_state.start_cs = -1
             elseif draw_state.tweak_waveform_zoom then
                 draw_state.tweak_waveform_zoom = false
-                local settings = load_settings()
                 settings.waveform_zoom = draw_state.waveform_zoom
                 save_settings(settings)
             elseif draw_state.preview then
@@ -690,7 +693,6 @@ end
 
 function exit()
     local window_state = gfx.dock(-1)
-    local settings = load_settings()
     settings.window_state = window_state
     save_settings(settings)
 end
@@ -702,8 +704,8 @@ local _, _, sw, sh = reaper.my_getViewport(0, 0, 0, 0, 0, 0, 0, 0, 1)
 last_w = gfx.w --window width
 last_h = gfx.h --window width
 gfx.init("Global Sampler", w, h, 0, sw/2 - w/2, sh/2 - h/2)
-if st.window_state then
-    gfx.dock(st.window_state)
+if settings.window_state then
+    gfx.dock(settings.window_state)
 end
 
 reaper.atexit(exit)
