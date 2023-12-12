@@ -85,6 +85,11 @@ function frame()
       set_draw_cursor()
     end
   end
+
+  -- X-Raym fix for undo points
+  if not lmb and last_lmb then
+    reaper.Undo_OnStateChange("Insert envelope palette")
+  end
   last_lmb = lmb
 
   --State

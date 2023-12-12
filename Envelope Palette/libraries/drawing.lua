@@ -126,7 +126,7 @@ function draw(state)
     if a_pos then
       if not invert and #a_pos == 2 then table.remove(a_pos, 1) end
       reaper.PreventUIRefresh(1)
-      reaper.Undo_BeginBlock()
+      --reaper.Undo_BeginBlock()
       for i = 1, #a_pos do
         local sp, ep, r = a_pos[i].s, a_pos[i].e, nil
         r, sp, ep = bound_to_razor_edits(state.razor_edits, sp, ep)
@@ -134,7 +134,7 @@ function draw(state)
           set_grid_pos(state, tr, env, sp, ep, a_pos[i].my)
         end
       end
-      reaper.Undo_EndBlock('Insert envelope palette', -1)
+      --reaper.Undo_EndBlock('Insert envelope palette', -1)
       reaper.PreventUIRefresh(-1)
     end
   end
