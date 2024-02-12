@@ -2,12 +2,12 @@
 -- @version 0.1
 -- @author BirdBird
 -- @provides
---  [nomain]libraries/gui.lua
---  [nomain]libraries/json.lua
---  [nomain]libraries/projects.lua
---  [nomain]libraries/settings.lua
---  [nomain]libraries/tab_sets.lua
---  [nomain]libraries/theme.lua
+--  [nomain]gui.lua
+--  [nomain]json.lua
+--  [nomain]projects.lua
+--  [nomain]settings.lua
+--  [nomain]tab_sets.lua
+--  [nomain]theme.lua
 --  [nomain]resources/JetBrainsMono-Medium.ttf
 --  [nomain]tab_sets/_tab_sets.txt
 --@changelog
