@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" commit="8c55afebde54dc7a6a2b4597c5170334a1a390ec" name="BirdBird ReaScript Testing">
+<index version="1" commit="2f2692fc54b1d19cded9ac0a3ec7484e7cab1174" name="BirdBird ReaScript Testing">
   <category name="Envelope Palette">
     <reapack name="BirdBird_Envelope Palette.lua" type="script" desc="Envelope Palette">
       <version name="0.8" author="BirdBird" time="2022-04-23T15:04:39Z">
@@ -1535,6 +1535,12 @@ spe: splits item every given interval, optionally by beats with "b" suffix]]></c
         <source main="main">https://github.com/Bird-Bird/ReaScript_Testing/raw/2b3e4db583a7634799931c33362aa99b1c19ff8f/Track%20Tags/BirdBird_Track%20Tags.lua</source>
         <source file="libraries/functions.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/2b3e4db583a7634799931c33362aa99b1c19ff8f/Track%20Tags/libraries/functions.lua</source>
         <source file="libraries/json.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/2b3e4db583a7634799931c33362aa99b1c19ff8f/Track%20Tags/libraries/json.lua</source>
+      </version>
+      <version name="0.6" author="BirdBird" time="2024-02-12T20:02:17Z">
+        <changelog><![CDATA[+ Improve performance]]></changelog>
+        <source main="main">https://github.com/Bird-Bird/ReaScript_Testing/raw/2f2692fc54b1d19cded9ac0a3ec7484e7cab1174/Track%20Tags/BirdBird_Track%20Tags.lua</source>
+        <source file="libraries/functions.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/2f2692fc54b1d19cded9ac0a3ec7484e7cab1174/Track%20Tags/libraries/functions.lua</source>
+        <source file="libraries/json.lua">https://github.com/Bird-Bird/ReaScript_Testing/raw/2f2692fc54b1d19cded9ac0a3ec7484e7cab1174/Track%20Tags/libraries/json.lua</source>
       </version>
     </reapack>
   </category>
