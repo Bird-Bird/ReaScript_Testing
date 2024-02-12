@@ -1,5 +1,5 @@
 -- @description Track Tags
--- @version 0.6
+-- @version 0.6.1
 -- @author BirdBird
 -- @provides
 --    [nomain]libraries/functions.lua
@@ -158,7 +158,7 @@ function frame()
     local open_rename_popup = false
     
     local project = reaper.EnumProjects(-1)
-    local project_change_count = reaper.GetProjectStateChangeCount(proj)
+    local project_change_count = reaper.GetProjectStateChangeCount(project)
     if (last_project ~= project or project_change_count ~= last_change_count) then
       tags, lookup, new_tracks = get_tracks_tags()
     end
