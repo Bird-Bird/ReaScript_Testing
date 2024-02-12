@@ -1,12 +1,11 @@
 -- @description Track Tags
--- @version 0.5.6
+-- @version 0.6
 -- @author BirdBird
 -- @provides
 --    [nomain]libraries/functions.lua
 --    [nomain]libraries/json.lua
-
 --@changelog
---  + Prepare for ReaImGui updates
+--  + Improve performance
 
 function p(msg) reaper.ShowConsoleMsg(tostring(msg) .. '\n') end
 dofile(reaper.GetResourcePath() .. '/Scripts/ReaTeam Extensions/API/imgui.lua')('0.6')
@@ -152,9 +151,20 @@ local text_input
 local text
 local selected_tag = nil
 local popup_dat = nil
+
+local tags, lookup, new_tracks
+local last_project, last_change_count = nil, 0
 function frame()
     local open_rename_popup = false
-    local tags, lookup, new_tracks = get_tracks_tags()
+    
+    local project = reaper.EnumProjects(-1)
+    local project_change_count = reaper.GetProjectStateChangeCount(proj)
+    if (last_project ~= project or project_change_count ~= last_change_count) then
+      tags, lookup, new_tracks = get_tracks_tags()
+    end
+    last_project = project
+    last_change_count = project_change_count
+    
     local sel_tracks = get_selected_tracks()
     local multiple_tracks = #sel_tracks > 1
    
@@ -388,20 +398,21 @@ function frame()
                 end
                 if #tags > 1 then
                     if reaper.ImGui_BeginMenu(ctx, 'Merge') then
-                        reaper.Undo_BeginBlock()
+                        
                         for j = 1, #tags do
                             local t = tags[j]
                             if i ~= j then
                                 if reaper.ImGui_MenuItem(ctx, t.name) then
+                                    reaper.Undo_BeginBlock()
                                     merge_tag(tag, t)
                                     if settings.auto_load_tags_merge then
                                         load_tag(t)
                                         selected_tag = t
                                     end
+                                    reaper.Undo_EndBlock('Merge tags', -1)
                                 end
                             end
                         end
-                        reaper.Undo_EndBlock('Merge tags', -1)
                         reaper.ImGui_EndMenu(ctx)
                     end
                 end
