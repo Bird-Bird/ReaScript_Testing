@@ -29,9 +29,16 @@ function action_listbox(ctx, height)
     filtered_actions = filter_actions(actions, filter) 
   end
   
+  local cursor_y = reaper.ImGui_GetCursorPosY(ctx)
+  local window_height = reaper.ImGui_GetWindowHeight(ctx)
+  local list_height = height
+  if window_height - cursor_y > height then
+    list_height = -FLT_MIN
+  end
+
   local clipper = reaper.ImGui_CreateListClipper(ctx)
   reaper.ImGui_ListClipper_Begin(clipper, #filtered_actions)
-  if reaper.ImGui_BeginListBox(ctx, '##Act', -FLT_MIN, height) then
+  if reaper.ImGui_BeginListBox(ctx, '##Act', -FLT_MIN, list_height) then
     while reaper.ImGui_ListClipper_Step(clipper) do
       local display_start, display_end = reaper.ImGui_ListClipper_GetDisplayRange(clipper)
       for i = display_start, display_end - 1 do

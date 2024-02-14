@@ -1,5 +1,5 @@
 -- @description Razor Edit Utility
--- @version 0.7.2
+-- @version 0.7.3
 -- @author BirdBird
 -- @provides
 --  [main]BirdBird_Razor Edit Utility Toolbar.lua
@@ -26,7 +26,9 @@
 --  [nomain]libraries/settings.lua
 --  [nomain]libraries/user_files/user_files.txt
 --@changelog
---  + Prepare for ReaImGui updates
+-- + Prompt user when deleting presets.
+-- + Update window background to be opaque.
+-- + Update actions list to make better use of the space.
 
 
 function p(msg) reaper.ShowConsoleMsg(tostring(msg) .. '\n') end

@@ -82,13 +82,17 @@ function settings_gui(settings, all_settings, selected_preset)
   local b_offs = but_size*2 + 2
   reaper.ImGui_SameLine(ctx, ww - b_offs)
   if reaper.ImGui_Button(ctx, "-", but_size, but_size) then
-    if #all_settings > 1 then 
-      local num_presets = #all_settings
-      table.remove(all_settings, selected_preset)
-      if selected_preset > #all_settings then
-        gm_write_selected_preset(#all_settings)
+    local message = "This will remove the selected preset. This action can't be undone.\n\nWould you like to proceed?"
+    local result = reaper.ShowMessageBox(message, "Razor Edit Utility - Warning", 4)
+    if result == 6 then
+      if #all_settings > 1 then 
+        local num_presets = #all_settings
+        table.remove(all_settings, selected_preset)
+        if selected_preset > #all_settings then
+          gm_write_selected_preset(#all_settings)
+        end
+        save = true
       end
-      save = true
     end
   end
   reaper.ImGui_SameLine(ctx, ww - b_offs + 18)
