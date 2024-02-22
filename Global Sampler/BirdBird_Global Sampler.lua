@@ -1,5 +1,5 @@
 -- @description Global Sampler
--- @version 0.99.8.3
+-- @version 0.99.8.4
 -- @author BirdBird
 -- @provides
 --    [nomain]global_sampler_libraries/global_resampler_lib.lua
@@ -10,8 +10,13 @@
 --    [main]BirdBird_Global Sampler Theme Editor.lua
 --    [effect] BirdBird_Global Sampler.jsfx
 --@changelog
---  + Avoid crashes if settings file got corrupted.
---  + Clear selection after dragging files out.
+-- + Add text to indicate whether the sampler has been paused
+-- + Fix stereo channels getting swapped in some cases when the display has been offset
+-- + Fix some bugs that happen at high samplerates
+-- + Fix the JSFX window showing up in some cases (requires REAPER v6.44 and above)
+-- + Fix the JSFX not initializing correctly in some cases
+
+reaper_version = tonumber((reaper.GetAppVersion()):match("^[0-9]+%.?[0-9]*"))
 
 --CHECK DEPENDENCIES
 function open_url(url)
@@ -542,6 +547,17 @@ function draw(m, mouse_state, drag_info)
     if jsfx_existed > 0 then
         gfx.rect(draw_state.cs, margin, draw_state.cw, bh)
     end
+
+    --PAUSED TEXT
+    local pause_state = reaper.gmem_read(13)
+    if pause_state == 1 then
+      gfx.setfont(0)
+      gfx.set(theme.writer_col.r/256, theme.writer_col.g/256, theme.writer_col.b/256)
+      gfx.x = 10
+      gfx.y = 10
+      gfx.drawstr("Paused")
+    end
+
 
     --STORE STATE--
     draw_state.bw = bw

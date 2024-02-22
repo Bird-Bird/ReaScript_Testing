@@ -51,9 +51,11 @@ function instance_enabled(i)
 end
 
 function hide_instance(js)
-    reaper.TrackFX_Show(js.track, js.index, 3)
-    local hwnd = reaper.TrackFX_GetFloatingWindow( js.track, js.index )
-    reaper.JS_Window_Show( hwnd, "HIDE" )
+    if reaper_version < 6.44 then
+        reaper.TrackFX_Show(js.track, js.index, 3)
+        local hwnd = reaper.TrackFX_GetFloatingWindow( js.track, js.index )
+        reaper.JS_Window_Show( hwnd, "HIDE" )
+    end
 end
 
 --ONLY USE WHEN THERE IS GUARANTEED TO BE A SINGLE INSTANCE ENABLED
@@ -140,12 +142,15 @@ function locate_all_JSFX(name)
     return instances, ext_dat
 end
 
+--no longer necessary for v6.44 and above
 function ping_JSFX()
-    local js = locate_JSFX(fx_name)
-    if js then
-        hide_instance(js)
-    else
-        reaper.gmem_write(5, 0) --announce plugin not found
+    if reaper_version < 6.44 then
+        local js = locate_JSFX(fx_name)
+        if js then
+            hide_instance(js)
+        else
+            reaper.gmem_write(5, 0) --announce plugin not found
+        end
     end
 end
 

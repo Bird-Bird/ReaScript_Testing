@@ -2,10 +2,8 @@ noindex: true
 version: 0.99
 author BirdBird
 
-options:gmem=BB_Sampler, maxmem=33554432
+options:gmem=BB_Sampler, maxmem=33554432, gfx_idle=1
 desc: Global Sampler
-
-slider1:0<-1,1,0.1>-Force Change
 
 in_pin:left input
 in_pin:right input
@@ -14,17 +12,18 @@ out_pin:right output
 
 @init
 ext_noinit = 1;
-buf_pos = 0;
-len_in_secs = 60;
-buf_len = len_in_secs*srate*2;
-counter = 0;
-gmem[5] = 1;
-gmem_reserved = 20;
-preview_delick_len = 0.01;
-
-@slider
 
 @block
+last_srate != srate ? (
+  buf_pos = 0;
+  len_in_secs = 60;
+  buf_len = len_in_secs*srate*2;
+  counter = 0;
+  gmem[5] = 1;
+  gmem_reserved = 20;
+  preview_delick_len = 0.01;
+  last_srate = srate;
+);
 
 @sample
 
@@ -142,9 +141,6 @@ lock_writehead == 0 && pause_state != 1 ? (
     last_disp_buf_size = disp_buf_size;
   );
   
-  
-  
-  
   //RECALCULATE DISPLAY BUFFER
   flush_display = gmem[14];
   flush_display == 1 ? (
@@ -216,7 +212,9 @@ function wmod(num, mod) local(v) (
   num < 0 ? mod - ((num*-1) % mod) : num % mod;
 );
 
-function sample_buf(start_index, len) local(temp_buf, track, i) (
+function sample_buf(start_index_initial, len) local(temp_buf, track, i) (
+    start_index = start_index_initial;
+    start_index_initial % 2 == 1 ? (start_index = start_index - 1;);
     temp_buf = buf_len + 1 + disp_buf_size*2;
     temp_buf_len = len;
     
@@ -230,7 +228,7 @@ function sample_buf(start_index, len) local(temp_buf, track, i) (
         
         temp_buf[i] =   buf_pos[x1];
         temp_buf[i+1] = buf_pos[x2];
-        i += 2;
+        i += 2; 
       );
     );
     
