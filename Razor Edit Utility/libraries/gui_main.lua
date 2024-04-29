@@ -115,7 +115,7 @@ function settings_gui(settings, all_settings, selected_preset)
     if rv then save = true end
     reaper.ImGui_SameLine(ctx)
     reaper.ImGui_SetNextItemWidth(ctx, 70)
-    rv, settings.folder_prefix_mode = reaper.ImGui_Combo(ctx, "##E", settings.folder_prefix_mode, "Prefix\0Suffix\0Word\0")
+    rv, settings.folder_prefix_mode = reaper.ImGui_Combo(ctx, "##E", settings.folder_prefix_mode, "Prefix\31Suffix\31Word\31")
     if rv then save = true end
 
     reaper.ImGui_SameLine(ctx)
