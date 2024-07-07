@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" commit="bb2a644ea3f06def2160b4bf011ee3b31728cc11" name="BirdBird ReaScript Testing">
+<index version="1" commit="7825159f726fb9891f57a0aa266741773dcb66c1" name="BirdBird ReaScript Testing">
   <category name="Envelope Palette">
     <reapack name="BirdBird_Envelope Palette.lua" type="script" desc="Envelope Palette">
       <version name="0.8" author="BirdBird" time="2022-04-23T15:04:39Z">
@@ -959,6 +959,10 @@ spe: splits item every given interval, optionally by beats with "b" suffix]]></c
       <version name="0.92" author="BirdBird" time="2024-07-07T22:52:06Z">
         <changelog><![CDATA[+ Fix old items getting stuck on the display with a various combination of preferences.]]></changelog>
         <source main="main">https://github.com/Bird-Bird/ReaScript_Testing/raw/bb2a644ea3f06def2160b4bf011ee3b31728cc11/Note%20Puncher/BirdBird_Note%20Puncher.lua</source>
+      </version>
+      <version name="0.93" author="BirdBird" time="2024-07-07T23:02:32Z">
+        <changelog><![CDATA[+ Fix crashes for MIDI Editors with no takes.]]></changelog>
+        <source main="main">https://github.com/Bird-Bird/ReaScript_Testing/raw/7825159f726fb9891f57a0aa266741773dcb66c1/Note%20Puncher/BirdBird_Note%20Puncher.lua</source>
       </version>
     </reapack>
   </category>
