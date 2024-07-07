@@ -58,7 +58,7 @@ end
 
 function update_note_cache()
   if cache == nil then
-		return
+    return
   end
   
   cache.active_notes = {}
@@ -72,7 +72,7 @@ function update_note_cache()
     end
   end
 
-	needs_redraw = true
+  needs_redraw = true
 end
 
 function get_clusters(notes)
@@ -113,17 +113,17 @@ function get_clusters(notes)
 end
 
 function recalculate_note_cache()
-	cache = nil
+  cache = nil
   
   local item, take, editor = get_item_take()
   if item == nil or take == nil then
     needs_redraw = true
-		return
+    return
   end
   
   cache          = {}
-	cache.editor   = editor
-	cache.track    = reaper.GetMediaItemTrack(item)
+  cache.editor   = editor
+  cache.track    = reaper.GetMediaItemTrack(item)
   cache.item     = item
   cache.take     = take
   cache.notes    = get_notes(take)
@@ -203,23 +203,23 @@ local viewport_scroll = 0
 function draw_or_hit_test(cache, x, y, w, h, draw, hit_test, mouse_x, mouse_y)
   if cache == nil then
     gfx.set(0.9, 0.9, 0.9)
-		gfx.rect(0, 0, gfx.w, gfx.h)
-		gfx.x = 10
-		gfx.y = 10
-		gfx.set(0.1, 0.1, 0.1)
-		gfx.drawstr("No active/selected MIDI take.")
-		return
+    gfx.rect(0, 0, gfx.w, gfx.h)
+    gfx.x = 10
+    gfx.y = 10
+    gfx.set(0.1, 0.1, 0.1)
+    gfx.drawstr("No active/selected MIDI take.")
+    return
   end
 
-	if draw == true then
-		gfx.clear = 0x000000
-	end
+  if draw == true then
+    gfx.clear = 0x000000
+  end
   
   local out_hit_note = -1
 
-	local gui_white_note_width = GUI_WHITE_NOTE_WIDTH*settings.gui_scale
-	local gui_full_note_width  = gui_white_note_width + math.floor(math.max(GUI_NOTE_SEPARATOR*settings.gui_scale, 1) + 0.5)
-	local gui_black_note_width = GUI_BLACK_NOTE_WIDTH*settings.gui_scale
+  local gui_white_note_width = GUI_WHITE_NOTE_WIDTH*settings.gui_scale
+  local gui_full_note_width  = gui_white_note_width + math.floor(math.max(GUI_NOTE_SEPARATOR*settings.gui_scale, 1) + 0.5)
+  local gui_black_note_width = GUI_BLACK_NOTE_WIDTH*settings.gui_scale
   
   --white notes
   local cursor = 0
@@ -248,10 +248,10 @@ function draw_or_hit_test(cache, x, y, w, h, draw, hit_test, mouse_x, mouse_y)
       end
       gfx.rect(note_x, note_y, note_w, note_h)
       
-			if settings.hide_cosmetics == 0 then
-      	gfx.set(0.0, 0.0, 0.0, 0.12)
-      	gfx.line(note_x, note_y, note_x, note_y + note_h)
-			end
+      if settings.hide_cosmetics == 0 then
+        gfx.set(0.0, 0.0, 0.0, 0.12)
+        gfx.line(note_x, note_y, note_x, note_y + note_h)
+      end
     end
     
     if hit_test == true and axis_aligned_bounding_box(note_x, note_y, note_w, note_h, mouse_x, mouse_y) then
@@ -288,17 +288,17 @@ function draw_or_hit_test(cache, x, y, w, h, draw, hit_test, mouse_x, mouse_y)
         gfx.set(0.5, 0.5, 1, 1)
         gfx.rect(note_x + 1, note_y, note_w - 2, note_h - 1)
       else
-				if settings.hide_cosmetics == 0 then
-					gfx.set(0, 0, 0, 0.1)
-        	gfx.rect(note_x - 4, note_y, note_w, note_h)
-				end
+        if settings.hide_cosmetics == 0 then
+          gfx.set(0, 0, 0, 0.1)
+          gfx.rect(note_x - 4, note_y, note_w, note_h)
+        end
         gfx.set(0.1, 0.1, 0.1, 1)
         gfx.rect(note_x, note_y, note_w, note_h)
       end
-			if settings.hide_cosmetics == 0 then
-      	gfx.set(1.0, 1.0, 1.0, 0.2)
-      	gfx.line(note_x + note_w - 2, note_y + 1, note_x + note_w - 2, note_y + note_h - 2)
-			end
+      if settings.hide_cosmetics == 0 then
+        gfx.set(1.0, 1.0, 1.0, 0.2)
+        gfx.line(note_x + note_w - 2, note_y + 1, note_x + note_w - 2, note_y + note_h - 2)
+      end
     end
     
     if hit_test == true and axis_aligned_bounding_box(note_x, note_y, note_w, note_h, mouse_x, mouse_y) then
@@ -341,8 +341,8 @@ function draw_settings_button()
 end
 
 function show_settings()
-	local dock_status = gfx.dock(-1)
-	local is_docked = dock_status & 0x0F > 0
+  local dock_status = gfx.dock(-1)
+  local is_docked = dock_status & 0x0F > 0
   local menu = is_docked and "!Undock" or "Dock"
   menu = menu .. "|>GUI Scale"
   menu = menu .. "|"  .. (settings.gui_scale == 0.5 and "!0.5x" or "0.5x")
@@ -350,41 +350,41 @@ function show_settings()
   menu = menu .. "|"  .. (settings.gui_scale == 1.5 and "!1.5x" or "1.5x")
   menu = menu .. "|"  .. (settings.gui_scale == 2   and "!2x" or "2x")
   menu = menu .. "|<" .. (settings.gui_scale == 4   and "!4x" or "4x")
-	menu = menu .. "|"  .. (settings.hide_cosmetics  == 1 and "!Hide Cosmetics" or "Hide Cosmetics")
+  menu = menu .. "|"  .. (settings.hide_cosmetics  == 1 and "!Hide Cosmetics" or "Hide Cosmetics")
   menu = menu .. "|"  .. "Set Chord Threshold (" .. settings.cluster_threshold .. 'ms)'
   if user_has_js_api == true then
-		menu = menu .. "||" ..  (settings.auto_focus      == 1 and "!Mouse Auto-Focus" or "Mouse Auto-Focus")
-	end
+    menu = menu .. "||" ..  (settings.auto_focus      == 1 and "!Mouse Auto-Focus" or "Mouse Auto-Focus")
+  end
 
   gfx.x, gfx.y = gfx.mouse_x, gfx.mouse_y
   local result = gfx.showmenu(menu)
 
   if result == 1 then
-		if is_docked == true then
-			gfx.dock(0)
-		else
-			gfx.dock(513)
-		end
+    if is_docked == true then
+      gfx.dock(0)
+    else
+      gfx.dock(513)
+    end
   elseif result == 2 then
     settings.gui_scale = 0.5
-		needs_redraw = true
+    needs_redraw = true
   elseif result == 3 then
     settings.gui_scale = 1.0
-		needs_redraw = true
+    needs_redraw = true
   elseif result == 4 then
     settings.gui_scale = 1.5
-		needs_redraw = true
+    needs_redraw = true
   elseif result == 5 then
     settings.gui_scale = 2.0
-		needs_redraw = true
+    needs_redraw = true
   elseif result == 6 then
     settings.gui_scale = 4.0
-		needs_redraw = true
+    needs_redraw = true
   elseif result == 7 then
-		settings.hide_cosmetics = settings.hide_cosmetics  == 1 and 0 or 1
-		needs_redraw = true
-	elseif result == 8 then
-		--threshold
+    settings.hide_cosmetics = settings.hide_cosmetics  == 1 and 0 or 1
+    needs_redraw = true
+  elseif result == 8 then
+    --threshold
     local retval, values = reaper.GetUserInputs("Chord Threshold:", 1, "Value (ms):", "")
     if retval == false then
       return
@@ -397,9 +397,9 @@ function show_settings()
     else
       reaper.ShowMessageBox("Please enter a valid number.", "Invalid Input", 0)
     end
-	elseif result == 9 then
-		settings.auto_focus      = settings.auto_focus == 1 and 0 or 1
-	end
+  elseif result == 9 then
+    settings.auto_focus      = settings.auto_focus == 1 and 0 or 1
+  end
 end
 
 local SHIFT_MAP = {4}
@@ -430,15 +430,15 @@ function do_left_click(pitch)
   local edit_cursor_pos = reaper.GetCursorPosition()
   local edit_cursor_PPQ = reaper.MIDI_GetPPQPosFromProjTime(cache.take, edit_cursor_pos)
   
-	local undo_string = "Note Puncher: "
+  local undo_string = "Note Puncher: "
 
   if cache.active_notes[pitch] == true then
-		local function note_overlaps_cursor(note)
+    local function note_overlaps_cursor(note)
       return edit_cursor_PPQ >= note.startppqpos and edit_cursor_PPQ <= note.endppqpos
     end
 
-		undo_string = undo_string .. "Remove Note" .. (extra_notes == nil and "" or "s")
-		reaper.Undo_BeginBlock()
+    undo_string = undo_string .. "Remove Note" .. (extra_notes == nil and "" or "s")
+    reaper.Undo_BeginBlock()
 
     local notes_to_delete = {}
 
@@ -465,9 +465,9 @@ function do_left_click(pitch)
       ::continue::
     end
 
-		reaper.MIDI_Sort(cache.take)
-		reaper.MarkTrackItemsDirty(cache.track, cache.item)
-		reaper.Undo_EndBlock(undo_string, -1)
+    reaper.MIDI_Sort(cache.take)
+    reaper.MarkTrackItemsDirty(cache.track, cache.item)
+    reaper.Undo_EndBlock(undo_string, -1)
   else
     local cluster_id = locate_cluster_id_by_ppq_position(cache, edit_cursor_PPQ)
     if cluster_id == nil then
@@ -475,8 +475,8 @@ function do_left_click(pitch)
     end
     local cluster = cache.clusters[cluster_id]
   
-		undo_string = undo_string .. "Insert Note" .. (extra_notes == nil and "" or "s")
-		reaper.Undo_BeginBlock()
+    undo_string = undo_string .. "Insert Note" .. (extra_notes == nil and "" or "s")
+    reaper.Undo_BeginBlock()
 
     local minppq, maxppq, average_velocity = get_cluster_stats(cluster)
     reaper.MIDI_InsertNote(cache.take, false, false, minppq, maxppq, 1, pitch, average_velocity, true)
@@ -485,9 +485,9 @@ function do_left_click(pitch)
         reaper.MIDI_InsertNote(cache.take, false, false, minppq, maxppq, 1, pitch + extra_notes[i], average_velocity, true)
       end
     end
-		reaper.MIDI_Sort(cache.take)
-		reaper.MarkTrackItemsDirty(cache.track, cache.item)
-		reaper.Undo_EndBlock(undo_string, -1)
+    reaper.MIDI_Sort(cache.take)
+    reaper.MarkTrackItemsDirty(cache.track, cache.item)
+    reaper.Undo_EndBlock(undo_string, -1)
   end
 end
 
@@ -504,14 +504,14 @@ function get_previous_ppq_position(position, nudge)
   if cluster_id == nil then
     local found_cluster = false
     
-		--wrap back to start if at the end of the item
-		local time = reaper.GetMediaItemInfo_Value(cache.item, "D_POSITION") + reaper.GetMediaItemInfo_Value(cache.item, "D_LENGTH")
-		local end_ppq = reaper.MIDI_GetPPQPosFromProjTime(cache.take, time)
-		if position == end_ppq then
-			return 0
-		end
+    --wrap back to start if at the end of the item
+    local time = reaper.GetMediaItemInfo_Value(cache.item, "D_POSITION") + reaper.GetMediaItemInfo_Value(cache.item, "D_LENGTH")
+    local end_ppq = reaper.MIDI_GetPPQPosFromProjTime(cache.take, time)
+    if position == end_ppq then
+      return 0
+    end
 
-		--find next best cluster
+    --find next best cluster
     for i = #cache.clusters, 1, -1 do
       local cluster = cache.clusters[i]
       local minppqpos, maxppqpos = get_cluster_stats(cluster)
@@ -520,7 +520,7 @@ function get_previous_ppq_position(position, nudge)
       end
     end
       
-		--move to start
+    --move to start
     return 0
   else
     if cluster_id == 1 then
@@ -547,13 +547,13 @@ function get_next_ppq_position(position, nudge)
 
   local cluster_id = locate_cluster_id_by_ppq_position(cache, position)
   if cluster_id == nil then
-		local found_cluster = false
+    local found_cluster = false
     
     for i = 1, #cache.clusters do
       local cluster = cache.clusters[i]
       local minppqpos, maxppqpos = get_cluster_stats(cluster)
       if minppqpos > position then
-				return minppqpos + ppq_nudge
+        return minppqpos + ppq_nudge
       end
     end
 
@@ -582,56 +582,56 @@ end
 local NUDGE_BACK    = 0
 local NUDGE_FORWARD = 1
 function nudge_cursor(nudge_type)
-	if cache == nil then
-		return
-	end
+  if cache == nil then
+    return
+  end
 
   local edit_cursor_pos = reaper.GetCursorPosition()
   local edit_cursor_PPQ = reaper.MIDI_GetPPQPosFromProjTime(cache.take, edit_cursor_pos)
-	local position = nudge_type == NUDGE_BACK and get_previous_ppq_position(edit_cursor_PPQ, true) or
-																			          get_next_ppq_position(edit_cursor_PPQ, true)
+  local position = nudge_type == NUDGE_BACK and get_previous_ppq_position(edit_cursor_PPQ, true) or
+                                                get_next_ppq_position(edit_cursor_PPQ, true)
 
-	if not position then
-		return
-	end
+  if not position then
+    return
+  end
 
-	local time = reaper.MIDI_GetProjTimeFromPPQPos(cache.take, position)
-	reaper.SetEditCurPos(time, false, false)
+  local time = reaper.MIDI_GetProjTimeFromPPQPos(cache.take, position)
+  reaper.SetEditCurPos(time, false, false)
 end
 
 function nudge_cursor_grid(nudge_type)
-	if cache == nil then
-		goto arrange
-	end
+  if cache == nil then
+    goto arrange
+  end
 
-	--send the command to the active midi editor
-	if cache.editor ~= nil then
-		if nudge_type == NUDGE_BACK then
-			reaper.MIDIEditor_OnCommand(cache.editor, 40047)
-		else
-			reaper.MIDIEditor_OnCommand(cache.editor, 40048)
-		end		
-	end
+  --send the command to the active midi editor
+  if cache.editor ~= nil then
+    if nudge_type == NUDGE_BACK then
+      reaper.MIDIEditor_OnCommand(cache.editor, 40047)
+    else
+      reaper.MIDIEditor_OnCommand(cache.editor, 40048)
+    end    
+  end
 
-	--send it to arrange
-	::arrange::
-	if nudge_type == NUDGE_BACK then
-		reaper.Main_OnCommand(40646, -1)
-	else
-		reaper.Main_OnCommand(40647, -1)
-	end	
-	return
+  --send it to arrange
+  ::arrange::
+  if nudge_type == NUDGE_BACK then
+    reaper.Main_OnCommand(40646, -1)
+  else
+    reaper.Main_OnCommand(40647, -1)
+  end  
+  return
 end
 
 function try_mouse_autofocus()
-	if user_has_js_api == false then
-		return
-	end
+  if user_has_js_api == false then
+    return
+  end
 
-	local focused_window = reaper.JS_Window_GetFocus()
-	if axis_aligned_bounding_box(0, 0, gfx.w, gfx.h, gfx.mouse_x, gfx.mouse_y) and focused_window ~= hwnd then
-		reaper.JS_Window_SetFocus(hwnd)
-	end
+  local focused_window = reaper.JS_Window_GetFocus()
+  if axis_aligned_bounding_box(0, 0, gfx.w, gfx.h, gfx.mouse_x, gfx.mouse_y) and focused_window ~= hwnd then
+    reaper.JS_Window_SetFocus(hwnd)
+  end
 end
 
 local last_edit_cursor_position = reaper.GetCursorPosition()
@@ -640,45 +640,45 @@ local last_change_count         = reaper.GetProjectStateChangeCount(last_active_
 local last_gfx_w                = gfx.w
 local last_gfx_h                = gfx.h
 function try_invalidate_cache()
-	local invalidated = false
-	
-	--project tab changed
-	local active_project = reaper.EnumProjects(-1)
-	if last_active_project ~= active_project then
-		recalculate_note_cache()
-		invalidated = true
-	end
-	last_active_project = active_project
+  local invalidated = false
+  
+  --project tab changed
+  local active_project = reaper.EnumProjects(-1)
+  if last_active_project ~= active_project then
+    recalculate_note_cache()
+    invalidated = true
+  end
+  last_active_project = active_project
 
-	if invalidated == true then 
-		return 
-	end
+  if invalidated == true then 
+    return 
+  end
 
-	--undo history changed
-	local change_count = reaper.GetProjectStateChangeCount(active_project)
-	if last_change_count ~= change_count then
-		recalculate_note_cache()
-		invalidated = true
-	end
-	last_change_count = change_count
+  --undo history changed
+  local change_count = reaper.GetProjectStateChangeCount(active_project)
+  if last_change_count ~= change_count then
+    recalculate_note_cache()
+    invalidated = true
+  end
+  last_change_count = change_count
 
-	if invalidated == true then 
-		return 
-	end
+  if invalidated == true then 
+    return 
+  end
 
-	--cursor moved
-	local cursor_position = reaper.GetCursorPosition()
-	if last_edit_cursor_position ~= cursor_position then
+  --cursor moved
+  local cursor_position = reaper.GetCursorPosition()
+  if last_edit_cursor_position ~= cursor_position then
     update_note_cache()
-	end
-	last_edit_cursor_position = cursor_position
+  end
+  last_edit_cursor_position = cursor_position
 
-	--window resized
-	if last_gfx_w ~= gfx.w or last_gfx_h ~= gfx.h then
-		needs_redraw = true
-	end
-	last_gfx_w = gfx.w
-	last_gfx_h = gfx.h
+  --window resized
+  if last_gfx_w ~= gfx.w or last_gfx_h ~= gfx.h then
+    needs_redraw = true
+  end
+  last_gfx_w = gfx.w
+  last_gfx_h = gfx.h
 end
 
 local last_LMB = gfx.mouse_cap&1   == 1
@@ -701,12 +701,12 @@ function main()
 
   --left click
   if last_LMB == false and LMB == true then
-		if mouse_x >= gfx.w - GUI_SETTINGS_BUTTON_RANGE and mouse_y <= GUI_SETTINGS_BUTTON_RANGE then
-			show_settings(menu)
-		else
-    	local hit = draw_or_hit_test(cache, 0, 0, gfx.w, gfx.h, false, true, mouse_x, mouse_y)
-    	do_left_click(hit)
-		end
+    if mouse_x >= gfx.w - GUI_SETTINGS_BUTTON_RANGE and mouse_y <= GUI_SETTINGS_BUTTON_RANGE then
+      show_settings(menu)
+    else
+      local hit = draw_or_hit_test(cache, 0, 0, gfx.w, gfx.h, false, true, mouse_x, mouse_y)
+      do_left_click(hit)
+    end
   end
   last_LMB = LMB
   
@@ -722,13 +722,13 @@ function main()
   end
   last_MMB = MMB
 
-	try_invalidate_cache()
-	
-	if settings.auto_focus == 1 then
-		try_mouse_autofocus(mouse_x, mouse_y)
-	end
+  try_invalidate_cache()
   
-	--hotkeys
+  if settings.auto_focus == 1 then
+    try_mouse_autofocus(mouse_x, mouse_y)
+  end
+  
+  --hotkeys
   local char = gfx.getchar()
   if char == 32 then
     reaper.Main_OnCommand(40044, -1) --transport
@@ -736,17 +736,17 @@ function main()
     nudge_cursor(0)
   elseif char == 50 then
     nudge_cursor(1)
-	elseif char == 33 then
-		nudge_cursor_grid(0)
-	elseif char == 39 then
-		nudge_cursor_grid(1)
-	end
+  elseif char == 33 then
+    nudge_cursor_grid(0)
+  elseif char == 39 then
+    nudge_cursor_grid(1)
+  end
 
   if char ~= -1 and char ~= 27 then
     if needs_redraw == true then
       draw_or_hit_test(cache, 0, 0, gfx.w, gfx.h, true, false)
       draw_settings_button()
-			needs_redraw = false
+      needs_redraw = false
       gfx.update()
     end
     reaper.defer(main)
@@ -756,7 +756,7 @@ end
 local EXT_STATE_NAME = "birdbird_notepuncher"
 function save_settings()
   reaper.SetExtState(EXT_STATE_NAME, "gui_scale",          tostring(settings.gui_scale),       true)
-	reaper.SetExtState(EXT_STATE_NAME, "auto_focus",         tostring(settings.auto_focus),      true)
+  reaper.SetExtState(EXT_STATE_NAME, "auto_focus",         tostring(settings.auto_focus),      true)
   reaper.SetExtState(EXT_STATE_NAME, "hide_cosmetics",     tostring(settings.hide_cosmetics),  true)
   reaper.SetExtState(EXT_STATE_NAME, "cluster_threshold",  tostring(settings.cluster_threshold),  true)
   
@@ -770,7 +770,7 @@ end
 
 function load_settings()
   settings.gui_scale         = tonumber(reaper.GetExtState(EXT_STATE_NAME, "gui_scale"))         or 1
-	settings.auto_focus        = tonumber(reaper.GetExtState(EXT_STATE_NAME, "auto_focus"))        or 0
+  settings.auto_focus        = tonumber(reaper.GetExtState(EXT_STATE_NAME, "auto_focus"))        or 0
   settings.hide_cosmetics    = tonumber(reaper.GetExtState(EXT_STATE_NAME, "hide_cosmetics"))    or 0
   settings.cluster_threshold = tonumber(reaper.GetExtState(EXT_STATE_NAME, "cluster_threshold")) or 175
   settings.dock              = tonumber(reaper.GetExtState(EXT_STATE_NAME, "dock"))              or 0
@@ -785,7 +785,7 @@ reaper.atexit(save_settings)
 
 gfx.init("Note Puncher", settings.window_w, settings.window_h, settings.dock, settings.window_x, settings.window_y)
 if user_has_js_api == true then
-	hwnd = reaper.JS_Window_Find("Note Puncher", true)
+  hwnd = reaper.JS_Window_Find("Note Puncher", true)
 end
 
 recalculate_note_cache()
