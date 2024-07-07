@@ -2,7 +2,6 @@
 -- @version 0.9
 -- @author BirdBird
 -- @changelog
--- @changelog
 --  + Initial release.
 
 local cache           = nil
