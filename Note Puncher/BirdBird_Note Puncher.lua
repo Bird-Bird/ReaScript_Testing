@@ -1,8 +1,8 @@
 -- @description Note Puncher
--- @version 0.91
+-- @version 0.92
 -- @author BirdBird
 -- @changelog
---  + Initial release.
+--  + Fix old items getting stuck on the display with a various combination of preferences.
 
 local cache           = nil
 local settings        = {}
@@ -639,6 +639,8 @@ local last_active_project       = reaper.EnumProjects(-1)
 local last_change_count         = reaper.GetProjectStateChangeCount(last_active_project)
 local last_gfx_w                = gfx.w
 local last_gfx_h                = gfx.h
+local last_editor               = reaper.MIDIEditor_GetActive()
+local last_editor_take          = last_editor ~= nil and reaper.MIDIEditor_GetTake(last_editor) or nil
 function try_invalidate_cache()
   local invalidated = false
   
@@ -661,6 +663,31 @@ function try_invalidate_cache()
     invalidated = true
   end
   last_change_count = change_count
+
+  if invalidated == true then 
+    return 
+  end
+
+  --active take of the active editor changed
+  local editor = reaper.MIDIEditor_GetActive()
+  if last_editor ~= editor then
+    recalculate_note_cache()
+    invalidated = true
+  end
+  last_editor = editor
+
+  if invalidated == true then 
+    return 
+  end
+
+  if last_editor ~= nil and editor ~= nil then
+    local take = reaper.MIDIEditor_GetTake(editor)
+    if last_editor_take ~= take then
+      recalculate_note_cache()
+      invalidated = true
+    end
+    last_editor_take = take
+  end
 
   if invalidated == true then 
     return 
