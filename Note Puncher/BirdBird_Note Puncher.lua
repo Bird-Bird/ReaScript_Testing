@@ -2,7 +2,8 @@
 -- @version 0.9
 -- @author BirdBird
 -- @changelog
--- + Initial release.
+-- @changelog
+--  + Initial release.
 
 local cache           = nil
 local settings        = {}
