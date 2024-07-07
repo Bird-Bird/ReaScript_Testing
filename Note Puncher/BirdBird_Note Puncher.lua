@@ -1,8 +1,8 @@
 -- @description Note Puncher
--- @version 0.92
+-- @version 0.93
 -- @author BirdBird
 -- @changelog
---  + Fix old items getting stuck on the display with a various combination of preferences.
+--  + Fix crashes for MIDI Editors with no takes.
 
 local cache           = nil
 local settings        = {}
@@ -15,6 +15,9 @@ function get_item_take()
   
   if editor ~= nil then
     local take = reaper.MIDIEditor_GetTake(editor)
+    if take == nil then
+      return nil, nil, nil
+    end
     local item = reaper.GetMediaItemTake_Item(take)
     return item, take, editor
   else
