@@ -1,8 +1,8 @@
 -- @description Note Puncher
--- @version 0.93
+-- @version 0.94
 -- @author BirdBird
 -- @changelog
---  + Fix crashes for MIDI Editors with no takes.
+--  + Added right drag modifier to offset the view.
 
 local cache           = nil
 local settings        = {}
@@ -751,6 +751,18 @@ function main()
     gfx.setcursor(0)
   end
   last_MMB = MMB
+
+  --right drag
+  if last_RMB == true and RMB == true then
+    viewport_scroll = math.max(0, viewport_scroll - delta_x/(GUI_FULL_NOTE_WIDTH*settings.gui_scale))
+    if cache ~= nil and math.abs(delta_x) > 0 then
+      needs_redraw = true
+    end
+    gfx.setcursor(429, 'arrange_handscroll')
+  elseif last_RMB == true and RMB == false then
+    gfx.setcursor(0)
+  end
+  last_RMB = RMB
 
   try_invalidate_cache()
   
