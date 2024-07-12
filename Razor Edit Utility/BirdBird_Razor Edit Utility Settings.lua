@@ -1,5 +1,5 @@
 -- @description Razor Edit Utility
--- @version 0.7.4
+-- @version 0.7.5pre
 -- @author BirdBird
 -- @provides
 --  [main]BirdBird_Razor Edit Utility Toolbar.lua
@@ -26,7 +26,7 @@
 --  [nomain]libraries/settings.lua
 --  [nomain]libraries/user_files/user_files.txt
 --@changelog
--- Fixed crash on launch.
+-- Added option to preserve envelope selection.
 
 
 function p(msg) reaper.ShowConsoleMsg(tostring(msg) .. '\n') end

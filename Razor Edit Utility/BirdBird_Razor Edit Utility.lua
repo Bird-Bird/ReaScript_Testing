@@ -41,9 +41,10 @@ function on_project_change(settings)
   local move_edit_cursor = settings.move_cursor
   local seek_play        = settings.seek_play
 
-  local select_tracks    = settings.select_tracks
-  local solo_tracks      = settings.solo_tracks
-  local exclude_folders  = settings.exclude_folders
+  local select_tracks      = settings.select_tracks
+  local solo_tracks        = settings.solo_tracks
+  local exclude_folders    = settings.exclude_folders
+  local unselect_envelopes = settings.unselect_envelopes
 
   local select_items         = settings.select_items
   local exclude_larger_items = settings.exclude_out_bounds
@@ -87,9 +88,14 @@ function on_project_change(settings)
   
   --Unselect
   if select_tracks then
-    reaper.Main_OnCommand(40297, 0)
+    local selected_envelope = nil
+    if unselect_envelopes == true then
+      reaper.Main_OnCommand(40297, 0)
+    else
+      selected_envelope = reaper.GetSelectedEnvelope(0)
+    end
     
-    --Select
+    --Select Tracks
     for i = 1, #edits do
       local track = edits[i].track
       local exclude, ch = false
@@ -102,6 +108,10 @@ function on_project_change(settings)
       if not exclude then
         reaper.SetTrackSelected(track, true)
       end
+    end
+
+    if selected_envelope ~= nil then
+      reaper.SetCursorContext(2, selected_envelope)
     end
   end
 

@@ -163,6 +163,8 @@ function settings_gui(settings, all_settings, selected_preset)
       end_disable(not settings.select_tracks)
       rv, settings.solo_tracks = reaper.ImGui_Checkbox(ctx, "Solo tracks", settings.solo_tracks)
       if rv then save = true end
+      rv, settings.unselect_envelopes = reaper.ImGui_Checkbox(ctx, "Unselect Envelopes", settings.unselect_envelopes)
+      if rv then save = true end
     reaper.ImGui_Unindent(ctx, indent)
     
     --Items

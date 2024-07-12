@@ -24,6 +24,7 @@ function get_default_setting()
     --SELECTION
     select_tracks = false,
       exclude_folders = false,
+      unselect_envelopes = true,
 
     select_items = false,
       add_to_selection = false,
@@ -46,6 +47,8 @@ function validate_old_settings(all_settings)
   local action_map = get_all_actions_map()
   for i = 1, #all_settings do
     local settings = all_settings[i]
+    
+    --actions
     if not settings["actions"] then
       settings.actions = {}
     else
@@ -58,6 +61,11 @@ function validate_old_settings(all_settings)
         end
       end
     end
+
+    --unselect envelopes
+    if settings["unselect_envelopes"] == nil then
+      settings.unselect_envelopes = true
+    end
   end
 end
 
@@ -68,16 +76,31 @@ function get_settings()
     return get_default_settings()
   else
     local st = settings:read("*all")
-    st_json = json.decode(st)
-    validate_old_settings(st_json)
-    return st_json
+    settings:close()
+
+    local success, result = pcall(json.decode, st)
+    if success == false then
+      reaper.defer(function()  
+        reaper.ShowMessageBox("Corrupted preset file detected.\nPlease report this in the script thread, including the console output after hitting 'OK'.", "Razor Edit Utility - Error", 0)
+        reaper.ShowConsoleMsg("\n" .. st .. "\n")
+      end)
+      return get_default_settings()
+    end
+    validate_old_settings(result)
+    return result
   end
 end
 
 function save_settings(data)
   local settings = io.open(path .. '/user_files/presets.json', 'w')
-  local d = json.encode(data)
-  settings:write(d)
+  local success, result = pcall(json.encode, data)
+  if success == false then
+    reaper.defer(function()  
+      reaper.ShowMessageBox("Corrupted preset file detected, Razor Edit Utility will keep using last known presets instead.\nPlease report this in the script thread.", "Razor Edit Utility - Error", 0)
+    end)
+    return
+  end
+  settings:write(result)
   settings:close()
 end
 
