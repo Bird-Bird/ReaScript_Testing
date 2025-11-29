@@ -76,6 +76,10 @@ v arg1: Offsets item volume in dBs.
 - arg1: Offset in dBs.
 vr arg1: Creates a volume ramp offsetting volume every item.
 - arg1: Offset in dBs.
+pan arg1: Offsets the stereo pan of selected items.
+- arg1: Pan offset value (e.g., 0.1 shifts 10% to the right, -0.1 shifts 10% to the left).
+panr arg1: Creates a stereo pan ramp across selected items.
+- arg1: Pan change per item (e.g., 0.1 for 10% right shift per item).
 rev: Reverses selected items, will also reverse envelopes and fades.
 spl arg1: Splits items.
 - arg1: Number of splits

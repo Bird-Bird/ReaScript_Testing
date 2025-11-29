@@ -63,6 +63,8 @@ local grammar_table = {
   ["ten"] = {func = tension, args = {"num"}},
   ["v"]   = {func = volume, args = {"num"}},
   ["vr"]   = {func = volume_ramp, args = {"num"}},
+  ["pan"]  = {func = pan, args = {"num"}},
+  ["panr"] = {func = pan_ramp, args = {"num"}},
   ["si"]  = {func = select_index, args = {"num"}},
   ["sai"]  = {func = select_at_index, args = {"num"}},
   ["di"]  = {func = deselect_index, args = {"num"}},
@@ -377,5 +379,3 @@ function ext_clear_external_selections()
   reaper.Main_OnCommand(40289, 0)
   fc_reset_to_initial_state()
 end
-
-

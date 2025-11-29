@@ -550,3 +550,40 @@ function offset(length)
     reaper.SetMediaItemTakeInfo_Value(take, 'D_STARTOFFS', value)
   end
 end
+
+local function clamp_pan_value(val)
+  return math.max(-1.0, math.min(1.0, val))
+end
+
+function pan(pan_offset)
+  local items = get_selected_items()
+  pan_offset = tonumber(pan_offset) or 0
+  if #items == 0 then return end
+
+  for i = 1, #items do
+    local item = items[i]
+    local take = reaper.GetActiveTake(item) -- Ou GetMediaItemTake(item, 0) si tu veux toujours le premier take
+    if take then
+      local current_pan = reaper.GetMediaItemTakeInfo_Value(take, 'D_PAN')
+      local new_pan = clamp_pan_value(current_pan + pan_offset)
+      reaper.SetMediaItemTakeInfo_Value(take, 'D_PAN', new_pan)
+    end
+  end
+end
+
+function pan_ramp(pan_delta_per_item)
+  local items = get_selected_items()
+  pan_delta_per_item = tonumber(pan_delta_per_item) or 0
+  if #items == 0 then return end
+
+  for i = 1, #items do
+    local item = items[i]
+    local take = reaper.GetActiveTake(item) -- Ou GetMediaItemTake(item, 0)
+    if take then
+      local current_pan = reaper.GetMediaItemTakeInfo_Value(take, 'D_PAN')
+      local pan_offset_for_this_item = pan_delta_per_item * (i - 1) -- Le premier item (i=1) a un offset de 0
+      local new_pan = clamp_pan_value(current_pan + pan_offset_for_this_item)
+      reaper.SetMediaItemTakeInfo_Value(take, 'D_PAN', new_pan)
+    end
+  end
+end
