@@ -88,6 +88,7 @@ function selection_indicator(sel_data)
     if #sel_data > 1 then
         reaper.ImGui_EndDisabled(ctx)
     end
+
 end
 
 function init_empty_tracks(sel_data)
@@ -102,14 +103,18 @@ function init_empty_tracks(sel_data)
 end
 
 local bt_labels = {
-  add = 'Add',
-  del = 'Delete',
-  col = 'Collapse'
+  add = 'Dup',
+  new = 'New',
+  del = '-',
+  col = 'Collapse',
+  set = '?'
 }
 local bt_labels_slim = {
-  add = '+',
+  add = '+=',
+  new = '+',
   del = '-',
-  col = 'c'
+  col = 'c',
+  set = '?'
 }
 function buttons(sel_data, switch)
     local lb = settings.slim_mode and bt_labels_slim or bt_labels
@@ -130,6 +135,25 @@ function buttons(sel_data, switch)
         reaper.PreventUIRefresh(-1)
         reaper.UpdateArrange()        
     end
+
+    --ADD NEW EMPTY VERSION
+    reaper.ImGui_SameLine(ctx)
+    if theme_button(ctx, lb.new) then
+        init_empty_tracks(sel_data)
+        reaper.PreventUIRefresh(1)
+        reaper.Undo_BeginBlock()
+        local clear = 1
+        for i = 1, #sel_data do 
+            local track = sel_data[i].track
+            local state = get_ext_state(track)
+            add_new_version(track, state, clear)
+            if settings.prefix_tracks then prefix_track_fast(track) end
+        end
+        reaper.Undo_EndBlock('Track Versions - Add New Empty Version', -1)
+        reaper.PreventUIRefresh(-1)
+        reaper.UpdateArrange()        
+    end
+
 
     --DELETE VERSION
     reaper.ImGui_SameLine(ctx)
@@ -159,9 +183,11 @@ function buttons(sel_data, switch)
         end
     end
 
+
     --COLLAPSE VERSIONS
-    local bt_offs = settings.slim_mode and 14 or calc_button_offs
-    right_align_padding(bt_offs)
+   -- local bt_offs = settings.slim_mode and 14 or calc_button_offs+32
+   -- right_align_padding(bt_offs)
+   reaper.ImGui_SameLine(ctx)
     if theme_button(ctx, lb.col) then
         init_empty_tracks(sel_data)
         reaper.PreventUIRefresh(1)
@@ -176,6 +202,19 @@ function buttons(sel_data, switch)
         reaper.PreventUIRefresh(-1)
         reaper.UpdateArrange()        
     end
+
+    --SETTINGS ME NU
+    local bt_offs = settings.slim_mode and 14 or calc_button_offs-44
+    right_align_padding(bt_offs)
+    --reaper.ImGui_SameLine(ctx)
+    if theme_button(ctx, lb.set) then
+
+       reaper.ImGui_OpenPopup(ctx, 'Settings')
+
+    end
+
+
+
 
     --SWITCH VERSIONS
     if switch then

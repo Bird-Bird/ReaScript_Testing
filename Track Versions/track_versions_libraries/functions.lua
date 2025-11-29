@@ -130,9 +130,37 @@ function get_selected_tracks()
 
     local tracks = {}
     local min_versions = math.huge
-    local selected_track_count = reaper.CountSelectedTracks(0)
-    for i = 0, selected_track_count - 1 do
+    local track_count = reaper.CountSelectedTracks(0)
+    if track_count == 0 then return {}, 0, -1 end
+
+    local selected_and_grouped_tracks = {}
+
+
+    for i = 0, track_count - 1 do
         local track = reaper.GetSelectedTrack(0, i)
+
+        reftrackgrouplow=reaper.GetSetTrackGroupMembership( track, 'MEDIA_EDIT_LEAD', 0, 0  )
+        reftrackgrouphi=reaper.GetSetTrackGroupMembershipHigh( track, 'MEDIA_EDIT_LEAD',0, 0 )
+
+        -- if track is MEDIA_EDIT_LEAD of at least one group then continue
+        if reftrackgrouplow+reftrackgrouplow ~=0 then
+         
+            for tridx =1, reaper.CountTracks(0) do
+                local trk=reaper.GetTrack(0, tridx-1)
+                trkgrouplow=reaper.GetSetTrackGroupMembership( trk, 'MEDIA_EDIT_FOLLOW', 0, 0 )
+                trkgrouphi=reaper.GetSetTrackGroupMembershipHigh( trk, 'MEDIA_EDIT_FOLLOW', 0, 0 )
+              
+                if reftrackgrouplow & trkgrouplow ~=0 or reftrackgrouphi & trkgrouphi ~=0
+                then table.insert(selected_and_grouped_tracks, trk)
+                end
+            end
+        else table.insert(selected_and_grouped_tracks, track)
+        end
+    end
+
+
+    for i = 1, #selected_and_grouped_tracks do
+        local track = selected_and_grouped_tracks[i]
         local state = get_ext_state(track)
 
         --INIT EMPTY TRACKS
@@ -145,15 +173,76 @@ function get_selected_tracks()
             all_selected = all_selected and (state.data.selected == last_selected)
         end
         
-        tracks[i+1] = {}
-        tracks[i+1].track = track
-        tracks[i+1].state = state
+        tracks[i] = {}
+        tracks[i].track = track
+        tracks[i].state = state
 
         last_selected = state.data.selected
     end
 
     return tracks, min_versions, all_selected and last_selected or -1
 end
+
+function get_selected_tracks_fast()
+    local track_count = reaper.CountSelectedTracks(0)
+    if track_count == 0 then return {}, 0, -1 end
+
+    local t = {}
+    local min_versions = math.huge
+    local max_versions = 0
+    local common_sel = -1
+
+    local selected_and_grouped_tracks = {}
+
+-- build table with all selected and grouped tracks
+    for i = 0, track_count - 1 do
+        local track = reaper.GetSelectedTrack(0, i)
+
+        reftrackgrouplow=reaper.GetSetTrackGroupMembership( track, 'MEDIA_EDIT_LEAD', 0, 0  )
+        reftrackgrouphi=reaper.GetSetTrackGroupMembershipHigh( track, 'MEDIA_EDIT_LEAD',0, 0 )
+
+        -- if track is MEDIA_EDIT_LEAD of at least one group then continue
+        if reftrackgrouplow+reftrackgrouplow ~=0 then
+         
+            for tridx =1, reaper.CountTracks(0) do
+                local trk=reaper.GetTrack(0, tridx-1)
+                trkgrouplow=reaper.GetSetTrackGroupMembership( trk, 'MEDIA_EDIT_FOLLOW', 0, 0 )
+                trkgrouphi=reaper.GetSetTrackGroupMembershipHigh( trk, 'MEDIA_EDIT_FOLLOW', 0, 0 )
+              
+                if reftrackgrouplow & trkgrouplow ~=0 or reftrackgrouphi & trkgrouphi ~=0
+                then table.insert(selected_and_grouped_tracks, trk)
+                end
+            end
+        else table.insert(selected_and_grouped_tracks, track)
+        end
+    end
+
+    --loop through that table
+    for i = 1, #selected_and_grouped_tracks do
+        local track = selected_and_grouped_tracks[i]
+        local query = get_ext_state_query(track)
+        if query.num_versions == 0 then query.num_versions = 1 end
+        table.insert(t, {track = track, query = query})
+        
+        min_versions = math.min(min_versions, query.num_versions)
+        max_versions = math.max(max_versions, query.num_versions)
+
+        if common_sel == -1 then 
+            common_sel = query.selected 
+        elseif common_sel ~= -1 and query.selected ~= common_sel then
+            common_sel = 0
+        end
+
+
+
+    end
+    local no_versions = max_versions == 0
+    return t, min_versions, common_sel, no_versions
+end
+
+
+--original get_selected_tracks_fats()
+--[[ 
 
 function get_selected_tracks_fast()
     local track_count = reaper.CountSelectedTracks(0)
@@ -177,10 +266,15 @@ function get_selected_tracks_fast()
         elseif common_sel ~= -1 and query.selected ~= common_sel then
             common_sel = 0
         end
+
+
+
     end
     local no_versions = max_versions == 0
     return t, min_versions, common_sel, no_versions
 end
+--]]
+
 
 
 --ITEMS
