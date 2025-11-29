@@ -427,3 +427,15 @@ function validate_tag_name(lookup, name)
         return false
     end
 end
+
+-- Fergler
+function focus_arrange_window(force_delay)
+    if force_delay then
+        reaper.defer(function() 
+            reaper.defer(
+                reaper.SetCursorContext(1))
+        end)
+    else
+        eaper.SetCursorContext(1)
+    end
+end

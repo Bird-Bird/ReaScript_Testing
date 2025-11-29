@@ -154,6 +154,9 @@ local text
 local selected_tag = nil
 local popup_dat = nil
 
+-- Fergler
+local first_run = true
+
 local tags, lookup, new_tracks
 local last_project, last_change_count = nil, 0
 function frame()
@@ -585,6 +588,20 @@ function loop()
     if visible then
         frame()
         reaper.ImGui_End(ctx)
+    end
+    
+    -- Fergler
+    local is_text_input_active = reaper.ImGui_IsAnyItemActive(ctx)
+    
+    -- Inlined track_ui_state function - check for mouse release and focus arrange window
+    local mouse_released = reaper.ImGui_IsMouseReleased(ctx, reaper.ImGui_MouseButton_Left()) and not is_text_input_active
+    if mouse_released then
+        focus_arrange_window(true)
+    end
+
+    if reaper.ImGui_IsKeyPressed(ctx, reaper.ImGui_Key_Escape()) or first_run then
+        focus_arrange_window(true)
+        first_run = false
     end
     
     if show_style_editor then
