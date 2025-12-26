@@ -140,6 +140,7 @@ local default_settings = {
     auto_load_tags_merge = true,
     auto_hide_tracks_when_tag_active = true,
     auto_tag_tracks = false,
+    shift_for_multiselect = true,
 }
 function get_settings()
     local file_name = 'settings.json'
@@ -426,4 +427,31 @@ function validate_tag_name(lookup, name)
     else
         return false
     end
+end
+
+function load_multiple_tags(tags_table)
+    if #tags_table == 0 then
+        show_all_tracks()
+        return
+    end
+    
+    reaper.PreventUIRefresh(1)
+    local tracks = get_all_tracks()
+    for i = 1, #tracks do
+        local track = tracks[i]
+        local ext = get_ext_state(track)
+        local should_show = false
+        
+        for _, tag in ipairs(tags_table) do
+            if ext.tags[tag.name] then
+                should_show = true
+                break
+            end
+        end
+        
+        set_track_visible(track, ext, should_show and 1 or 0)
+        reaper.SetTrackSelected(track, false)
+    end
+    reaper.PreventUIRefresh(-1)
+    reaper.TrackList_AdjustWindows(false)
 end

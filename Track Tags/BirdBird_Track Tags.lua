@@ -37,7 +37,7 @@ local flt_min, flt_max = reaper.ImGui_NumericLimits_Float()
 --SETTINGS
 local settings = get_settings()
 function settings_menu()
-    reaper.ImGui_SetNextWindowSize(ctx, 542, 132, window_resize_flag)
+    reaper.ImGui_SetNextWindowSize(ctx, 542, 188, window_resize_flag)
     if reaper.ImGui_BeginPopupModal(ctx, 'Settings', nil) then
         reaper.ImGui_PushStyleColor(ctx, reaper.ImGui_Col_FrameBgHovered(), 0x12BD993A)
         local save = false
@@ -63,10 +63,20 @@ function settings_menu()
         reaper.ImGui_Separator(ctx)
 
         r, settings.auto_hide_tracks_when_tag_active = reaper.ImGui_Checkbox(ctx, 
-        '##3',
+        '##s3',
         settings.auto_hide_tracks_when_tag_active)
         reaper.ImGui_SameLine(ctx)
         reaper.ImGui_TextWrapped(ctx, 'Automatically hide tracks when they are removed from the active tag.')
+        if r then 
+            save = true
+        end
+        reaper.ImGui_Separator(ctx)
+        
+        r, settings.shift_for_multiselect = reaper.ImGui_Checkbox(ctx, 
+        '##s4',
+        settings.shift_for_multiselect)
+        reaper.ImGui_SameLine(ctx)
+        reaper.ImGui_TextWrapped(ctx, 'Require Shift key to select multiple tags (when disabled, regular click will and shift will exclusively activate a tag).')
         if r then 
             save = true
         end
@@ -151,7 +161,7 @@ end
 
 local text_input
 local text
-local selected_tag = nil
+local selected_tags = {}
 local popup_dat = nil
 
 local tags, lookup, new_tracks
@@ -273,14 +283,16 @@ function frame()
         if #tags == 0 then
             reaper.ImGui_Text(ctx, 'No tags found.')
         else
-            if selected_tag then
-                if reaper.ImGui_MenuItem(ctx, 'Add to active tag') then
+            if #selected_tags > 0 then
+                if reaper.ImGui_MenuItem(ctx, 'Add to active tags') then
                     reaper.Undo_BeginBlock()
                     for i = 1, #sel_tracks do
                         local tr = sel_tracks[i]
-                        add_tag_to_track(tr, selected_tag)   
+                        for _, sel_tag in ipairs(selected_tags) do
+                            add_tag_to_track(tr, sel_tag)   
+                        end
                     end
-                    reaper.Undo_EndBlock('Add selected tracks to active tag', -1)  
+                    reaper.Undo_EndBlock('Add selected tracks to active tags', -1)  
                 end
             end
             if reaper.ImGui_BeginMenu(ctx, 'Add tag') then
@@ -306,8 +318,15 @@ function frame()
                         for i = 1, #sel_tracks do
                             local tr = sel_tracks[i]
                             remove_tag_from_track(tr, t)
-                            if selected_tag and selected_tag.name == t.name and 
-                            settings.auto_hide_tracks_when_tag_active then
+                            local is_selected_tag = false
+                            for _, sel_tag in ipairs(selected_tags) do
+                                if sel_tag.name == t.name then
+                                    is_selected_tag = true
+                                    break
+                                end
+                            end
+
+                            if is_selected_tag and settings.auto_hide_tracks_when_tag_active then
                                 set_track_visible(tr, nil, 0)
                             end
                         end
@@ -326,14 +345,16 @@ function frame()
 
     --AUTO INSERT NEW TAGS
     local auto_insert = settings.auto_tag_tracks
-    if selected_tag and #new_tracks > 0 and auto_insert then
+    if #selected_tags > 0 and #new_tracks > 0 and auto_insert then
         for i = 1, #new_tracks do
             local track = new_tracks[i]
             local ext = get_ext_state(track)
             if not ext.lock_visibility and not track_is_blacklisted(track) then
                 reaper.Undo_BeginBlock()
-                add_tag_to_track(track, selected_tag)
-                reaper.Undo_EndBlock('Add new tag to tracks (Automatic tagging)', -1)
+                for _, tag in ipairs(selected_tags) do
+                    add_tag_to_track(track, tag)
+                end
+                reaper.Undo_EndBlock('Add new tags to tracks (Automatic tagging)', -1)
             end
         end
     end
@@ -350,7 +371,13 @@ function frame()
         reaper.ImGui_PushStyleColor(ctx, reaper.ImGui_Col_Separator(), 0xFFFFFF00)
         for i = 1, #tags do
             local tag = tags[i]
-            local tag_selected = selected_tag and selected_tag.name == tag.name or false
+            local tag_selected = false
+            for _, sel_tag in ipairs(selected_tags) do
+                if sel_tag.name == tag.name then
+                    tag_selected = true
+                    break
+                end
+            end
 
             local col = palette(i/6, 0.5)
             local h, hh, ha = palette(i/6, 0.5), palette(i/6, 0.03), palette(i/6, 0.5)
@@ -360,27 +387,48 @@ function frame()
             reaper.ImGui_PushStyleColor(ctx, reaper.ImGui_Col_HeaderHovered(), hh)
             reaper.ImGui_PushStyleColor(ctx, reaper.ImGui_Col_HeaderActive(),  ha)
 
-            local r, p_selected = reaper.ImGui_Selectable(ctx, tag.name, tag_selected)
+            local r = reaper.ImGui_Selectable(ctx, tag.name, tag_selected)
             if r then
                 local shift = get_shift()
-                if shift then
-                    reaper.Undo_BeginBlock()
-                    select_tag_only(tag)
-                    reaper.Undo_EndBlock('Select tracks containing tag', -1)
+                reaper.Undo_BeginBlock()
+            
+                if not settings.shift_for_multiselect and shift then
+                    selected_tags = {tag}
+                    load_multiple_tags(selected_tags)
                 else
-                    if not tag_selected then
-                        reaper.Undo_BeginBlock()
-                        selected_tag = tag
-                        load_tag(tag)
-                        reaper.Undo_EndBlock('Select tag', -1)
+                    local is_multiselect_action
+                    if settings.shift_for_multiselect then
+                        is_multiselect_action = shift
                     else
-                        reaper.Undo_BeginBlock()
-                        show_all_tracks()
-                        selected_tag = nil
-                        reaper.Undo_EndBlock('Unselect tag', -1)
+                        is_multiselect_action = true
+                    end
+                    
+                    if is_multiselect_action then
+                        if tag_selected then
+                            for i, sel_tag in ipairs(selected_tags) do
+                                if sel_tag.name == tag.name then
+                                    table.remove(selected_tags, i)
+                                    break
+                                end
+                            end
+                        else
+                            table.insert(selected_tags, tag)
+                        end
+                        load_multiple_tags(selected_tags)
+                    else
+                        if not tag_selected then
+                            selected_tags = {tag}
+                            load_tag(tag)
+                        else
+                            show_all_tracks()
+                            selected_tags = {}
+                        end
                     end
                 end
+            
+                reaper.Undo_EndBlock('Toggle tag selection', -1)
             end
+
             colored_frame(col)
             reaper.ImGui_PopStyleColor(ctx, 3)
             
